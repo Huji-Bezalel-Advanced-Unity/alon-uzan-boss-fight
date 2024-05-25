@@ -1,11 +1,16 @@
 # Clash Of Monsters
 
->### Clash Of Monsters is a strategy game in which each player choose his troops and uses them wise in order to defeat Warrok
+>### Clash Of Monsters is a 2D strategy game in which each player choose his troops wiselly in order to defeat Warrok
 
 **Game Mechanics**
 
 ---
-Each player is granted by certain amount of money. in order to defeat Warrok the player must destroy the fence around him and then kill him. The player can choose between three kinds of troops, each with his own advantages and disadvantages. Each troop has its own price so the player must think carefully when choosing troops. One can by as many troops as he wants as long as he has enough money in his bank.
+Each player is granted by certain amount of money. in order to defeat Warrok the player must destroy the fence around him and then kill him. <br><br>
+**How To Do It?**
+1. Choosing a troop, each with his own advantages and disadvantages.
+2. Left click on the mouse in the desireable place on the screen to spawn the troop.<br>
+
+**NOTE:** Each troop has its own price so the player must think carefully when choosing troops.
 
 **Boss Mechanics**
 
@@ -35,8 +40,7 @@ in order to attack Warrok, one must choose the troop he wants to spawn and then 
 **Art**
 
 ---
-All the prefabs can be taken from Mixamo both for the warrok and for the troops.
-[Mixamo Animations and Characters](https://www.mixamo.com/#/)
+Unity Assets Store.
 
 **AI**
 
