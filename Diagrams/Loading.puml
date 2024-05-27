@@ -1,0 +1,28 @@
+﻿@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant Loader
+participant LoaderUI
+participant CoreManagers
+participant BankManager
+
+participant GameLogic
+participant BossPhasesManager
+participant WarriorsManager
+participant BossManager
+
+entity Scene
+
+Loader -> LoaderUI: Update
+Loader -> CoreManagers: Initialize
+CoreManagers -> BankManager: Initialize
+
+Loader -> GameLogic: Initialize
+GameLogic -> BossPhasesManager: Initialize
+GameLogic -> WarriorsManager: Initialize
+GameLogic -> BossManager: Initialize
+
+
+@enduml
