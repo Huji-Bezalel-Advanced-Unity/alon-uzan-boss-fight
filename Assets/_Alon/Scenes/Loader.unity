@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 151854249}
   - component: {fileID: 151854248}
   m_Layer: 5
-  m_Name: BarForeground
+  m_Name: BarFG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 269079233}
   - component: {fileID: 269079236}
   m_Layer: 5
-  m_Name: BarForegroundMask
+  m_Name: BarFGMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -667,7 +667,7 @@ GameObject:
   - component: {fileID: 1761928264}
   - component: {fileID: 1761928263}
   m_Layer: 5
-  m_Name: BarBackground
+  m_Name: BarBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

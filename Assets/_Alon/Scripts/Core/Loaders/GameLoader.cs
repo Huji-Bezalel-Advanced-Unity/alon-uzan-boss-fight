@@ -43,7 +43,7 @@ namespace _Alon.Scripts.Core.Loaders
         {
             yield return new WaitForSeconds(0.1f);
             
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(gameLoaderUI.transform.root.gameObject);
             
             gameLoaderUI.Init(LoadMaxAmount);
@@ -82,7 +82,7 @@ namespace _Alon.Scripts.Core.Loaders
         {
             if (isSuccess)
             {
-                gameLoaderUI.AddAccumulate(20);
+                gameLoaderUI.AddAccumulate(50);
                 LoadMainScene();
             }
             else

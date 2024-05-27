@@ -1,4 +1,4 @@
-using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,7 @@ namespace _Alon.Scripts.Core.Loaders
         /// Serialized Fields
         /// </Header>
         [SerializeField] private Image loaderFG;
+        [SerializeField] private TextMeshProUGUI accumulatePerc;
 
         /// <Header>
         /// Public Fields
@@ -42,7 +43,7 @@ namespace _Alon.Scripts.Core.Loaders
             SetAccumulate(_accumulate + amount);
         }
 
-        public void SetAccumulate(int amount)
+        private void SetAccumulate(int amount)
         {
             _accumulate = amount;
             UpdateUI();
@@ -53,6 +54,7 @@ namespace _Alon.Scripts.Core.Loaders
             var percentage = (float)_accumulate / _accumulateTarget;
             var percentageClamp = Mathf.Clamp01(percentage);
             loaderFG.fillAmount = percentageClamp;
+            accumulatePerc.text = _accumulate.ToString() + "%";
         }
 
     }
