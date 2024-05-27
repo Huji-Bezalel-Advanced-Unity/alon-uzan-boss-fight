@@ -1,14 +1,21 @@
 # Clash Of Monsters
 
+<img src="C:\Users\alon0\ForkGit\BossFight\Assets\_Alon\Art\BackGround.png" width="600" height="400" border="10"/>
+
 >### Clash Of Monsters is a 2D strategy game in which each player choose his troops wiselly in order to defeat Warrok
+
+**Story**
+
+---
+In Eldoria, a pretty town in Arinthia, something bad happened. Prince Aric got turned into Warrok, a big, scary monster, by a mean witch named Morana. Warrok started wrecking everything, scaring everyone. Now, Eldoria needs heroes to fix things. Brave folks from far away are coming to fight Warrok and save the prince. Only if they beat Warrok can the curse go away and Eldoria be happy again.
 
 **Game Mechanics**
 
 ---
-Each player is granted by certain amount of money. in order to defeat Warrok the player must destroy the fence around him and then kill him. <br><br>
+Each player is granted by certain amount of money. In order to defeat Warrok the player must destroy the fence around him and then kill him. <br><br>
 **How To Do It?**
-1. Choosing a troop, each with his own advantages and disadvantages.
-2. Left click on the mouse in the desireable place on the screen to spawn the troop.<br>
+1. Choosing a troop from the troops panel, each with his own advantages and disadvantages.
+2. Left click (mouse) in the desirable place on the screen to spawn the troop.<br>
 
 **NOTE:** Each troop has its own price so the player must think carefully when choosing troops.
 
@@ -24,23 +31,29 @@ The Warrok is a monster that can punch troops and chase them if needed. There ar
 - Attacking Phase - when the fences is britches he starts to attack the closest troop by punching him. the strategy is to punch the closest troop with the least amount of life remains.
 - Falling Back Phase - when Warrok has less or equal then 10% life amount, he is starts to run away from the troops while every 5 seconds he attacks a troop nearby him.
 
-**Story**
-
----
-In Eldoria, a pretty town in Arinthia, something bad happened. Prince Aric got turned into Warrok, a big, scary monster, by a mean witch named Morana. Warrok started wrecking everything, scaring everyone. Now, Eldoria needs heroes to fix things. Brave folks from far away are coming to fight Warrok and save the prince. Only if they beat Warrok can the curse go away and Eldoria be happy again.
-
 **Player Mechanics**
 
 ---
 in order to attack Warrok, one must choose the troop he wants to spawn and then if he has enough money in his bank he needs to touch the screen wherever he wants the tropp to be spawned. The player can change the troop selector any time he wants.
+
+<img src="C:\Users\alon0\Downloads\warriors2.png" width="150" height="150"/>
+
 - **Ram Smashers**: These troops are great at breaking fences and barriers quickly, but they're slow and can get hit a lot while they move.
+
+<img src="C:\Users\alon0\Downloads\warriors4.png" width="180" height="150"/>
+
 - **Iron Guardians**: These warriors hit hard and can take a lot of hits themselves, but they're slow and can be outmaneuvered by fast enemies.
+
+<img src="C:\Users\alon0\Downloads\warriors3.png" width="200" height="150"/>
+
 - **Swift Blades**: These fighters are super fast and hit fast too, but they don't have much armor, so they can't take many hits.
 
 **Art**
 
 ---
-Unity Assets Store.
+Unity Assets Store.<br>
+- Players at <strong><em>[This Page](https://assetstore.unity.com/packages/2d/characters/warriors-animated-2d-characters-178121)</em></strong><br>
+- Terrain at <strong><em>[This Page](https://assetstore.unity.com/packages/2d/environments/hex-medieval-fantasy-locations-59271)</em></strong><br>
 
 **AI**
 
