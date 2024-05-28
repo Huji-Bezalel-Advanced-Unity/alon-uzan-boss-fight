@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loaderFG: {fileID: 269079234}
-  accumulatePerc: {fileID: 281674705}
+  accumulatePercent: {fileID: 281674705}
 --- !u!1 &281674703
 GameObject:
   m_ObjectHideFlags: 0

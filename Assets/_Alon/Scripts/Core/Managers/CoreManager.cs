@@ -7,26 +7,23 @@ namespace _Alon.Scripts.Core.Managers
 {
     public class CoreManager
     {
-        /// <Header>
-        /// Constants
-        /// </Header>
-
-        /// <Header>
-        /// Serialized Fields
-        /// </Header>
-
-        /// <Header>
-        /// Public Fields
-        /// </Header>
-
-        /// <Header>
+        /// <summary>
         /// Private Fields
-        /// </Header>
-        private Action<bool> _onComplete;
-
+        /// </summary>
+        private readonly Action<bool> _onComplete;
+        public static CoreManager instance;
+        
         public CoreManager(Action<bool> onComplete)
         {
-            _onComplete = onComplete;
+            if (instance != null)
+            {
+                Debug.LogException(new Exception("CoreManager already exists"));
+                return;
+            }
+            
+            instance = this;
+            
+            this._onComplete = onComplete;
             OnLoadSuccess();
         }
 
@@ -40,6 +37,4 @@ namespace _Alon.Scripts.Core.Managers
             _onComplete?.Invoke(false);
         }
     }
-    
-
 }

@@ -1,30 +1,23 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Alon.Scripts.Core.Loaders
 {
     public class GameLoaderUI : MonoBehaviour
     {
-        /// <Header>
-        /// Constants
-        /// </Header>
-        
-        /// <Header>
+        /// <summary>
         /// Serialized Fields
-        /// </Header>
+        /// </summary>
         [SerializeField] private Image loaderFG;
-        [SerializeField] private TextMeshProUGUI accumulatePerc;
-
-        /// <Header>
-        /// Public Fields
-        /// </Header>
+        [SerializeField] private TextMeshProUGUI accumulatePercent;
         
-        /// <Header>
+        /// <summary>
         /// Private Fields
-        /// </Header>
-        private int _accumulate;
-        private int _accumulateTarget;
+        /// </summary>
+        private int accumulate;
+        private int accumulateTarget;
 
         private void Reset()
         {
@@ -33,28 +26,28 @@ namespace _Alon.Scripts.Core.Loaders
 
         public void Init(int target)
         {
-            _accumulateTarget = target;
-            _accumulate = 0;
+            accumulateTarget = target;
+            accumulate = 0;
             UpdateUI();
         }
 
         public void AddAccumulate(int amount)
         {
-            SetAccumulate(_accumulate + amount);
+            SetAccumulate(accumulate + amount);
         }
 
         private void SetAccumulate(int amount)
         {
-            _accumulate = amount;
+            accumulate = amount;
             UpdateUI();
         }
 
         private void UpdateUI()
         {
-            var percentage = (float)_accumulate / _accumulateTarget;
+            var percentage = (float)accumulate / accumulateTarget;
             var percentageClamp = Mathf.Clamp01(percentage);
             loaderFG.fillAmount = percentageClamp;
-            accumulatePerc.text = _accumulate.ToString() + "%";
+            accumulatePercent.text = accumulate.ToString() + "%";
         }
 
     }

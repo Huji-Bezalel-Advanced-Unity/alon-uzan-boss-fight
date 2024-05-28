@@ -10,23 +10,19 @@ namespace _Alon.Scripts.Core.Loaders
     
     public class GameLoader : MonoBehaviour
     {
-        /// <Header>
+        /// <summary>
         /// Constants
-        /// </Header>
+        /// </summary>
         private const int LoadMaxAmount = 100;
         
-        /// <Header>
+        /// <summary>
         /// Serialized Fields
-        /// </Header>
+        /// </summary>
         [SerializeField] private GameLoaderUI gameLoaderUI;
 
-        /// <Header>
-        /// Public Fields
-        /// </Header>
-
-        /// <Header>
+        /// <summary>
         /// Private Fields
-        /// </Header>
+        /// </summary>
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
             {"LoadMainScene", 50}
@@ -58,7 +54,6 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void LoadMainScene()
         {
-            Debug.Log("loading main scene...");
             SceneManager.LoadScene("BossMain");
             gameLoaderUI.AddAccumulate(_loadersProgress["LoadMainScene"]);
             SceneManager.sceneLoaded += OnMainSceneLoaded;
