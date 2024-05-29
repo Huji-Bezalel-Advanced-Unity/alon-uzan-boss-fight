@@ -1,4 +1,5 @@
 ﻿using System;
+using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
 
@@ -10,7 +11,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// Serialized Fields
         /// </summary>
         [SerializeField] private float _moveSpeed = 1f;
-        [SerializeField] private Vector3 _fakeBossPosition;
         
         /// <summary>
         /// Private Fields
@@ -18,10 +18,12 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private SkeletonAnimation _skeletonAnimation;
         private bool _isMoving;
         private bool _wasMoving;
+        private GameObject _boss;
 
         private void Start()
         {
             _skeletonAnimation = GetComponent<SkeletonAnimation>();
+            _boss = GameManager.Instance.Boss; // Get the boss from GameManager
         }
 
         private void Update()
@@ -57,10 +59,16 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleMovement()
         {
-            var moveDirection = (_fakeBossPosition - transform.position).normalized;
+            if (_boss == null)
+            {
+                _isMoving = false;
+                return;
+            }
+
+            var moveDirection = (_boss.transform.position - transform.position).normalized;
 
             float distanceToMove = _moveSpeed * Time.deltaTime;
-            float distanceToTarget = Vector3.Distance(transform.position, _fakeBossPosition);
+            float distanceToTarget = Vector3.Distance(transform.position, _boss.transform.position);
 
             if (distanceToTarget > distanceToMove)
             {
@@ -70,10 +78,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
             else
             {
-                transform.position = _fakeBossPosition;
+                transform.position = _boss.transform.position;
                 _isMoving = false;
             }
-            
         }
     }
 }

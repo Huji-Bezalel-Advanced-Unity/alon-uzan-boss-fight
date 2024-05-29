@@ -32,7 +32,7 @@ using System.Collections.Generic;
 
 namespace Spine {
 	public class Skeleton {
-		internal SkeletonData data;
+		public SkeletonData data;
 		internal ExposedList<Bone> bones;
 		internal ExposedList<Slot> slots;
 		internal ExposedList<Slot> drawOrder;

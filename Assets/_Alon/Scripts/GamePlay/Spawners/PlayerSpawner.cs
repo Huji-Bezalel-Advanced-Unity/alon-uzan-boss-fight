@@ -14,6 +14,7 @@ namespace _Alon.Scripts.GamePlay.Spawners
         /// Private Fields
         /// </summary>
         private Vector3 _spawnPosition;
+        private GameObject _bossPosition;
 
         private void Update()
         {
@@ -30,5 +31,6 @@ namespace _Alon.Scripts.GamePlay.Spawners
         {
             Instantiate(playerPrefab, _spawnPosition, Quaternion.identity);
         }
+        
     }
 }
