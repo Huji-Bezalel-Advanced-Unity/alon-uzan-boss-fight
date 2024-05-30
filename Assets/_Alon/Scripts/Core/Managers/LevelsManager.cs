@@ -10,8 +10,12 @@ namespace _Alon.Scripts.Core.Managers
         /// Private Fields
         /// </summary>
         private readonly Action<bool> _onComplete;
+
         private List<LevelsData> _levelsData;
-        
+
+
+        // End Of Local Variables
+
         public LevelsManager(Action<bool> onComplete)
         {
             this._onComplete = onComplete;
@@ -23,7 +27,7 @@ namespace _Alon.Scripts.Core.Managers
         {
             _levelsData = new List<LevelsData>
             {
-                new LevelsData {Name = "Boss Level", SceneName = "BossMain", BossName = "Warrok", Status = true},
+                new LevelsData { Name = "Boss Level", SceneName = "BossMain", BossName = "Warrok", Status = true },
             };
         }
 
@@ -31,22 +35,22 @@ namespace _Alon.Scripts.Core.Managers
         {
             _onComplete?.Invoke(false);
         }
-        
+
         private void OnLoadSuccess()
         {
             _onComplete?.Invoke(true);
         }
-        
+
         public LevelsData GetLevelData(string levelName)
         {
             return _levelsData.Find(x => x.Name == levelName);
         }
-        
+
         public LevelsData GetLevelData(int index)
         {
             return _levelsData[index];
         }
-        
+
         public struct LevelsData
         {
             public string Name;
@@ -54,6 +58,5 @@ namespace _Alon.Scripts.Core.Managers
             public string BossName;
             public bool Status;
         }
-        
     }
 }

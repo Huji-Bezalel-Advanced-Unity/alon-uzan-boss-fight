@@ -10,45 +10,49 @@ namespace _Alon.Scripts.Core.Loaders
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private Image loaderFG;
+        [SerializeField] private Image loaderFg;
+
         [SerializeField] private TextMeshProUGUI accumulatePercent;
-        
+
         /// <summary>
         /// Private Fields
         /// </summary>
-        private int accumulate;
-        private int accumulateTarget;
+        private int _accumulate;
+
+        private int _accumulateTarget;
+
+
+        // End Of Local Variables
 
         private void Reset()
         {
-            loaderFG = GetComponent<Image>();
+            loaderFg = GetComponent<Image>();
         }
 
         public void Init(int target)
         {
-            accumulateTarget = target;
-            accumulate = 0;
+            _accumulateTarget = target;
+            _accumulate = 0;
             UpdateUI();
         }
 
         public void AddAccumulate(int amount)
         {
-            SetAccumulate(accumulate + amount);
+            SetAccumulate(_accumulate + amount);
         }
 
         private void SetAccumulate(int amount)
         {
-            accumulate = amount;
+            _accumulate = amount;
             UpdateUI();
         }
 
         private void UpdateUI()
         {
-            var percentage = (float)accumulate / accumulateTarget;
+            var percentage = (float)_accumulate / _accumulateTarget;
             var percentageClamp = Mathf.Clamp01(percentage);
-            loaderFG.fillAmount = percentageClamp;
-            accumulatePercent.text = accumulate.ToString() + "%";
+            loaderFg.fillAmount = percentageClamp;
+            accumulatePercent.text = _accumulate.ToString() + "%";
         }
-
     }
 }

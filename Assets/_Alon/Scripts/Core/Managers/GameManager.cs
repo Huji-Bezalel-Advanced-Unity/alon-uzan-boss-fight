@@ -5,10 +5,20 @@ namespace _Alon.Scripts.Core.Managers
 {
     public class GameManager
     {
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private readonly Action<bool> _onComplete;
+
+        /// <summary>
+        /// Public Fields
+        /// </summary>
         public static GameManager Instance { get; private set; }
 
         public GameObject Boss { get; private set; }
+
+
+        // End Of Local Variables
 
         public GameManager(Action<bool> onComplete)
         {
@@ -25,7 +35,7 @@ namespace _Alon.Scripts.Core.Managers
             _onComplete = onComplete;
             OnLoadSuccess();
         }
-        
+
         private void OnLoadSuccess()
         {
             _onComplete?.Invoke(true);

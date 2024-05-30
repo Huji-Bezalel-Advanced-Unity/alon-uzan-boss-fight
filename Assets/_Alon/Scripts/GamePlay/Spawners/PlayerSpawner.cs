@@ -9,12 +9,16 @@ namespace _Alon.Scripts.GamePlay.Spawners
         /// Serialized Fields
         /// </summary>
         [SerializeField] private GameObject playerPrefab;
-        
+
         /// <summary>
         /// Private Fields
         /// </summary>
         private Vector3 _spawnPosition;
+
         private GameObject _bossPosition;
+
+
+        // End Of Local Variables
 
         private void Update()
         {
@@ -22,7 +26,7 @@ namespace _Alon.Scripts.GamePlay.Spawners
             {
                 _spawnPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 _spawnPosition.z = 0;
-                
+
                 SpawnPlayer();
             }
         }
@@ -31,6 +35,5 @@ namespace _Alon.Scripts.GamePlay.Spawners
         {
             Instantiate(playerPrefab, _spawnPosition, Quaternion.identity);
         }
-        
     }
 }

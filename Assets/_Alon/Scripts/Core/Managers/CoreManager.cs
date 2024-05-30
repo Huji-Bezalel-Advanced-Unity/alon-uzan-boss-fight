@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace _Alon.Scripts.Core.Managers
@@ -11,18 +9,25 @@ namespace _Alon.Scripts.Core.Managers
         /// Private Fields
         /// </summary>
         private readonly Action<bool> _onComplete;
-        public static CoreManager instance;
-        
+
+        /// <summary>
+        /// Public Fields
+        /// </summary>
+        public static CoreManager Instance;
+
+
+        // End Of Local Variables
+
         public CoreManager(Action<bool> onComplete)
         {
-            if (instance != null)
+            if (Instance != null)
             {
                 Debug.LogException(new Exception("CoreManager already exists"));
                 return;
             }
-            
-            instance = this;
-            
+
+            Instance = this;
+
             this._onComplete = onComplete;
             OnLoadSuccess();
         }

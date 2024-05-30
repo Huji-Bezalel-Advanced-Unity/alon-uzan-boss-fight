@@ -11,20 +11,28 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// Serialized Fields
         /// </summary>
         [SerializeField] private float zoomSpeed = 10f;
+
         [SerializeField] private float minZoom = 5f;
+
         [SerializeField] private float maxZoom = 8f;
+
         [SerializeField] private Vector2 minBoundary;
+
         [SerializeField] private Vector2 maxBoundary;
 
         /// <summary>
         /// Private Fields
         /// </summary>
-        private Vector3 dragOrigin;
-        private Camera mainCamera;
+        private Vector3 _dragOrigin;
+
+        private Camera _mainCamera;
+
+
+        // End Of Local Variables
 
         private void Start()
         {
-            mainCamera = gameObject.GetComponent<Camera>();
+            _mainCamera = gameObject.GetComponent<Camera>();
         }
 
         void Update()
@@ -38,36 +46,35 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (Input.GetMouseButtonDown(1))
             {
-                dragOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                _dragOrigin = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
                 return;
             }
 
             if (Input.GetMouseButton(1))
             {
-                Vector3 difference = dragOrigin - mainCamera.ScreenToWorldPoint(Input.mousePosition);
-                mainCamera.transform.position += difference;
+                Vector3 difference = _dragOrigin - _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                _mainCamera.transform.position += difference;
                 ClampCameraPosition();
             }
         }
 
         private void HandleZoom()
         {
-            var mainCamOrthoSize = mainCamera.orthographicSize;
+            var mainCamOrthographicSize = _mainCamera.orthographicSize;
             float scroll = Input.GetAxis("Mouse ScrollWheel");
             if (scroll != 0.0f)
             {
-                mainCamOrthoSize -= scroll * zoomSpeed;
-                mainCamera.orthographicSize = Mathf.Clamp(mainCamOrthoSize, minZoom, maxZoom);
+                mainCamOrthographicSize -= scroll * zoomSpeed;
+                _mainCamera.orthographicSize = Mathf.Clamp(mainCamOrthographicSize, minZoom, maxZoom);
             }
         }
 
         private void ClampCameraPosition()
         {
-            Vector3 pos = mainCamera.transform.position;
+            Vector3 pos = _mainCamera.transform.position;
             pos.x = Mathf.Clamp(pos.x, minBoundary.x, maxBoundary.x);
             pos.y = Mathf.Clamp(pos.y, minBoundary.y, maxBoundary.y);
-            mainCamera.transform.position = pos;
+            _mainCamera.transform.position = pos;
         }
     }
 }
-

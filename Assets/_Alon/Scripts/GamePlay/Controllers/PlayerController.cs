@@ -2,6 +2,7 @@
 using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
@@ -10,20 +11,26 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private float _moveSpeed = 1f;
-        
+        [SerializeField] private float moveSpeed = 1f;
+
         /// <summary>
         /// Private Fields
         /// </summary>
         private SkeletonAnimation _skeletonAnimation;
+
         private bool _isMoving;
+
         private bool _wasMoving;
+
         private GameObject _boss;
+
+
+        // End Of Local Variables
 
         private void Start()
         {
             _skeletonAnimation = GetComponent<SkeletonAnimation>();
-            _boss = GameManager.Instance.Boss; // Get the boss from GameManager
+            _boss = GameManager.Instance.Boss;
         }
 
         private void Update()
@@ -36,11 +43,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (moveDirection.x > 0)
             {
-                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
+                    transform.localScale.z);
             }
             else if (moveDirection.x < 0)
             {
-                transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
+                    transform.localScale.z);
             }
         }
 
@@ -54,6 +63,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 _skeletonAnimation.AnimationState.SetAnimation(0, "Idle", true);
             }
+
             _wasMoving = _isMoving;
         }
 
@@ -67,7 +77,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
             var moveDirection = (_boss.transform.position - transform.position).normalized;
 
-            float distanceToMove = _moveSpeed * Time.deltaTime;
+            float distanceToMove = moveSpeed * Time.deltaTime;
             float distanceToTarget = Vector3.Distance(transform.position, _boss.transform.position);
 
             if (distanceToTarget > distanceToMove)

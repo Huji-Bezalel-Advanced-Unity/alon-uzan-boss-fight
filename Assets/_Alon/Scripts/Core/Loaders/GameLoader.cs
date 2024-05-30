@@ -15,11 +15,15 @@ namespace _Alon.Scripts.Core.Loaders
         /// Constants
         /// </summary>
         private const int LoadMaxAmount = 100;
-        private const float xMinPos = 2;
-        private const float yMinPos = 2;
-        private const float xMaxPos = -2;
-        private const float yMaxPos = -2;
-        
+
+        private const float XMinPos = 2;
+
+        private const float YMinPos = 2;
+
+        private const float XMaxPos = -2;
+
+        private const float YMaxPos = -2;
+
         /// <summary>
         /// Serialized Fields
         /// </summary>
@@ -30,15 +34,18 @@ namespace _Alon.Scripts.Core.Loaders
         /// </summary>
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
-            {"LoadMainScene", 20},
-            {"OnMainSceneLoaded", 20},
-            {"OnLoadComplete", 10},
-            {"OnCoreManagerLoaded", 30},
-            {"OnGameManagersLoaded", 20}
+            { "LoadMainScene", 20 },
+            { "OnMainSceneLoaded", 20 },
+            { "OnLoadComplete", 10 },
+            { "OnCoreManagerLoaded", 30 },
+            { "OnGameManagersLoaded", 20 }
         };
+
         private GameObject _boss;
-        
-        // Start is called before the first frame update
+
+
+        // End Of Local Variables
+
         void Start()
         {
             StartCoroutine(StartLoadingAsync());
@@ -47,21 +54,21 @@ namespace _Alon.Scripts.Core.Loaders
         private IEnumerator StartLoadingAsync()
         {
             yield return new WaitForSeconds(0.1f);
-            
+
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(gameLoaderUI.transform.root.gameObject);
-            
+
             gameLoaderUI.Init(LoadMaxAmount);
 
             LoadCoreManagers();
             LoadGameManagers();
         }
-        
+
         private void LoadCoreManagers()
         {
             var coreManager = new CoreManager(OnCoreManagerLoaded);
         }
-        
+
         private void LoadGameManagers()
         {
             var gameManager = new GameManager(OnGameManagersLoaded);
@@ -113,7 +120,7 @@ namespace _Alon.Scripts.Core.Loaders
                 Debug.LogException(new Exception("Core Managers Loading Failed."));
             }
         }
-        
+
         private void LoadBoss()
         {
             var bossPrefab = Resources.Load<GameObject>("Satan");
@@ -137,16 +144,16 @@ namespace _Alon.Scripts.Core.Loaders
                 Debug.LogError("Failed to get SkeletonAnimation component.");
                 return;
             }
-            
+
             skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
-            
+
             GameManager.Instance.SetBoss(_boss); // Set the boss in the GameManager
         }
 
         private Vector3 GeneratePosition()
         {
-            float x = Random.Range(xMinPos, xMaxPos);
-            float y = Random.Range(yMinPos, yMaxPos);
+            float x = Random.Range(XMinPos, XMaxPos);
+            float y = Random.Range(YMinPos, YMaxPos);
             return new Vector3(x, y, 0);
         }
     }
