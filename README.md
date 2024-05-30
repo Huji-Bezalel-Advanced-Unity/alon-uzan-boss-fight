@@ -22,6 +22,8 @@ Each player is granted by certain amount of money. In order to defeat Warrok the
 **Boss Mechanics**
 
 ---
+<br><br>
+<img src="Assets/_Alon/Art/BossSprite.png" width="300" height="300"/><br><br>
 The Warrok is a monster that can punch troops and chase them if needed. There are some troops that can be killed by him easily and some that he is more struggle to kill. As well as there is some troops that is takes more damage to warrok then the others.
 
 **Boss Phases**
