@@ -347,7 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdbe9850074f437ea4cb09f19292db4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loaderFG: {fileID: 269079234}
+  loaderFg: {fileID: 269079234}
   accumulatePercent: {fileID: 281674705}
 --- !u!1 &281674703
 GameObject:
