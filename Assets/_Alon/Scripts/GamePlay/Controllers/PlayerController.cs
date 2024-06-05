@@ -16,8 +16,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Private Fields
         /// </summary>
-        private SkeletonAnimation _skeletonAnimation;
-
         private bool _isMoving;
 
         private bool _wasMoving;
@@ -29,7 +27,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Start()
         {
-            _skeletonAnimation = GetComponent<SkeletonAnimation>();
             _boss = GameManager.Instance.Boss;
         }
 
@@ -57,11 +54,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (_isMoving && !_wasMoving)
             {
-                _skeletonAnimation.AnimationState.SetAnimation(0, "Run", true);
+                GameManager.Instance.SetPlayerAnimation(gameObject, "Run", true);
             }
             else if (!_isMoving && _wasMoving)
             {
-                _skeletonAnimation.AnimationState.SetAnimation(0, "Idle", true);
+                GameManager.Instance.SetPlayerAnimation(gameObject, "Idle", true);
             }
 
             _wasMoving = _isMoving;

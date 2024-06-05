@@ -48,6 +48,7 @@ namespace _Alon.Scripts.Core.Loaders
 
         void Start()
         {
+            gameLoaderUI.OnUIFinished += OnUIFinished;
             StartCoroutine(StartLoadingAsync());
         }
 
@@ -101,11 +102,16 @@ namespace _Alon.Scripts.Core.Loaders
             gameLoaderUI.AddAccumulate(_loadersProgress["OnMainSceneLoaded"]);
             OnLoadComplete();
         }
-
-        private void OnLoadComplete()
+        
+        private void OnUIFinished()
         {
             Destroy(this.gameObject);
             Destroy(gameLoaderUI.transform.root.gameObject);
+        }
+
+        private void OnLoadComplete()
+        {
+            gameLoaderUI.AddAccumulate(_loadersProgress["OnLoadComplete"]);
         }
 
 
@@ -138,14 +144,7 @@ namespace _Alon.Scripts.Core.Loaders
                 return;
             }
 
-            var skeletonAnimation = _boss.GetComponent<SkeletonAnimation>();
-            if (skeletonAnimation == null)
-            {
-                Debug.LogError("Failed to get SkeletonAnimation component.");
-                return;
-            }
-
-            skeletonAnimation.AnimationState.SetAnimation(0, "idle", true);
+            GameManager.Instance.SetBossAnimation(_boss, "idle", true);
 
             GameManager.Instance.SetBoss(_boss); // Set the boss in the GameManager
         }

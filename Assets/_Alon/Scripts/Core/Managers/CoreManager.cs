@@ -15,7 +15,6 @@ namespace _Alon.Scripts.Core.Managers
         /// </summary>
         public static CoreManager Instance;
 
-
         // End Of Local Variables
 
         public CoreManager(Action<bool> onComplete)
@@ -27,7 +26,9 @@ namespace _Alon.Scripts.Core.Managers
             }
 
             Instance = this;
-
+            
+            
+            
             this._onComplete = onComplete;
             OnLoadSuccess();
         }

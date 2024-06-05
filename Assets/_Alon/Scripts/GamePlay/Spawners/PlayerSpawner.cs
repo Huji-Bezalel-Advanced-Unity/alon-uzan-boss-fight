@@ -1,4 +1,5 @@
 ﻿using System;
+using _Alon.Scripts.Core.Managers;
 using UnityEngine;
 
 namespace _Alon.Scripts.GamePlay.Spawners
@@ -33,7 +34,9 @@ namespace _Alon.Scripts.GamePlay.Spawners
 
         private void SpawnPlayer()
         {
-            Instantiate(playerPrefab, _spawnPosition, Quaternion.identity);
+            GameObject newPlayer = Instantiate(playerPrefab, _spawnPosition, Quaternion.identity);
+            print(newPlayer);
+            GameManager.Instance.AddPlayer(newPlayer.gameObject);
         }
     }
 }
