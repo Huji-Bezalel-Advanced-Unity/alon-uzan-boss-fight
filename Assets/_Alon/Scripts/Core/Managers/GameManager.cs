@@ -19,7 +19,7 @@ namespace _Alon.Scripts.Core.Managers
         
         private HashSet<GameObject> _players;
         
-        private static float MinDistanceToAttack = 3f;
+        private static float MinDistanceToAttack = 1f;
         
         /// <summary>
         /// Public Fields

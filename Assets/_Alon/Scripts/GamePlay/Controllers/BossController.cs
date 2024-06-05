@@ -1,5 +1,6 @@
 using System;
 using _Alon.Scripts.Core.Managers;
+using Spine.Unity;
 using UnityEngine;
 
 namespace _Alon.Scripts.Gameplay.Controllers
@@ -9,6 +10,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private GameObject _boss;
         
         private GameObject playerToAttack = null;
+
+        private bool _isAttacking = false;
         
         private void Awake()
         {
@@ -21,6 +24,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             if (playerToAttack != null)
             {
                 Attack();
+                _isAttacking = true;
             }
         }
 
@@ -31,7 +35,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Attack()
         {
-            GameManager.Instance.SetBossAnimation(gameObject, "attack", true);
+            if (!_isAttacking)
+            {
+                GameManager.Instance.SetBossAnimation(gameObject, "attack", true);
+            }
         }
     }
 }
