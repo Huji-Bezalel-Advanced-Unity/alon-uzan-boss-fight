@@ -13,19 +13,34 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private bool _isAttacking = false;
         
+        private PlayerController _playerController;
+        
+        private bool _isTherePlayer = false;
+        
+        private bool _isWasPlayer = false;
+        
         private void Awake()
         {
+            GameManager.Instance.OnPlayerDeath += OnPlayerDeath;
             _boss = GameManager.Instance.Boss;
+        }
+
+        private void OnPlayerDeath()
+        {
+            Debug.Log("Change Player.");
+            TryAttack();
         }
 
         private void Update()
         {
-            TryAttack();
-            if (playerToAttack != null)
-            {
-                Attack();
-                _isAttacking = true;
-            }
+            HandleAttack();
+        }
+
+        private void HandleAttack()
+        {
+            if (playerToAttack == null) return;
+            Attack();
+            _isAttacking = true;
         }
 
         private void TryAttack()

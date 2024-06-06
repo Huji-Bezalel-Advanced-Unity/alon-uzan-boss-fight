@@ -21,12 +21,17 @@ namespace _Alon.Scripts.Core.Managers
         
         private static float MinDistanceToAttack = 1f;
         
+        
         /// <summary>
         /// Public Fields
         /// </summary>
         public static GameManager Instance { get; private set; }
 
+        public event Action OnPlayerDeath;
+        
         public GameObject Boss { get; private set; }
+        
+        public GameObject nearestPLayer = null;
 
         // End Of Local Variables
 
@@ -98,11 +103,23 @@ namespace _Alon.Scripts.Core.Managers
                 float distance = Vector3.Distance(player.transform.position, Boss.transform.position);
                 if (distance <= MinDistanceToAttack)
                 {
+                    nearestPLayer = player;
                     return player;
                 }
             }
 
+            nearestPLayer = null;
             return null;
+        }
+
+        public void InvokeOnPLayerDeath()
+        {
+            OnPlayerDeath?.Invoke();
+        }
+
+        public bool IsTherePlayer()
+        {
+            return _players.Count > 0;
         }
     }
 }

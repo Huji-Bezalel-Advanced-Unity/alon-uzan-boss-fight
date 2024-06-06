@@ -13,7 +13,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// Constants
         /// </summary>
         private const float MinDistanceToAttack = 0.5f;
-        
+
         /// <summary>
         /// Serialized Fields
         /// </summary>
@@ -25,14 +25,23 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private bool _isMoving;
 
         private bool _wasMoving;
-        
+
         private bool _isAttacking;
 
         private GameObject _boss;
 
+        [SerializeField] private float _playersLife = 100f;
+
+        private float _TimeToTakeDamage = 2f;
+        
+        private bool _isDead = false;
+
+
+        /// <summary>
+        /// Public Fields
+        /// </summary>
 
         // End Of Local Variables
-
         private void Start()
         {
             _boss = GameManager.Instance.Boss;
@@ -42,10 +51,24 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             HandleAnimation();
             HandleMovement();
-            if (_isAttacking)
+            HandleAttack();
+            TakeDamageRoutine();
+        }
+
+        private void HandleAttack()
+        {
+            if (_isAttacking && !_isDead)
             {
                 StartCoroutine(AttackCooldown());
             }
+        }
+
+        private void TakeDamageRoutine()
+        {
+            _TimeToTakeDamage -= Time.deltaTime;
+            if (!(_TimeToTakeDamage <= 0) || GameManager.Instance.GetNearestPlayer() != gameObject || _isDead) return;
+            TakeDamage(10f);
+            _TimeToTakeDamage = 2f;
         }
 
         private void Attack()
@@ -81,6 +104,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 GameManager.Instance.SetPlayerAnimation(gameObject, "Idle", true);
             }
+
             _wasMoving = _isMoving;
         }
 
@@ -115,6 +139,32 @@ namespace _Alon.Scripts.Gameplay.Controllers
             Attack();
             yield return new WaitForSeconds(2f);
             _isAttacking = true;
+        }
+
+        private void TakeDamage(float damage)
+        {
+            GameManager.Instance.SetPlayerAnimation(gameObject, "Hurt", false);
+            _playersLife -= damage;
+            if (_playersLife <= 0)
+            {
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            _isDead = true;
+            GameManager.Instance.SetPlayerAnimation(gameObject, "Death", false);
+            Debug.Log("Diee");
+            GameManager.Instance.RemovePlayer(gameObject);
+            GameManager.Instance.InvokeOnPLayerDeath();
+            StartCoroutine(DelayDeathForAnimation());
+        }
+        
+        private IEnumerator DelayDeathForAnimation()
+        {
+            yield return new WaitForSeconds(5f);
+            Destroy(gameObject);
         }
     }
 }
