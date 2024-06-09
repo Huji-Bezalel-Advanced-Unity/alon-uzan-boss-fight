@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8881220716331215756}
   - component: {fileID: 168171414194345226}
   - component: {fileID: 7218400210567438589}
-  - component: {fileID: 7210043616650535875}
+  - component: {fileID: 7546207209748270479}
   m_Layer: 0
   m_Name: Warrior_2_Defender
   m_TagString: Untagged
@@ -122,7 +122,7 @@ MonoBehaviour:
   _animationName: Hurt
   loop: 1
   timeScale: 1
---- !u!114 &7210043616650535875
+--- !u!114 &7546207209748270479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6026630236416058280}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9754c8ff37b64e4193e52cf94fb3f495, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d8888c007ae47a8a45532ffc48dc1e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1

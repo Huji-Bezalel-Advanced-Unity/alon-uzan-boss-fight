@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.Serialization;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
-    public class PlayerController : MonoBehaviour
+    public class BasePlayerController : MonoBehaviour
     {
         /// <summary>
         /// Constants
@@ -30,11 +31,17 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private GameObject _boss;
 
-        [SerializeField] private float _playersLife = 100f;
+        [SerializeField] protected float _playersLife = 100f;
 
         private float _TimeToTakeDamage = 2f;
         
+        private float _TimeToGiveDamage = 2f;
+
         private bool _isDead = false;
+
+        private readonly float _baseDamageToTake = 10f;
+        
+        private readonly float _baseDamageToGive = 10f;
 
 
         /// <summary>
@@ -53,6 +60,16 @@ namespace _Alon.Scripts.Gameplay.Controllers
             HandleMovement();
             HandleAttack();
             TakeDamageRoutine();
+            GiveDamageRoutine();
+        }
+
+        private void GiveDamageRoutine()
+        {
+            _TimeToGiveDamage -= Time.deltaTime;
+            if (!(Vector3.Distance(transform.position, _boss.transform.position) <= MinDistanceToAttack) ||
+                !(_TimeToGiveDamage <= 0)) return;
+            DealDamage();
+            _TimeToGiveDamage = 2f;
         }
 
         private void HandleAttack()
@@ -67,7 +84,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             _TimeToTakeDamage -= Time.deltaTime;
             if (!(_TimeToTakeDamage <= 0) || GameManager.Instance.GetNearestPlayer() != gameObject || _isDead) return;
-            TakeDamage(10f);
+            TakeDamage();
             _TimeToTakeDamage = 2f;
         }
 
@@ -141,10 +158,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isAttacking = true;
         }
 
-        private void TakeDamage(float damage)
+        protected virtual void TakeDamage()
         {
             GameManager.Instance.SetPlayerAnimation(gameObject, "Hurt", false);
-            _playersLife -= damage;
             if (_playersLife <= 0)
             {
                 Die();
@@ -155,16 +171,20 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             _isDead = true;
             GameManager.Instance.SetPlayerAnimation(gameObject, "Death", false);
-            Debug.Log("Diee");
             GameManager.Instance.RemovePlayer(gameObject);
             GameManager.Instance.InvokeOnPLayerDeath();
             StartCoroutine(DelayDeathForAnimation());
         }
-        
+
         private IEnumerator DelayDeathForAnimation()
         {
             yield return new WaitForSeconds(5f);
             Destroy(gameObject);
+        }
+
+        private void DealDamage()
+        {
+            
         }
     }
 }

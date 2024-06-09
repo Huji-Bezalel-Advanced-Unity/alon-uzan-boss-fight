@@ -13,11 +13,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private bool _isAttacking = false;
         
-        private PlayerController _playerController;
+        private BasePlayerController _basePlayerController;
         
         private bool _isTherePlayer = false;
         
         private bool _isWasPlayer = false;
+        
+        private float _bossLife = 100f;
         
         private void Awake()
         {
