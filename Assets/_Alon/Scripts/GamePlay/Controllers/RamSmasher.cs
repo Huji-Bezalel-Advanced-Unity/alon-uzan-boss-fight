@@ -11,5 +11,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             base.TakeDamage();
             _playersLife -= _BaseDamageToTake;
         }
+        
+        
     }
 }

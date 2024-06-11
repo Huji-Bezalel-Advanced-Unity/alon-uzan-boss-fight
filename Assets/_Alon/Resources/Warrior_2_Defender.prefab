@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 168171414194345226}
   - component: {fileID: 7218400210567438589}
   - component: {fileID: 7546207209748270479}
+  - component: {fileID: 6772842409085980059}
   m_Layer: 0
   m_Name: Warrior_2_Defender
   m_TagString: Untagged
@@ -136,3 +137,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   _playersLife: 100
+--- !u!195 &6772842409085980059
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6026630236416058280}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.27
+  m_Speed: 1
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 6.272869
+  m_BaseOffset: 3.1364346
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

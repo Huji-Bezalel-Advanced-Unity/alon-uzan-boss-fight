@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 
 namespace _Alon.Scripts.Gameplay.Controllers
@@ -43,6 +44,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         
         private readonly float _baseDamageToGive = 10f;
 
+        private NavMeshAgent _navMeshAgent;
 
         /// <summary>
         /// Public Fields
@@ -52,10 +54,15 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Start()
         {
             _boss = GameManager.Instance.Boss;
+            _navMeshAgent = GetComponent<NavMeshAgent>();
+            _navMeshAgent.updateRotation = false;
+            _navMeshAgent.updateUpAxis = false;
+            
         }
 
         private void Update()
         {
+            HandleDirections();
             HandleAnimation();
             HandleMovement();
             HandleAttack();
@@ -70,6 +77,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 !(_TimeToGiveDamage <= 0)) return;
             DealDamage();
             _TimeToGiveDamage = 2f;
+        }
+
+        private void DealDamage()
+        {
+            throw new NotImplementedException();
         }
 
         private void HandleAttack()
@@ -96,14 +108,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isAttacking = false;
         }
 
-        private void HandleDirections(Vector3 moveDirection)
+        private void HandleDirections()
         {
-            if (moveDirection.x > 0)
+            if (_boss.transform.position.x > transform.position.x)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
             }
-            else if (moveDirection.x < 0)
+            else if (_boss.transform.position.x < transform.position.x)
             {
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
@@ -132,17 +144,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 _isMoving = false;
                 return;
             }
-
-            var moveDirection = (_boss.transform.position - transform.position).normalized;
-
-            float distanceToMove = moveSpeed * Time.deltaTime;
-            float distanceToTarget = Vector3.Distance(transform.position, _boss.transform.position);
-
-            if (distanceToTarget - distanceToMove >= MinDistanceToAttack)
+            
+            if (Vector2.Distance(transform.position, _boss.transform.position) >= MinDistanceToAttack)
             {
-                transform.Translate(moveDirection * distanceToMove, Space.World);
+                _navMeshAgent.SetDestination(_boss.transform.position);
                 _isMoving = true;
-                HandleDirections(moveDirection);
             }
             else if (_isMoving)
             {
@@ -182,9 +188,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
             Destroy(gameObject);
         }
 
-        private void DealDamage()
+        private void OnCollisionEnter2D(Collision2D other)
         {
-            
+            Debug.Log("Collided with " + other.gameObject.name);
         }
     }
 }
