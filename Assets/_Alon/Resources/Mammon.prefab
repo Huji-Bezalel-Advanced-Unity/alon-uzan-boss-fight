@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3338056}
   - component: {fileID: 2306792}
   - component: {fileID: 11427758}
+  - component: {fileID: 6724403536040439455}
   m_Layer: 8
   m_Name: Mammon
   m_TagString: Untagged
@@ -121,3 +122,15 @@ MonoBehaviour:
   _animationName: idle
   loop: 1
   timeScale: 1
+--- !u!114 &6724403536040439455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae80deb75ad4316bc5b3b6908c77bda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

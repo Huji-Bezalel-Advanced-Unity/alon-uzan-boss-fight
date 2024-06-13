@@ -129,7 +129,7 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void LoadBoss()
         {
-            var bossPrefab = Resources.Load<GameObject>("Satan");
+            var bossPrefab = Resources.Load<GameObject>("Mammon");
             if (bossPrefab == null)
             {
                 Debug.LogError("Failed to load boss prefab from Resources folder.");
