@@ -6,12 +6,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
     {
         private float _BaseDamageToTake = 30f;
 
-        protected override void TakeDamage()
+        public override void TakeDamage()
         {
             base.TakeDamage();
             _playersLife -= _BaseDamageToTake;
         }
-        
         
     }
 }

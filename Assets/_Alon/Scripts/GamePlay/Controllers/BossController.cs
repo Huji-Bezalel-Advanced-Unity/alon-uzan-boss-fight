@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
@@ -7,55 +8,63 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BossController : MonoBehaviour
     {
-        private GameObject _boss;
-        
-        private GameObject playerToAttack = null;
+        private GameObject _playerToAttack = null;
 
         private bool _isAttacking = false;
-        
-        private BasePlayerController _basePlayerController;
-        
+
         private bool _isTherePlayer = false;
-        
+
         private bool _isWasPlayer = false;
-        
+
         private float _bossLife = 100f;
-        
-        private void Awake()
-        {
-            GameManager.Instance.OnPlayerDeath += OnPlayerDeath;
-            _boss = GameManager.Instance.Boss;
-        }
 
         private void OnPlayerDeath()
         {
             Debug.Log("Change Player.");
-            TryAttack();
         }
 
         private void Update()
         {
-            HandleAttack();
+            TryAttack();
+            if (!_isAttacking)
+            {
+                StartCoroutine(DelayAttack());
+                HandleAttack();
+            }
+        }
+
+        private IEnumerator DelayAttack()
+        {
+            _isAttacking = true;
+            yield return new WaitForSeconds(2);
+            _isAttacking = false;
         }
 
         private void HandleAttack()
         {
-            if (playerToAttack == null) return;
+            if (_playerToAttack == null)
+            {
+                GameManager.Instance.SetBossAnimation(gameObject, "idle", true);
+                return;
+            }
+            
             Attack();
             _isAttacking = true;
         }
 
         private void TryAttack()
         {
-            playerToAttack = GameManager.Instance.GetNearestPlayer();
+            _playerToAttack = GameManager.Instance.GetNearestPlayer();
+            if (_playerToAttack != null)
+            {
+                Debug.Log("attack!");
+            }
         }
 
         private void Attack()
         {
-            if (!_isAttacking)
-            {
-                GameManager.Instance.SetBossAnimation(gameObject, "attack", true);
-            }
+            GameManager.Instance.SetBossAnimation(gameObject, "attack", false);
+            GameManager.Instance.DealDamage(_playerToAttack);
         }
     }
 }

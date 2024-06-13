@@ -66,7 +66,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             HandleAnimation();
             HandleMovement();
             HandleAttack();
-            TakeDamageRoutine();
+            // TakeDamageRoutine();
             GiveDamageRoutine();
         }
 
@@ -75,13 +75,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _TimeToGiveDamage -= Time.deltaTime;
             if (!(Vector3.Distance(transform.position, _boss.transform.position) <= MinDistanceToAttack) ||
                 !(_TimeToGiveDamage <= 0)) return;
-            DealDamage();
             _TimeToGiveDamage = 2f;
-        }
-
-        private void DealDamage()
-        {
-            throw new NotImplementedException();
         }
 
         private void HandleAttack()
@@ -92,13 +86,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
         }
 
-        private void TakeDamageRoutine()
-        {
-            _TimeToTakeDamage -= Time.deltaTime;
-            if (!(_TimeToTakeDamage <= 0) || GameManager.Instance.GetNearestPlayer() != gameObject || _isDead) return;
-            TakeDamage();
-            _TimeToTakeDamage = 2f;
-        }
+        // private void TakeDamageRoutine()
+        // {
+        //     _TimeToTakeDamage -= Time.deltaTime;
+        //     if (!(_TimeToTakeDamage <= 0) || GameManager.Instance.GetNearestPlayer() != gameObject || _isDead) return;
+        //     TakeDamage();
+        //     _TimeToTakeDamage = 2f;
+        // }
 
         private void Attack()
         {
@@ -164,7 +158,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isAttacking = true;
         }
 
-        protected virtual void TakeDamage()
+        public virtual void TakeDamage()
         {
             GameManager.Instance.SetPlayerAnimation(gameObject, "Hurt", false);
             if (_playersLife <= 0)
@@ -178,7 +172,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isDead = true;
             GameManager.Instance.SetPlayerAnimation(gameObject, "Death", false);
             GameManager.Instance.RemovePlayer(gameObject);
-            GameManager.Instance.InvokeOnPLayerDeath();
             StartCoroutine(DelayDeathForAnimation());
         }
 

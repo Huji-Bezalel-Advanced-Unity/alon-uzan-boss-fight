@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3340438}
   - component: {fileID: 2357020}
   - component: {fileID: 11439612}
-  - component: {fileID: -925810759769045028}
+  - component: {fileID: 8339090394525398139}
   m_Layer: 8
   m_Name: Satan
   m_TagString: Untagged
@@ -122,7 +122,7 @@ MonoBehaviour:
   _animationName: Idle
   loop: 1
   timeScale: 1
---- !u!114 &-925810759769045028
+--- !u!114 &8339090394525398139
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

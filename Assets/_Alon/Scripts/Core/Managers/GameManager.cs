@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using _Alon.Scripts.Gameplay.Controllers;
 using UnityEngine;
 
 namespace _Alon.Scripts.Core.Managers
@@ -83,6 +84,7 @@ namespace _Alon.Scripts.Core.Managers
         
         public void AddPlayer(GameObject player)
         {
+            Debug.Log("new player added");
             _players.Add(player);
         }
         
@@ -91,16 +93,12 @@ namespace _Alon.Scripts.Core.Managers
             _players.Remove(player);
         }
 
-        public HashSet<GameObject> GetPlayers()
-        {
-            return _players;
-        }
-
         public GameObject GetNearestPlayer()
         {
-            foreach (var player in GameManager.Instance.GetPlayers())
+            foreach (var player in _players)
             {
                 float distance = Vector3.Distance(player.transform.position, Boss.transform.position);
+                Debug.Log(distance);
                 if (distance <= MinDistanceToAttack)
                 {
                     nearestPLayer = player;
@@ -112,9 +110,9 @@ namespace _Alon.Scripts.Core.Managers
             return null;
         }
 
-        public void InvokeOnPLayerDeath()
+        public void DealDamage(GameObject playerToAttack)
         {
-            OnPlayerDeath?.Invoke();
+            playerToAttack.GetComponent<BasePlayerController>().TakeDamage();
         }
 
         public bool IsTherePlayer()
