@@ -18,7 +18,7 @@ namespace _Alon.Scripts.Core.Managers
 
         private PlayerAnimator _playerAnimator;
         
-        private HashSet<GameObject> _players;
+        private HashSet<BasePlayerController> _players;
         
         private static float MinDistanceToAttack = 1f;
         
@@ -28,11 +28,9 @@ namespace _Alon.Scripts.Core.Managers
         /// </summary>
         public static GameManager Instance { get; private set; }
 
-        public event Action OnPlayerDeath;
         
         public GameObject Boss { get; private set; }
         
-        public GameObject nearestPLayer = null;
 
         // End Of Local Variables
 
@@ -51,7 +49,7 @@ namespace _Alon.Scripts.Core.Managers
             this._bossAnimator = new BossAnimator();
             this._playerAnimator = new PlayerAnimator();
             
-            this._players = new HashSet<GameObject>();
+            this._players = new HashSet<BasePlayerController>();
             
             _onComplete = onComplete;
             OnLoadSuccess();
@@ -82,42 +80,38 @@ namespace _Alon.Scripts.Core.Managers
             _playerAnimator.SetAnimation(player, animationName, loop);
         }
         
-        public void AddPlayer(GameObject player)
+        public void AddPlayer(BasePlayerController player)
         {
             Debug.Log("new player added");
             _players.Add(player);
         }
         
-        public void RemovePlayer(GameObject player)
+        public void RemovePlayer(BasePlayerController player)
         {
             _players.Remove(player);
         }
 
-        public GameObject GetNearestPlayer()
+        public BasePlayerController GetNearestPlayer()
         {
             foreach (var player in _players)
             {
                 float distance = Vector3.Distance(player.transform.position, Boss.transform.position);
-                Debug.Log(distance);
                 if (distance <= MinDistanceToAttack)
                 {
-                    nearestPLayer = player;
                     return player;
                 }
             }
-
-            nearestPLayer = null;
             return null;
         }
 
-        public void DealDamage(GameObject playerToAttack)
+        public void DealDamage(BasePlayerController playerToAttack)
         {
-            playerToAttack.GetComponent<BasePlayerController>().TakeDamage();
+            playerToAttack.TakeDamage();
         }
 
-        public bool IsTherePlayer()
+        public void DealBossDamage(float baseDamageToGive)
         {
-            return _players.Count > 0;
+            Boss.GetComponent<BossController>().TakeDamage(baseDamageToGive);
         }
     }
 }

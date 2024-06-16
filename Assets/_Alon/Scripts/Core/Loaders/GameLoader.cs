@@ -16,13 +16,13 @@ namespace _Alon.Scripts.Core.Loaders
         /// </summary>
         private const int LoadMaxAmount = 100;
 
-        private const float XMinPos = 2;
+        private const float XMinPos = -10;
 
-        private const float YMinPos = 2;
+        private const float YMinPos = 5.5f;
 
-        private const float XMaxPos = -2;
+        private const float XMaxPos = -4;
 
-        private const float YMaxPos = -2;
+        private const float YMaxPos = 1.5f;
 
         /// <summary>
         /// Serialized Fields

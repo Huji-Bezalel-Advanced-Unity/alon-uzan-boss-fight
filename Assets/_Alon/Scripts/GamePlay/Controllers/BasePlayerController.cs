@@ -6,6 +6,7 @@ using Spine.Unity;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
@@ -21,6 +22,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// </summary>
         [SerializeField] private float moveSpeed = 1f;
 
+        [SerializeField] private Image lifeBar;
+
+        [SerializeField] private GameObject barHolder;
+
         /// <summary>
         /// Private Fields
         /// </summary>
@@ -35,16 +40,18 @@ namespace _Alon.Scripts.Gameplay.Controllers
         [SerializeField] protected float _playersLife = 100f;
 
         private float _TimeToTakeDamage = 2f;
-        
+
         private float _TimeToGiveDamage = 2f;
 
         private bool _isDead = false;
 
         private readonly float _baseDamageToTake = 10f;
-        
+
         private readonly float _baseDamageToGive = 10f;
 
         private NavMeshAgent _navMeshAgent;
+
+        private float _maxLife = 100;
 
         /// <summary>
         /// Public Fields
@@ -57,16 +64,16 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _navMeshAgent.updateRotation = false;
             _navMeshAgent.updateUpAxis = false;
-            
+            lifeBar.fillAmount = _maxLife;
         }
 
         private void Update()
         {
+            if (_isDead) return;
             HandleDirections();
             HandleAnimation();
             HandleMovement();
             HandleAttack();
-            // TakeDamageRoutine();
             GiveDamageRoutine();
         }
 
@@ -86,20 +93,18 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
         }
 
-        // private void TakeDamageRoutine()
-        // {
-        //     _TimeToTakeDamage -= Time.deltaTime;
-        //     if (!(_TimeToTakeDamage <= 0) || GameManager.Instance.GetNearestPlayer() != gameObject || _isDead) return;
-        //     TakeDamage();
-        //     _TimeToTakeDamage = 2f;
-        // }
-
         private void Attack()
         {
             int randomAttack = UnityEngine.Random.Range(1, 3); // Corrected the range to include 2
             String attackAnimation = randomAttack == 1 ? "Stab" : "Slash";
             GameManager.Instance.SetPlayerAnimation(gameObject, attackAnimation, false);
+            GiveDamage();
             _isAttacking = false;
+        }
+
+        protected virtual void GiveDamage()
+        {
+            GameManager.Instance.DealBossDamage(_baseDamageToGive);
         }
 
         private void HandleDirections()
@@ -123,7 +128,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 GameManager.Instance.SetPlayerAnimation(gameObject, "Run", true);
                 _wasMoving = true;
             }
-            else if (!_isMoving && _wasMoving && _isAttacking)
+            else if (!_isDead && !_isMoving && _wasMoving && _isAttacking)
             {
                 GameManager.Instance.SetPlayerAnimation(gameObject, "Idle", true);
             }
@@ -138,7 +143,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 _isMoving = false;
                 return;
             }
-            
+
             if (Vector2.Distance(transform.position, _boss.transform.position) >= MinDistanceToAttack)
             {
                 _navMeshAgent.SetDestination(_boss.transform.position);
@@ -160,30 +165,47 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         public virtual void TakeDamage()
         {
-            GameManager.Instance.SetPlayerAnimation(gameObject, "Hurt", false);
             if (_playersLife <= 0)
             {
                 Die();
             }
+            StartCoroutine(DelayHurtAnimation());
+        }
+
+        private IEnumerator DelayHurtAnimation()
+        {
+            yield return new WaitForSeconds(1f);
+            if (!_isDead)
+                GameManager.Instance.SetPlayerAnimation(gameObject, "Hurt", false);
         }
 
         private void Die()
         {
             _isDead = true;
+            lifeBar.fillAmount = 0;
             GameManager.Instance.SetPlayerAnimation(gameObject, "Death", false);
-            GameManager.Instance.RemovePlayer(gameObject);
+            GameManager.Instance.RemovePlayer(this);
             StartCoroutine(DelayDeathForAnimation());
         }
 
         private IEnumerator DelayDeathForAnimation()
         {
-            yield return new WaitForSeconds(5f);
+            this.enabled = false;
+            yield return new WaitForSeconds(0.7f);
+            barHolder.SetActive(false);
+            yield return new WaitForSeconds(4.3f);
             Destroy(gameObject);
         }
 
         private void OnCollisionEnter2D(Collision2D other)
         {
             Debug.Log("Collided with " + other.gameObject.name);
+        }
+
+        protected IEnumerator UpdateLifeBar(float target)
+        {
+            yield return new WaitForSeconds(0.7f);
+            lifeBar.fillAmount = Mathf.Max(0, target / _maxLife);
         }
     }
 }

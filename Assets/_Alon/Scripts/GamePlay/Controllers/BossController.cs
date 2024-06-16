@@ -3,12 +3,13 @@ using System.Collections;
 using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BossController : MonoBehaviour
     {
-        private GameObject _playerToAttack = null;
+        private BasePlayerController _playerToAttack = null;
 
         private bool _isAttacking = false;
 
@@ -16,11 +17,15 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private bool _isWasPlayer = false;
 
-        private float _bossLife = 100f;
+        private float _maxBossLife = 1000;
+        
+        private float _bossLife = 1000f;
 
-        private void OnPlayerDeath()
+        [SerializeField] private Image bossLifeBar;
+
+        private void Start()
         {
-            Debug.Log("Change Player.");
+            bossLifeBar.fillAmount = 100;
         }
 
         private void Update()
@@ -28,15 +33,15 @@ namespace _Alon.Scripts.Gameplay.Controllers
             TryAttack();
             if (!_isAttacking)
             {
-                StartCoroutine(DelayAttack());
                 HandleAttack();
+                StartCoroutine(DelayAttack());
             }
         }
 
         private IEnumerator DelayAttack()
         {
             _isAttacking = true;
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(2f);
             _isAttacking = false;
         }
 
@@ -55,16 +60,20 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void TryAttack()
         {
             _playerToAttack = GameManager.Instance.GetNearestPlayer();
-            if (_playerToAttack != null)
-            {
-                Debug.Log("attack!");
-            }
         }
 
         private void Attack()
         {
             GameManager.Instance.SetBossAnimation(gameObject, "attack", false);
             GameManager.Instance.DealDamage(_playerToAttack);
+        }
+        
+        public void TakeDamage(float damage)
+        {
+            // take damage
+            _bossLife = Mathf.Max(0, _bossLife - damage);
+            bossLifeBar.fillAmount = _bossLife / _maxBossLife;
+            print(_bossLife);
         }
     }
 }
