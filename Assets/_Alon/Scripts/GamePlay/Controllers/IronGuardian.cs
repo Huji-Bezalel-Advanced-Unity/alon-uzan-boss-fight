@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using _Alon.Scripts.Core.Managers;
+﻿using _Alon.Scripts.Core.Managers;
+using UnityEngine;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
-    public class RamSmasher : BasePlayerController
+    public class IronGuardian : BasePlayerController
     {
         private float _BaseDamageToTake = 20f;
         private float _BaseDamageToGive = 30f;

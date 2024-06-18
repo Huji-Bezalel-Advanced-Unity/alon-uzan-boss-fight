@@ -1073,8 +1073,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 203126119}
+  - component: {fileID: 203126120}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1095,6 +1096,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &203126120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203126118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0784e70762894cbbad20745fc6813c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossLifeBar: {fileID: 2013667693}
 --- !u!1 &277173922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1861,7 +1875,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -0.0000019073486, y: -62.764984}
-  m_SizeDelta: {x: 1136.02, y: 70.41998}
+  m_SizeDelta: {x: 891, y: 73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &803324342
 MonoBehaviour:
@@ -1883,7 +1897,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1122501942, guid: 7b726f2b37663dc4f96f937084da0ee3, type: 3}
+  m_Sprite: {fileID: 1046537280, guid: 6733a7ff4f16f0343ae6e5c09e9f8417, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5237,8 +5251,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -58}
-  m_SizeDelta: {x: 1105.79, y: 60.890015}
+  m_AnchoredPosition: {x: 0, y: -53.359985}
+  m_SizeDelta: {x: 810, y: 44.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2013667693
 MonoBehaviour:
@@ -5260,7 +5274,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 813976579, guid: 7b726f2b37663dc4f96f937084da0ee3, type: 3}
+  m_Sprite: {fileID: 579683620, guid: 6733a7ff4f16f0343ae6e5c09e9f8417, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1

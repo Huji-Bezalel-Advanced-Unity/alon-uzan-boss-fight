@@ -2,36 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Alon.Scripts.Core.Managers;
-using Spine.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
 namespace _Alon.Scripts.Core.Loaders
 {
     public class GameLoader : MonoBehaviour
     {
-        /// <summary>
-        /// Constants
-        /// </summary>
         private const int LoadMaxAmount = 100;
-
         private const float XMinPos = -10;
-
         private const float YMinPos = 5.5f;
-
         private const float XMaxPos = -4;
-
         private const float YMaxPos = 1.5f;
 
-        /// <summary>
-        /// Serialized Fields
-        /// </summary>
         [SerializeField] private GameLoaderUI gameLoaderUI;
-
-        /// <summary>
-        /// Private Fields
-        /// </summary>
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
             { "LoadMainScene", 20 },
@@ -42,9 +26,6 @@ namespace _Alon.Scripts.Core.Loaders
         };
 
         private GameObject _boss;
-
-
-        // End Of Local Variables
 
         void Start()
         {
@@ -102,7 +83,7 @@ namespace _Alon.Scripts.Core.Loaders
             gameLoaderUI.AddAccumulate(_loadersProgress["OnMainSceneLoaded"]);
             OnLoadComplete();
         }
-        
+
         private void OnUIFinished()
         {
             Destroy(this.gameObject);
@@ -113,7 +94,6 @@ namespace _Alon.Scripts.Core.Loaders
         {
             gameLoaderUI.AddAccumulate(_loadersProgress["OnLoadComplete"]);
         }
-
 
         private void OnCoreManagerLoaded(bool isSuccess)
         {
@@ -144,15 +124,20 @@ namespace _Alon.Scripts.Core.Loaders
                 return;
             }
 
-            GameManager.Instance.SetBossAnimation(_boss, "idle", true);
+            GameManager.Instance.BossAnimator.SetAnimation(_boss, "idle", true);
 
             GameManager.Instance.SetBoss(_boss); // Set the boss in the GameManager
+
+            if (GameManager.Instance.Boss == null)
+            {
+                Debug.LogError("Failed to set boss in GameManager.");
+            }
         }
 
         private Vector3 GeneratePosition()
         {
-            float x = Random.Range(XMinPos, XMaxPos);
-            float y = Random.Range(YMinPos, YMaxPos);
+            float x = UnityEngine.Random.Range(XMinPos, XMaxPos);
+            float y = UnityEngine.Random.Range(YMinPos, YMaxPos);
             return new Vector3(x, y, 0);
         }
     }

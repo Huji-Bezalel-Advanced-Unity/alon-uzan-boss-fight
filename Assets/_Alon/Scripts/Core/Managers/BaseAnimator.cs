@@ -2,12 +2,11 @@ using System;
 using UnityEngine;
 using Spine.Unity;
 
-
 namespace _Alon.Scripts.Core.Managers
 {
     public class BaseAnimator
     {
-        protected BaseAnimator(){}
+        protected BaseAnimator() { }
 
         public virtual void SetAnimation(GameObject player, String animationName, bool loop)
         {

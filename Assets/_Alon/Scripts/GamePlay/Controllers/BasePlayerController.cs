@@ -1,76 +1,44 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using _Alon.Scripts.Core.Managers;
-using Spine.Unity;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
+using _Alon.Scripts.Core.Managers;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BasePlayerController : MonoBehaviour
     {
-        /// <summary>
-        /// Constants
-        /// </summary>
         private const float MinDistanceToAttack = 0.5f;
-
-        /// <summary>
-        /// Serialized Fields
-        /// </summary>
         [SerializeField] private float moveSpeed = 1f;
-
         [SerializeField] private Image lifeBar;
-
         [SerializeField] private GameObject barHolder;
-
-        /// <summary>
-        /// Private Fields
-        /// </summary>
         private bool _isMoving;
-
         private bool _wasMoving;
-
         private bool _isAttacking;
-
         private GameObject _boss;
-
         [SerializeField] protected float _playersLife = 100f;
-
         private float _TimeToTakeDamage = 2f;
-
         private float _TimeToGiveDamage = 2f;
-
         private bool _isDead = false;
-
-        private readonly float _baseDamageToTake = 10f;
-
-        private readonly float _baseDamageToGive = 10f;
-
         private NavMeshAgent _navMeshAgent;
-
         private float _maxLife = 100;
 
-        /// <summary>
-        /// Public Fields
-        /// </summary>
+        protected PlayerAnimator _playerAnimator;
 
-        // End Of Local Variables
-        private void Start()
+        protected void Start()
         {
             _boss = GameManager.Instance.Boss;
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _navMeshAgent.updateRotation = false;
             _navMeshAgent.updateUpAxis = false;
-            lifeBar.fillAmount = _maxLife;
+            lifeBar.fillAmount = 1;
+            HandleDirections();
+            _playerAnimator = GameManager.Instance.PlayerAnimator; // inject Player Animator
         }
 
         private void Update()
         {
             if (_isDead) return;
-            HandleDirections();
             HandleAnimation();
             HandleMovement();
             HandleAttack();
@@ -95,16 +63,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Attack()
         {
-            int randomAttack = UnityEngine.Random.Range(1, 3); // Corrected the range to include 2
-            String attackAnimation = randomAttack == 1 ? "Stab" : "Slash";
-            GameManager.Instance.SetPlayerAnimation(gameObject, attackAnimation, false);
-            GiveDamage();
+            int randomAttack = Random.Range(1, 3);
+            string attackAnimation = randomAttack == 1 ? "Stab" : "Slash";
+            _playerAnimator.SetAnimation(gameObject, attackAnimation, false);
             _isAttacking = false;
         }
 
         protected virtual void GiveDamage()
         {
-            GameManager.Instance.DealBossDamage(_baseDamageToGive);
         }
 
         private void HandleDirections()
@@ -118,6 +84,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
+                barHolder.transform.Rotate(0, 180, 0);
             }
         }
 
@@ -125,15 +92,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (_isMoving && !_wasMoving)
             {
-                GameManager.Instance.SetPlayerAnimation(gameObject, "Run", true);
+                _playerAnimator.SetAnimation(gameObject, "Run", true);
                 _wasMoving = true;
             }
-            else if (!_isDead && !_isMoving && _wasMoving && _isAttacking)
+            else if (!_isDead && !_isMoving && _wasMoving)
             {
-                GameManager.Instance.SetPlayerAnimation(gameObject, "Idle", true);
+                _playerAnimator.SetAnimation(gameObject, "Idle", true);
+                _wasMoving = false;
             }
-
-            _wasMoving = _isMoving;
         }
 
         private void HandleMovement()
@@ -159,7 +125,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private IEnumerator AttackCooldown()
         {
             Attack();
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(2.5f);
+            if (!_isDead)
+                GiveDamage();
             _isAttacking = true;
         }
 
@@ -169,21 +137,25 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 Die();
             }
-            StartCoroutine(DelayHurtAnimation());
+            else
+            {
+                StartCoroutine(DelayHurtAnimation());
+            }
         }
 
         private IEnumerator DelayHurtAnimation()
         {
             yield return new WaitForSeconds(1f);
             if (!_isDead)
-                GameManager.Instance.SetPlayerAnimation(gameObject, "Hurt", false);
+            {
+                _playerAnimator.SetAnimation(gameObject, "Hurt", false);
+            }
         }
 
         private void Die()
         {
             _isDead = true;
-            lifeBar.fillAmount = 0;
-            GameManager.Instance.SetPlayerAnimation(gameObject, "Death", false);
+            _playerAnimator.SetAnimation(gameObject, "Death", false);
             GameManager.Instance.RemovePlayer(this);
             StartCoroutine(DelayDeathForAnimation());
         }
@@ -191,9 +163,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private IEnumerator DelayDeathForAnimation()
         {
             this.enabled = false;
+            yield return new WaitForSeconds(0.5f);
+            _playerAnimator.SetAnimation(gameObject, "Death", false);
             yield return new WaitForSeconds(0.7f);
             barHolder.SetActive(false);
-            yield return new WaitForSeconds(4.3f);
+            yield return new WaitForSeconds(4f);
             Destroy(gameObject);
         }
 

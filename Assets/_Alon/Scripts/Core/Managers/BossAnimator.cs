@@ -12,8 +12,8 @@ namespace _Alon.Scripts.Core.Managers
             "attack",
             "idle"
         };
-        
-        public BossAnimator(){}
+
+        public BossAnimator() { }
 
         public override void SetAnimation(GameObject player, String animationName, bool loop)
         {

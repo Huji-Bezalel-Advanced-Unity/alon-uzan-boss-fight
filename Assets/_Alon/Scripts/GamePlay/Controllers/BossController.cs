@@ -1,31 +1,22 @@
-using System;
 using System.Collections;
 using _Alon.Scripts.Core.Managers;
-using Spine.Unity;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BossController : MonoBehaviour
     {
         private BasePlayerController _playerToAttack = null;
-
         private bool _isAttacking = false;
-
-        private bool _isTherePlayer = false;
-
-        private bool _isWasPlayer = false;
-
         private float _maxBossLife = 1000;
-        
         private float _bossLife = 1000f;
 
-        [SerializeField] private Image bossLifeBar;
+        private BossAnimator _bossAnimator;
 
         private void Start()
         {
-            bossLifeBar.fillAmount = 100;
+            _bossAnimator = GameManager.Instance.BossAnimator; // inject Boss Animator
+            _bossAnimator.SetAnimation(gameObject, "idle", true);
         }
 
         private void Update()
@@ -49,10 +40,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (_playerToAttack == null)
             {
-                GameManager.Instance.SetBossAnimation(gameObject, "idle", true);
+                _bossAnimator.SetAnimation(gameObject, "idle", true);
                 return;
             }
-            
+
             Attack();
             _isAttacking = true;
         }
@@ -64,15 +55,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Attack()
         {
-            GameManager.Instance.SetBossAnimation(gameObject, "attack", false);
+            _bossAnimator.SetAnimation(gameObject, "attack", false);
             GameManager.Instance.DealDamage(_playerToAttack);
         }
-        
+
         public void TakeDamage(float damage)
         {
-            // take damage
             _bossLife = Mathf.Max(0, _bossLife - damage);
-            bossLifeBar.fillAmount = _bossLife / _maxBossLife;
+            StartCoroutine(UIManager.Instance.UpdateBossLifeBar(_bossLife));
             print(_bossLife);
         }
     }

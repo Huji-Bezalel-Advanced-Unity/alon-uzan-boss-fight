@@ -16,8 +16,8 @@ namespace _Alon.Scripts.Core.Managers
             "Run",
             "Walk"
         };
-        
-        public PlayerAnimator(){}
+
+        public PlayerAnimator() { }
 
         public override void SetAnimation(GameObject player, String animationName, bool loop)
         {
