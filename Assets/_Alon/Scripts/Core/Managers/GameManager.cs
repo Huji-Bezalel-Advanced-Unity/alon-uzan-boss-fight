@@ -10,6 +10,13 @@ namespace _Alon.Scripts.Core.Managers
         private readonly Action<bool> _onComplete;
         private HashSet<BasePlayerController> _players;
         private static float MinDistanceToAttack = 1f;
+        private GameObject currentPlayerToSpawn;
+        private Dictionary<string, GameObject> playersPrefabs = new Dictionary<string, GameObject>
+        {
+            {"IronGuardian", Resources.Load<GameObject>("IronGuardian")},
+            {"RamSmasher", Resources.Load<GameObject>("RamSmasher")},
+            {"SwiftBlade", Resources.Load<GameObject>("SwiftBlade")}
+        };
 
         public static GameManager Instance { get; private set; }
         public GameObject Boss { get; private set; }
@@ -95,6 +102,16 @@ namespace _Alon.Scripts.Core.Managers
             }
 
             bossController.TakeDamage(baseDamageToGive);
+        }
+        
+        public void SetPlayerToSpawn(string player)
+        {
+            currentPlayerToSpawn = playersPrefabs[player];
+        }
+
+        public GameObject GetPlayerToSpawn()
+        {
+            return currentPlayerToSpawn;
         }
     }
 }
