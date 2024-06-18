@@ -3,6 +3,7 @@ using _Alon.Scripts.Core.Managers;
 using _Alon.Scripts.Gameplay.Controllers;
 using UnityEngine;
 using UnityEngine.EventSystems; // Import the EventSystems namespace
+using UnityEngine.AI; // Import the AI namespace
 
 namespace _Alon.Scripts.GamePlay.Spawners
 {
@@ -32,7 +33,19 @@ namespace _Alon.Scripts.GamePlay.Spawners
                     _spawnPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     _spawnPosition.z = 0;
 
-                    SpawnPlayer();
+                    // Check if the position is on a walkable NavMesh area
+                    NavMeshHit hit;
+                    if (NavMesh.SamplePosition(_spawnPosition, out hit, 1.0f, NavMesh.AllAreas))
+                    {
+                        if (hit.hit)
+                        {
+                            SpawnPlayer();
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Position is not on a walkable NavMesh area");
+                    }
                 }
             }
         }
