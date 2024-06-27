@@ -10,14 +10,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private bool _isAttacking = false;
         private float _maxBossLife = 1000;
         private float _bossLife = 1000f;
-
-        private BossAnimator _bossAnimator;
-
-        private void Start()
-        {
-            _bossAnimator = GameManager.Instance.BossAnimator; // inject Boss Animator
-            _bossAnimator.SetAnimation(gameObject, "idle", true);
-        }
+        
 
         private void Update()
         {
@@ -40,7 +33,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (_playerToAttack == null)
             {
-                _bossAnimator.SetAnimation(gameObject, "idle", true);
                 return;
             }
 
@@ -55,7 +47,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Attack()
         {
-            _bossAnimator.SetAnimation(gameObject, "attack", false);
             GameManager.Instance.DealDamage(_playerToAttack);
         }
 

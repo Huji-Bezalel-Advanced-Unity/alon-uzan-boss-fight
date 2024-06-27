@@ -21,7 +21,6 @@ namespace _Alon.Scripts.Core.Managers
         public static GameManager Instance { get; private set; }
         public GameObject Boss { get; private set; }
         public PlayerAnimator PlayerAnimator { get; private set; }
-        public BossAnimator BossAnimator { get; private set; }
 
         public GameManager(Action<bool> onComplete)
         {
@@ -38,7 +37,6 @@ namespace _Alon.Scripts.Core.Managers
             this._players = new HashSet<BasePlayerController>();
             _onComplete = onComplete;
             PlayerAnimator = new PlayerAnimator();
-            BossAnimator = new BossAnimator();
             OnLoadSuccess();
         }
 

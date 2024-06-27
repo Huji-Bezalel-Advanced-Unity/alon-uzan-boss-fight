@@ -109,7 +109,7 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void LoadBoss()
         {
-            var bossPrefab = Resources.Load<GameObject>("Mammon");
+            var bossPrefab = Resources.Load<GameObject>("Mage");
             if (bossPrefab == null)
             {
                 Debug.LogError("Failed to load boss prefab from Resources folder.");
@@ -124,7 +124,6 @@ namespace _Alon.Scripts.Core.Loaders
                 return;
             }
 
-            GameManager.Instance.BossAnimator.SetAnimation(_boss, "idle", true);
 
             GameManager.Instance.SetBoss(_boss); // Set the boss in the GameManager
 
