@@ -20,6 +20,16 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 HandleAttack();
                 StartCoroutine(DelayAttack());
             }
+
+            if (_bossLife <= 0)
+            {
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            
         }
 
         private IEnumerator DelayAttack()
@@ -47,6 +57,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Attack()
         {
+            BossAnimator.Instance.ChangeAnimationState("attack", false, false);
             GameManager.Instance.DealDamage(_playerToAttack);
         }
 

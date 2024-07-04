@@ -10,11 +10,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private float zoomSpeed = 10f;
-
-        [SerializeField] private float minZoom = 5f;
-
-        [SerializeField] private float maxZoom = 8f;
 
         [SerializeField] private Vector2 minBoundary;
 
@@ -37,8 +32,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         void Update()
         {
-            HandleZoom();
-
             HandlePanning();
         }
 
@@ -58,16 +51,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
         }
 
-        private void HandleZoom()
-        {
-            var mainCamOrthographicSize = _mainCamera.orthographicSize;
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
-            if (scroll != 0.0f)
-            {
-                mainCamOrthographicSize -= scroll * zoomSpeed;
-                _mainCamera.orthographicSize = Mathf.Clamp(mainCamOrthographicSize, minZoom, maxZoom);
-            }
-        }
+        
 
         private void ClampCameraPosition()
         {

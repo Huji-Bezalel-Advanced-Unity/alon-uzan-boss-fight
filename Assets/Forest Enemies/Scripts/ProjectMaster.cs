@@ -9,7 +9,7 @@ public class ProjectMaster : MonoBehaviour
     public GameObject[] EnemiesArray;
     public int CurrentEnemy;
     public int totalEnemies;
-    private Enemy enemyScript;
+    private BossAnimator enemyScript;
     public Button flyButton;
     public Button flyAttackButton;
 
@@ -17,7 +17,7 @@ public class ProjectMaster : MonoBehaviour
     {
         CurrentEnemy = 0;
         totalEnemies = EnemiesArray.Count()-1;
-        enemyScript = EnemiesArray[CurrentEnemy].GetComponent<Enemy>();
+        enemyScript = EnemiesArray[CurrentEnemy].GetComponent<BossAnimator>();
     }
 
     private void Update()
@@ -35,7 +35,7 @@ public class ProjectMaster : MonoBehaviour
         else {CurrentEnemy = 0;}
         SetPosition();
         EnemiesArray[CurrentEnemy].SetActive(true);
-        enemyScript = EnemiesArray[CurrentEnemy].GetComponent<Enemy>();
+        enemyScript = EnemiesArray[CurrentEnemy].GetComponent<BossAnimator>();
         CheckButtons();
     }
 
@@ -49,7 +49,7 @@ public class ProjectMaster : MonoBehaviour
         else {CurrentEnemy = totalEnemies;}
         SetPosition();
         EnemiesArray[CurrentEnemy].SetActive(true);
-        enemyScript = EnemiesArray[CurrentEnemy].GetComponent<Enemy>();
+        enemyScript = EnemiesArray[CurrentEnemy].GetComponent<BossAnimator>();
         CheckButtons();
     }
 
@@ -75,43 +75,43 @@ public class ProjectMaster : MonoBehaviour
 
     public void SetIdle()
     {
-        string setAnimation = enemyScript.PLAYER_IDLE;
+        string setAnimation = BossAnimations.PLAYER_IDLE.ToString();
         enemyScript.ChangeAnimationState(setAnimation, false, false);
 
     }
     public void SetAttack()
     {
-        string setAnimation = enemyScript.PLAYER_ATTACK;
+        string setAnimation = BossAnimations.PLAYER_ATTACK.ToString();
         enemyScript.ChangeAnimationState(setAnimation, false, false);
 
     }
     public void SetWalk()
     {
-        string setAnimation = enemyScript.PLAYER_WALK;
+        string setAnimation = BossAnimations.PLAYER_WALK.ToString();
         enemyScript.ChangeAnimationState(setAnimation, true, false);
 
     }
     public void SetRun() 
     {
-        string setAnimation = enemyScript.PLAYER_RUN; 
+        string setAnimation = BossAnimations.PLAYER_RUN.ToString(); 
         enemyScript.ChangeAnimationState(setAnimation, false, true);
 
     }
     public void SetDeath()
     {
-        string setAnimation = enemyScript.PLAYER_DEATH;
+        string setAnimation = BossAnimations.PLAYER_DEATH.ToString();
         enemyScript.ChangeAnimationState(setAnimation, false, false);
 
     }
     public void SetFly()
     {
-        string setAnimation = enemyScript.PLAYER_FLY;
+        string setAnimation = BossAnimations.PLAYER_FLY.ToString();
         enemyScript.ChangeAnimationState(setAnimation, true, false);
 
     }
     public void SetFlyAttack()
     {
-        string setAnimation = enemyScript.PLAYER_FLY_ATTACK;
+        string setAnimation = BossAnimations.PLAYER_FLY_ATTACK.ToString();
         enemyScript.ChangeAnimationState(setAnimation, false, false);
 
     }
