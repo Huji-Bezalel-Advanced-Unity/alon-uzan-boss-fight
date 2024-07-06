@@ -30,21 +30,23 @@ namespace _Alon.Scripts.GamePlay.Spawners
                 // Check if the pointer is over a UI element
                 if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    _spawnPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    _spawnPosition.z = 0;
+                    // Convert mouse position to world position
+                    Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
+                    mouseWorldPosition.z = 0; // Set Z to 0 or other appropriate value depending on your game's coordinate system
 
-                    // Check if the position is on a walkable NavMesh area
-                    NavMeshHit hit;
-                    if (NavMesh.SamplePosition(_spawnPosition, out hit, 1.0f, NavMesh.AllAreas))
+                    // Check if the world position is on a walkable NavMesh area
+                    if (NavMesh.SamplePosition(mouseWorldPosition, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
                     {
                         if (hit.hit)
                         {
+                            _spawnPosition = hit.position;
+                            Debug.Log("Spawn position set at a walkable NavMesh area: " + _spawnPosition);
                             SpawnPlayer();
                         }
-                    }
-                    else
-                    {
-                        Debug.Log("Position is not on a walkable NavMesh area");
+                        else
+                        {
+                            Debug.Log("Clicked position is not on a walkable NavMesh area.");
+                        }
                     }
                 }
             }

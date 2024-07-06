@@ -8,8 +8,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BasePlayerController : MonoBehaviour
     {
-        private const float MinDistanceToAttack = 0.5f;
-        [SerializeField] private float moveSpeed = 1f;
+        private const float MinDistanceToAttack = 1.2f;
         [SerializeField] private Image lifeBar;
         [SerializeField] private GameObject barHolder;
         private bool _isMoving;
@@ -24,6 +23,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private float _maxLife = 100;
 
         protected PlayerAnimator _playerAnimator;
+        private Vector3 _target;
 
         protected void Start()
         {
@@ -55,6 +55,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleAttack()
         {
+            if (!GameManager.Instance.IsBossAlive) return;
+            
             if (_isAttacking && !_isDead)
             {
                 StartCoroutine(AttackCooldown());
@@ -79,12 +81,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
+                _target = Vector3.left;
             }
             else if (_boss.transform.position.x < transform.position.x)
             {
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
                 barHolder.transform.Rotate(0, 180, 0);
+                _target = Vector3.right;
             }
         }
 
@@ -104,15 +108,17 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleMovement()
         {
+            
             if (_boss == null)
             {
                 _isMoving = false;
                 return;
             }
+            
 
             if (Vector2.Distance(transform.position, _boss.transform.position) >= MinDistanceToAttack)
             {
-                _navMeshAgent.SetDestination(_boss.transform.position);
+                _navMeshAgent.SetDestination(_boss.transform.position + _target);
                 _isMoving = true;
             }
             else if (_isMoving)

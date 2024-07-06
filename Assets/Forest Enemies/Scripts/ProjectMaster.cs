@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using _Alon.Scripts.Core.Managers;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class ProjectMaster : MonoBehaviour
 {
@@ -18,11 +20,6 @@ public class ProjectMaster : MonoBehaviour
         CurrentEnemy = 0;
         totalEnemies = EnemiesArray.Count()-1;
         enemyScript = EnemiesArray[CurrentEnemy].GetComponent<BossAnimator>();
-    }
-
-    private void Update()
-    {
-        
     }
 
     public void NextEnemy()     

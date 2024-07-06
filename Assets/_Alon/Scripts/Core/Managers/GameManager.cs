@@ -9,7 +9,7 @@ namespace _Alon.Scripts.Core.Managers
     {
         private readonly Action<bool> _onComplete;
         private HashSet<BasePlayerController> _players;
-        private static float MinDistanceToAttack = 1f;
+        private static float MinDistanceToAttack = 1.2f;
         private GameObject currentPlayerToSpawn;
         private Dictionary<string, GameObject> playersPrefabs = new Dictionary<string, GameObject>
         {
@@ -21,6 +21,8 @@ namespace _Alon.Scripts.Core.Managers
         public static GameManager Instance { get; private set; }
         public GameObject Boss { get; private set; }
         public PlayerAnimator PlayerAnimator { get; private set; }
+
+        public bool IsBossAlive = true;
 
         public GameManager(Action<bool> onComplete)
         {
