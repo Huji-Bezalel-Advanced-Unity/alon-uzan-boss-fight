@@ -24,6 +24,7 @@ namespace _Alon.Scripts.Core.Managers
         public PlayerAnimator PlayerAnimator { get; private set; }
 
         public bool IsBossAlive = true;
+        private Dictionary<string, int> damagesDict;
 
         public GameManager(Action<bool> onComplete)
         {
@@ -41,6 +42,12 @@ namespace _Alon.Scripts.Core.Managers
             this._enemies = new HashSet<BaseEnemyController>();
             _onComplete = onComplete;
             PlayerAnimator = new PlayerAnimator();
+            damagesDict = new Dictionary<string, int>
+            {
+                {"IronGuardian", 20},
+                {"RamSmasher", 30},
+                {"SwiftBlade", 40}
+            };
             OnLoadSuccess();
         }
 
@@ -70,11 +77,11 @@ namespace _Alon.Scripts.Core.Managers
             _players.Remove(player);
         }
 
-        public BasePlayerController GetNearestPlayer(GameObject basePlayer)
+        public BasePlayerController GetNearestPlayerToBoss()
         {
             foreach (var player in _players)
             {
-                float distance = Vector3.Distance(player.transform.position, basePlayer.transform.position);
+                float distance = Vector3.Distance(player.transform.position, Boss.transform.position);
                 if (distance <= MinDistanceToAttack)
                 {
                     return player;
@@ -102,7 +109,7 @@ namespace _Alon.Scripts.Core.Managers
 
         public void DealDamage(BasePlayerController playerToAttack)
         {
-            playerToAttack.TakeDamage();
+            playerToAttack.TakeDamage(damagesDict[playerToAttack.gameObject.name.Replace("(Clone)", "")]);
         }
 
         public void DealEnemyDamage(float baseDamageToGive, GameObject enemy)
@@ -137,6 +144,22 @@ namespace _Alon.Scripts.Core.Managers
         public void AddEnemy(GameObject enemyToAdd)
         {
             _enemies.Add(enemyToAdd.GetComponent<BaseEnemyController>());
+        }
+
+        public BasePlayerController GetNearestPlayerToEnemy(GameObject gameObject)
+        {
+            float currentDistance = 1000f;
+            BasePlayerController nearestPlayer = null;
+            foreach (var player in _players)
+            {
+                float distance = Vector3.Distance(player.transform.position, gameObject.transform.position);
+                if (distance < currentDistance)
+                {
+                    currentDistance = distance;
+                    nearestPlayer = player;
+                }
+            }
+            return nearestPlayer;
         }
     }
 }

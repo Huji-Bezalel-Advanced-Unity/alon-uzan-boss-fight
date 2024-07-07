@@ -18,7 +18,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         [SerializeField] protected float _playersLife = 100f;
         private float _TimeToTakeDamage = 2f;
         private float _TimeToGiveDamage = 2f;
-        private bool _isDead = false;
+        public bool _isDead = false;
         private NavMeshAgent _navMeshAgent;
         private float _maxLife = 100;
 
@@ -52,7 +52,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
             if (nearestEnemy)
             {
                 Vector3 destination = nearestEnemy.transform.position + _target;
-                Debug.Log("Setting destination to nearest enemy: " + destination);
                 _navMeshAgent.SetDestination(destination);
                 HandleDirections();
             }
@@ -148,7 +147,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isAttacking = true;
         }
 
-        public virtual void TakeDamage()
+        public virtual void TakeDamage(float damage)
         {
             if (_playersLife <= 0)
             {

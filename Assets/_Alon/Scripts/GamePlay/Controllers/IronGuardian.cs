@@ -5,13 +5,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class IronGuardian : BasePlayerController
     {
-        private float _BaseDamageToTake = 20f;
+        public float _BaseDamageToTake = 20f;
         private float _BaseDamageToGive = 30f;
 
-        public override void TakeDamage()
+        public override void TakeDamage(float damage)
         {
-            _playersLife = Mathf.Max(0, _playersLife - _BaseDamageToTake);
-            base.TakeDamage();
+            _playersLife = Mathf.Max(0, _playersLife - damage);
+            base.TakeDamage(damage);
             StartCoroutine(UpdateLifeBar(_playersLife));
         }
 

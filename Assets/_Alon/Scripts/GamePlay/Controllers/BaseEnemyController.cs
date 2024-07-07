@@ -8,53 +8,50 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BaseEnemyController : MonoBehaviour
     {
-        private BasePlayerController _playerToAttack = null;
-        private bool _isAttacking = false;
-        private Animator _animator;
-        private float _deadZone = 3f;
-    
+        protected BasePlayerController _playerToAttack = null;
+        protected bool _isAttacking = false;
+        [SerializeField]protected Animator _animator;
+        protected float _deadZone = 3f;
+        private float _minDistanceToAttack = 1.2f;
+
         private void Start()
         {
             Debug.Log("BaseEnemyController Start");
-            _animator = GetComponent<Animator>();
+            // _animator = GetComponentInChildren<Animator>();
         }
-    
-        private void Update()
+
+        private void HandleApproachToPlayer() {}
+
+        protected void CheckForTarget()
         {
-            CheckForTarget();
-            TryAttack();
-        }
-    
-        private void CheckForTarget()
-        {
-            var player = GameManager.Instance.GetNearestPlayer(this.gameObject);
+            var player = GameManager.Instance.GetNearestPlayerToEnemy(this.gameObject);
             if (!player)
             {
-                return;
+                Debug.Log("No player to attack");
             }
             _playerToAttack = player;
         }
     
-        private void Die()
+        protected void Die()
         {
             _animator.Play("death");
             StartCoroutine(DieRoutine());
         }
     
-        private IEnumerator DieRoutine()
+        protected IEnumerator DieRoutine()
         {
             yield return new WaitForSeconds(2);
             Destroy(gameObject);
         }
     
-        private void TryAttack()
+        protected void TryAttack()
         {
             if (_playerToAttack == null)
             {
                 return;
             }
     
-            if (Vector3.Distance(transform.position, _playerToAttack.transform.position) < _deadZone)
+            if (Vector3.Distance(transform.position, _playerToAttack.transform.position) < _minDistanceToAttack)
             {
                 _isAttacking = true;
                 StartCoroutine(AttackCoolDown());
@@ -74,11 +71,17 @@ namespace _Alon.Scripts.Gameplay.Controllers
     
         protected virtual void Attack()
         {
-            _animator.Play("attack");
         }
         
         public virtual void TakeDamage(float damage){}
         
+        protected void MoveToPlayer(){}
+
+        protected IEnumerator DelayAttack()
+        {
+            yield return new WaitForSeconds(2);
+            _isAttacking = true;
+        }
         
     }
 

@@ -35,10 +35,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 _lastAttackTime += Time.deltaTime;
                 HandleAttack();
             }
-            else
-            {
-                
-            }
 
             if (_lastAttackTime > 3 && !_isPatrolling)
             {
@@ -84,7 +80,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void TryAttack()
         {
-            _playerToAttack = GameManager.Instance.GetNearestPlayer(this.gameObject);
+            _playerToAttack = GameManager.Instance.GetNearestPlayerToBoss();
         }
 
         private void Attack()

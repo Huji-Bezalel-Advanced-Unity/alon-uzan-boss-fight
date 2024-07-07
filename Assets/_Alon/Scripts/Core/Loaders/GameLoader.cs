@@ -139,7 +139,7 @@ namespace _Alon.Scripts.Core.Loaders
         
         private void LoadEnemy()
         {
-            GameObject enemyPrefab = Resources.Load<GameObject>("Small_1");
+            GameObject enemyPrefab = Resources.Load<GameObject>("EnemyGroup1");
             if (enemyPrefab == null)
             {
                 Debug.LogError("Failed to load enemy prefab from Resources folder.");
@@ -151,8 +151,11 @@ namespace _Alon.Scripts.Core.Loaders
                 Debug.LogError("Enemy instantiation failed.");
                 return;
             }
-            
-            GameManager.Instance.AddEnemy(_enemy);
+
+            foreach (Transform child in _enemy.transform)
+            {
+                GameManager.Instance.AddEnemy(child.gameObject);
+            }
         }
 
         private Vector3 GeneratePosition()
