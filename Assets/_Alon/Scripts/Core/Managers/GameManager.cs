@@ -9,6 +9,7 @@ namespace _Alon.Scripts.Core.Managers
     {
         private readonly Action<bool> _onComplete;
         private HashSet<BasePlayerController> _players;
+        private HashSet<BaseEnemyController> _enemies;
         private static float MinDistanceToAttack = 1.2f;
         private GameObject currentPlayerToSpawn;
         private Dictionary<string, GameObject> playersPrefabs = new Dictionary<string, GameObject>
@@ -37,6 +38,7 @@ namespace _Alon.Scripts.Core.Managers
             }
 
             this._players = new HashSet<BasePlayerController>();
+            this._enemies = new HashSet<BaseEnemyController>();
             _onComplete = onComplete;
             PlayerAnimator = new PlayerAnimator();
             OnLoadSuccess();
@@ -68,11 +70,11 @@ namespace _Alon.Scripts.Core.Managers
             _players.Remove(player);
         }
 
-        public BasePlayerController GetNearestPlayer()
+        public BasePlayerController GetNearestPlayer(GameObject basePlayer)
         {
             foreach (var player in _players)
             {
-                float distance = Vector3.Distance(player.transform.position, Boss.transform.position);
+                float distance = Vector3.Distance(player.transform.position, basePlayer.transform.position);
                 if (distance <= MinDistanceToAttack)
                 {
                     return player;
@@ -80,21 +82,38 @@ namespace _Alon.Scripts.Core.Managers
             }
             return null;
         }
+        
+        public GameObject GetNearestEnemy(GameObject basePlayer)
+        {
+            float currentDistance = 1000f;
+            BaseEnemyController nearestEnemy = null;
+            foreach (var enemy in _enemies)
+            {
+                float distance = Vector3.Distance(enemy.transform.position, basePlayer.transform.position);
+                if (distance < currentDistance)
+                {
+                    currentDistance = distance;
+                    nearestEnemy = enemy;
+                }
+            }
+            float distanceToBoss = Vector3.Distance(Boss.transform.position, basePlayer.transform.position);
+            return distanceToBoss < currentDistance || nearestEnemy == null ? Boss : nearestEnemy.gameObject;
+        }
 
         public void DealDamage(BasePlayerController playerToAttack)
         {
             playerToAttack.TakeDamage();
         }
 
-        public void DealBossDamage(float baseDamageToGive)
+        public void DealEnemyDamage(float baseDamageToGive, GameObject enemy)
         {
-            if (Boss == null)
+            if (enemy == null)
             {
                 Debug.LogError("Boss is not set in GameManager.");
                 return;
             }
 
-            var bossController = Boss.GetComponent<BossController>();
+            var bossController = enemy.GetComponent<BaseEnemyController>();
             if (bossController == null)
             {
                 Debug.LogError("BossController component not found on Boss.");
@@ -112,6 +131,12 @@ namespace _Alon.Scripts.Core.Managers
         public GameObject GetPlayerToSpawn()
         {
             return currentPlayerToSpawn;
+        }
+
+
+        public void AddEnemy(GameObject enemyToAdd)
+        {
+            _enemies.Add(enemyToAdd.GetComponent<BaseEnemyController>());
         }
     }
 }

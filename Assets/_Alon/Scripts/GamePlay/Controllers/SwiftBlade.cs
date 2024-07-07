@@ -18,7 +18,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected override void GiveDamage()
         {
-            GameManager.Instance.DealBossDamage(_BaseDamageToGive);
+            GameManager.Instance.DealEnemyDamage(_BaseDamageToGive, nearestEnemy);
         }
         
     }

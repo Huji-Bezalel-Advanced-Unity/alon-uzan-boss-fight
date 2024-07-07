@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
-    public class BossController : MonoBehaviour
+    public class BossController : BaseEnemyController
     {
         private BasePlayerController _playerToAttack = null;
         private bool _isAttacking = false;
@@ -17,12 +17,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private float _lastAttackTime = 0;
         private Vector3 _currentPatrolTarget;
         private readonly float _moveSpeed = 0.6f;
+        private BossAnimator _animator;
 
         private void Start()
         {
             _leftPatrolPoint = transform.position + Vector3.left * 2;  // 5 units to the left
             _rightPatrolPoint = transform.position + Vector3.right * 2; // 5 units to the right
             _currentPatrolTarget = _rightPatrolPoint;
+            _animator = GetComponent<BossAnimator>();
         }
 
         private void Update()
@@ -52,7 +54,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Die()
         {
-            BossAnimator.Instance.ChangeAnimationState("death", false, false);
+            _animator.ChangeAnimationState("death");
             StartCoroutine(DieRoutine());
         }
 
@@ -82,13 +84,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void TryAttack()
         {
-            _playerToAttack = GameManager.Instance.GetNearestPlayer();
+            _playerToAttack = GameManager.Instance.GetNearestPlayer(this.gameObject);
         }
 
         private void Attack()
         {
             _isAttacking = true;
-            BossAnimator.Instance.ChangeAnimationState("attack", false, false);
+            _animator.ChangeAnimationState("attack");
             GameManager.Instance.DealDamage(_playerToAttack);
             _isPatrolling = false; // Stop patrolling when attacking
             StartCoroutine(DelayAttack());
@@ -102,7 +104,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 float step = Time.deltaTime * _moveSpeed;
                 transform.position = Vector3.MoveTowards(transform.position, _currentPatrolTarget, step);
-                BossAnimator.Instance.ChangeAnimationState("walk", true, false);
+                _animator.ChangeAnimationState("walk");
                 
                 if (Vector3.Distance(transform.position, _currentPatrolTarget) < 0.001f)
                 {
@@ -128,7 +130,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
         }
 
-        public void TakeDamage(float damage)
+        public override void TakeDamage(float damage)
         {
             _bossLife = Mathf.Max(0, _bossLife - damage);
             StartCoroutine(UIManager.Instance.UpdateBossLifeBar(_bossLife));

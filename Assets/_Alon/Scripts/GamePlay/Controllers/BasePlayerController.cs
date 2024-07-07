@@ -24,6 +24,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected PlayerAnimator _playerAnimator;
         private Vector3 _target;
+        protected GameObject nearestEnemy;
 
         protected void Start()
         {
@@ -32,7 +33,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _navMeshAgent.updateRotation = false;
             _navMeshAgent.updateUpAxis = false;
             lifeBar.fillAmount = 1;
-            HandleDirections();
+            HandleSetTarget();
             _playerAnimator = GameManager.Instance.PlayerAnimator; // inject Player Animator
         }
 
@@ -43,6 +44,18 @@ namespace _Alon.Scripts.Gameplay.Controllers
             HandleMovement();
             HandleAttack();
             GiveDamageRoutine();
+        }
+
+        private void HandleSetTarget()
+        {
+            nearestEnemy = GameManager.Instance.GetNearestEnemy(this.gameObject);
+            if (nearestEnemy)
+            {
+                Vector3 destination = nearestEnemy.transform.position + _target;
+                Debug.Log("Setting destination to nearest enemy: " + destination);
+                _navMeshAgent.SetDestination(destination);
+                HandleDirections();
+            }
         }
 
         private void GiveDamageRoutine()
@@ -56,7 +69,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void HandleAttack()
         {
             if (!GameManager.Instance.IsBossAlive) return;
-            
+
             if (_isAttacking && !_isDead)
             {
                 StartCoroutine(AttackCooldown());
@@ -77,13 +90,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleDirections()
         {
-            if (_boss.transform.position.x > transform.position.x)
+            if (nearestEnemy.transform.position.x > transform.position.x)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
                 _target = Vector3.left;
             }
-            else if (_boss.transform.position.x < transform.position.x)
+            else
             {
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
@@ -108,17 +121,15 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleMovement()
         {
-            
-            if (_boss == null)
+            if (nearestEnemy == null)
             {
                 _isMoving = false;
                 return;
             }
-            
 
-            if (Vector2.Distance(transform.position, _boss.transform.position) >= MinDistanceToAttack)
+            if (Vector2.Distance(transform.position, nearestEnemy.transform.position) >= MinDistanceToAttack)
             {
-                _navMeshAgent.SetDestination(_boss.transform.position + _target);
+                HandleSetTarget();
                 _isMoving = true;
             }
             else if (_isMoving)

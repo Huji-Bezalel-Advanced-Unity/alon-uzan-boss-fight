@@ -26,6 +26,7 @@ namespace _Alon.Scripts.Core.Loaders
         };
 
         private GameObject _boss;
+        private GameObject _enemy;
 
         void Start()
         {
@@ -80,6 +81,7 @@ namespace _Alon.Scripts.Core.Loaders
         {
             SceneManager.sceneLoaded -= OnMainSceneLoaded;
             LoadBoss();
+            LoadEnemy();
             gameLoaderUI.AddAccumulate(_loadersProgress["OnMainSceneLoaded"]);
             OnLoadComplete();
         }
@@ -131,6 +133,26 @@ namespace _Alon.Scripts.Core.Loaders
             {
                 Debug.LogError("Failed to set boss in GameManager.");
             }
+            
+            
+        }
+        
+        private void LoadEnemy()
+        {
+            GameObject enemyPrefab = Resources.Load<GameObject>("Small_1");
+            if (enemyPrefab == null)
+            {
+                Debug.LogError("Failed to load enemy prefab from Resources folder.");
+                return;
+            }
+            _enemy = Instantiate(enemyPrefab, new Vector3(11, 0, 0), Quaternion.identity);
+            if (_enemy == null)
+            {
+                Debug.LogError("Enemy instantiation failed.");
+                return;
+            }
+            
+            GameManager.Instance.AddEnemy(_enemy);
         }
 
         private Vector3 GeneratePosition()
