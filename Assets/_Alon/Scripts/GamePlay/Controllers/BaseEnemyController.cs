@@ -13,16 +13,49 @@ namespace _Alon.Scripts.Gameplay.Controllers
         [SerializeField]protected Animator _animator;
         protected float _deadZone = 3f;
         private float _minDistanceToAttack = 1.2f;
+        private float _moveSpeed = 0.6f;
 
         private void Start()
         {
             Debug.Log("BaseEnemyController Start");
             // _animator = GetComponentInChildren<Animator>();
         }
+        
+        private void Update()
+        {
+            CheckForTarget();
+            HandleDirections();
+            if (!_isAttacking)
+            {
+                TryAttack();
+            }
+            HandleApproachToPlayer();
+            if (_playerToAttack == null || (_playerToAttack != null && _playerToAttack._isDead))
+            {
+                _animator.SetBool("isAttack", false);
+            }
+            
+        }
 
-        private void HandleApproachToPlayer() {}
+        private void HandleApproachToPlayer()
+        {
+            if (_playerToAttack == null)
+            {
+                return;
+            }
+            Debug.Log(_playerToAttack.gameObject.name);
+            if (!_isAttacking && Vector3.Distance(transform.position, _playerToAttack.transform.position) < _deadZone)
+            {
+                Debug.Log("Approaching player");
+                MoveToPlayer();
+            }
+            else
+            {
+                _animator.SetBool("isWalk", false);
+            }
+        }
 
-        protected void CheckForTarget()
+        private void CheckForTarget()
         {
             var player = GameManager.Instance.GetNearestPlayerToEnemy(this.gameObject);
             _playerToAttack = player;
@@ -34,13 +67,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
             StartCoroutine(DieRoutine());
         }
     
-        protected IEnumerator DieRoutine()
+        private IEnumerator DieRoutine()
         {
             yield return new WaitForSeconds(2);
             Destroy(gameObject);
         }
     
-        protected void TryAttack()
+        private void TryAttack()
         {
             if (_playerToAttack == null)
             {
@@ -66,16 +99,48 @@ namespace _Alon.Scripts.Gameplay.Controllers
     
         protected virtual void Attack()
         {
+            _isAttacking = true;
+            _animator.SetBool("isAttack", true);
+            StartCoroutine(DelayAttack());
         }
         
         public virtual void TakeDamage(float damage){}
-        
-        protected void MoveToPlayer(){}
 
-        protected IEnumerator DelayAttack()
+        private void MoveToPlayer()
+        {
+            if (_playerToAttack == null)
+            {
+                Debug.Log("No player to attack");
+                return;
+            }
+            Debug.Log("Moving to player");
+            // move to the player in _moveSpeed
+            _animator.SetBool("isWalk", true);
+            transform.position = Vector3.MoveTowards(transform.position, _playerToAttack.transform.position, _moveSpeed * Time.deltaTime);
+        }
+
+        private IEnumerator DelayAttack()
         {
             yield return new WaitForSeconds(2);
             _isAttacking = false;
+        }
+        
+        private void HandleDirections()
+        {
+            if (_playerToAttack == null)
+            {
+                return;
+            }
+            if (_playerToAttack.transform.position.x > transform.position.x)
+            {
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
+                    transform.localScale.z);
+            }
+            else
+            {
+                transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
+                    transform.localScale.z);
+            }
         }
         
     }
