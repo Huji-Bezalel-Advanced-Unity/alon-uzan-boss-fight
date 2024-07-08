@@ -25,10 +25,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected void CheckForTarget()
         {
             var player = GameManager.Instance.GetNearestPlayerToEnemy(this.gameObject);
-            if (!player)
-            {
-                Debug.Log("No player to attack");
-            }
             _playerToAttack = player;
         }
     
@@ -53,7 +49,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
     
             if (Vector3.Distance(transform.position, _playerToAttack.transform.position) < _minDistanceToAttack)
             {
-                _isAttacking = true;
                 StartCoroutine(AttackCoolDown());
                 Attack();
             }
@@ -80,7 +75,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected IEnumerator DelayAttack()
         {
             yield return new WaitForSeconds(2);
-            _isAttacking = true;
+            _isAttacking = false;
         }
         
     }
