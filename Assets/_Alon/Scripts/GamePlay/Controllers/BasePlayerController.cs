@@ -171,6 +171,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Die()
         {
             _isDead = true;
+            StopAllCoroutines();
             _playerAnimator.SetAnimation(gameObject, "Death", false);
             GameManager.Instance.RemovePlayer(this);
             StartCoroutine(DelayDeathForAnimation());

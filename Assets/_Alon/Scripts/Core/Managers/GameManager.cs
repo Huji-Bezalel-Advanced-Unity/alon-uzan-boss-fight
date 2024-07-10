@@ -126,8 +126,9 @@ namespace _Alon.Scripts.Core.Managers
                 Debug.LogError("BossController component not found on Boss.");
                 return;
             }
-
+            Debug.Log("Dealing damage to enemy" + enemy.gameObject.name);
             bossController.TakeDamage(baseDamageToGive);
+            Debug.Log("life: " + bossController.life);
         }
         
         public void SetPlayerToSpawn(string player)
@@ -160,6 +161,11 @@ namespace _Alon.Scripts.Core.Managers
                 }
             }
             return nearestPlayer;
+        }
+
+        public void RemoveEnemy(BaseEnemyController baseEnemyController)
+        {
+            _enemies.Remove(baseEnemyController);
         }
     }
 }

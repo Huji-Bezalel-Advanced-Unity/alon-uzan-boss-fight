@@ -14,6 +14,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected float _deadZone = 3f;
         private float _minDistanceToAttack = 1.2f;
         private float _moveSpeed = 0.6f;
+        public float life = 100;
 
         private void Start()
         {
@@ -34,7 +35,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 _animator.SetBool("isAttack", false);
             }
-            
+            CheckForDeath();
         }
 
         private void HandleApproachToPlayer()
@@ -43,7 +44,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
-            Debug.Log(_playerToAttack.gameObject.name);
+            
             if (!_isAttacking && Vector3.Distance(transform.position, _playerToAttack.transform.position) < _deadZone)
             {
                 Debug.Log("Approaching player");
@@ -63,14 +64,18 @@ namespace _Alon.Scripts.Gameplay.Controllers
     
         protected void Die()
         {
+            StopAllCoroutines();
+            GameManager.Instance.RemoveEnemy(this);
             _animator.Play("death");
             StartCoroutine(DieRoutine());
         }
     
         private IEnumerator DieRoutine()
         {
+            Debug.Log("start die routine");
+            this.enabled = false;
             yield return new WaitForSeconds(2);
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     
         private void TryAttack()
@@ -103,8 +108,19 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _animator.SetBool("isAttack", true);
             StartCoroutine(DelayAttack());
         }
+
+        public virtual void TakeDamage(float damage)
+        {
+            life -= damage;
+        }
         
-        public virtual void TakeDamage(float damage){}
+        private void CheckForDeath()
+        {
+            if (life <= 0)
+            {
+                Die();
+            }
+        }
 
         private void MoveToPlayer()
         {
