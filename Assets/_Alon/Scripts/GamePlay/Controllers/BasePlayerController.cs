@@ -8,7 +8,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BasePlayerController : MonoBehaviour
     {
-        private const float MinDistanceToAttack = 1.2f;
+        private const float MinDistanceToAttack = 1.5f;
         [SerializeField] private Image lifeBar;
         [SerializeField] private GameObject barHolder;
         private bool _isMoving;
@@ -40,6 +40,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Update()
         {
             if (_isDead) return;
+            HandleSetTarget();
             HandleAnimation();
             HandleMovement();
             HandleAttack();
@@ -60,7 +61,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void GiveDamageRoutine()
         {
             _TimeToGiveDamage -= Time.deltaTime;
-            if (!(Vector3.Distance(transform.position, _boss.transform.position) <= MinDistanceToAttack) ||
+            if (!(Vector3.Distance(transform.position, nearestEnemy.transform.position) <= MinDistanceToAttack) ||
                 !(_TimeToGiveDamage <= 0)) return;
             _TimeToGiveDamage = 2f;
         }
@@ -68,6 +69,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void HandleAttack()
         {
             if (!GameManager.Instance.IsBossAlive) return;
+            if (Vector3.Distance(transform.position, nearestEnemy.transform.position) > MinDistanceToAttack)
+            {
+                return;
+            }
 
             if (_isAttacking && !_isDead)
             {
@@ -111,7 +116,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 _playerAnimator.SetAnimation(gameObject, "Run", true);
                 _wasMoving = true;
             }
-            else if (!_isDead && !_isMoving && _wasMoving)
+            else if (nearestEnemy == null || (!_isDead && !_isMoving && _wasMoving))
             {
                 _playerAnimator.SetAnimation(gameObject, "Idle", true);
                 _wasMoving = false;

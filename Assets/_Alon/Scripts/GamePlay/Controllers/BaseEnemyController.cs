@@ -10,7 +10,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
     {
         protected BasePlayerController _playerToAttack = null;
         protected bool _isAttacking = false;
-        [SerializeField]protected Animator _animator;
+        protected Animator _animator;
         protected float _deadZone = 3f;
         private float _minDistanceToAttack = 1.2f;
         private float _moveSpeed = 0.6f;
@@ -19,7 +19,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Start()
         {
             Debug.Log("BaseEnemyController Start");
-            // _animator = GetComponentInChildren<Animator>();
+            _animator = GetComponentInChildren<Animator>();
         }
         
         private void Update()
@@ -98,7 +98,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
     
         private IEnumerator AttackCoolDown()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
             _isAttacking = false;
         }
     

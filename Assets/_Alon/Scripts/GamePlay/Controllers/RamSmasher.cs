@@ -17,6 +17,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected override void GiveDamage()
         {
+            if (nearestEnemy == null)
+            {
+                return;
+            }
             GameManager.Instance.DealEnemyDamage(_BaseDamageToGive, nearestEnemy);
         }
         
