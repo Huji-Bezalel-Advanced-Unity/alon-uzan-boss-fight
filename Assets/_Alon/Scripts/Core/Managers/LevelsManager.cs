@@ -13,7 +13,6 @@ namespace _Alon.Scripts.Core.Managers
 
         private List<LevelsData> _levelsData;
 
-
         // End Of Local Variables
 
         public LevelsManager(Action<bool> onComplete)

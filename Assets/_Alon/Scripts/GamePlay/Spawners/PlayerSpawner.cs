@@ -10,16 +10,12 @@ namespace _Alon.Scripts.GamePlay.Spawners
     public class PlayerSpawner : MonoBehaviour
     {
         /// <summary>
-        /// Serialized Fields
-        /// </summary>
-        private GameObject playerPrefab;
-
-        /// <summary>
         /// Private Fields
         /// </summary>
         private Vector3 _spawnPosition;
 
         private GameObject _bossPosition;
+        private GameObject playerPrefab;
 
         // End Of Local Variables
 
@@ -31,8 +27,10 @@ namespace _Alon.Scripts.GamePlay.Spawners
                 if (!EventSystem.current.IsPointerOverGameObject())
                 {
                     // Convert mouse position to world position
-                    Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
-                    mouseWorldPosition.z = 0; // Set Z to 0 or other appropriate value depending on your game's coordinate system
+                    Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                        Input.mousePosition.y, Camera.main.nearClipPlane));
+                    mouseWorldPosition.z =
+                        0; // Set Z to 0 or other appropriate value depending on your game's coordinate system
 
                     // Check if the world position is on a walkable NavMesh area
                     if (NavMesh.SamplePosition(mouseWorldPosition, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
@@ -60,12 +58,14 @@ namespace _Alon.Scripts.GamePlay.Spawners
             {
                 return;
             }
+
             UIManager.Instance.SetMesos(mesosToTake);
             if (playerPrefab == null)
             {
                 Debug.Log("Choose Player");
                 return;
             }
+
             GameObject newPlayer = Instantiate(playerPrefab, _spawnPosition, Quaternion.identity);
             print(newPlayer);
             GameManager.Instance.AddPlayer(newPlayer.GetComponent<BasePlayerController>());

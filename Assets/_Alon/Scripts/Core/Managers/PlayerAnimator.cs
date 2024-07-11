@@ -6,6 +6,9 @@ namespace _Alon.Scripts.Core.Managers
 {
     public class PlayerAnimator : BaseAnimator
     {
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private readonly HashSet<String> _animations = new HashSet<String>
         {
             "Death",
@@ -17,7 +20,11 @@ namespace _Alon.Scripts.Core.Managers
             "Walk"
         };
 
-        public PlayerAnimator() { }
+        // End Of Local Variables
+
+        public PlayerAnimator()
+        {
+        }
 
         public override void SetAnimation(GameObject player, String animationName, bool loop)
         {
@@ -25,6 +32,7 @@ namespace _Alon.Scripts.Core.Managers
             {
                 Debug.LogException(new Exception("Invalid animation name."));
             }
+
             base.SetAnimation(player, animationName, loop);
         }
     }

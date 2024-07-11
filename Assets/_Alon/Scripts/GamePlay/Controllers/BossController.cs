@@ -6,11 +6,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BossController : BaseEnemyController
     {
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private BasePlayerController _playerToAttack = null;
+
         private bool _isAttacking = false;
         private float _maxBossLife = 1000;
         private float _bossLife = 1000f;
-        
         private Vector3 _leftPatrolPoint;
         private Vector3 _rightPatrolPoint;
         private bool _isPatrolling = false;
@@ -19,9 +22,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private readonly float _moveSpeed = 0.6f;
         private BossAnimator _animator;
 
+        // End Of Local Variables
+
         private void Start()
         {
-            _leftPatrolPoint = transform.position + Vector3.left * 2;  // 5 units to the left
+            _leftPatrolPoint = transform.position + Vector3.left * 2; // 5 units to the left
             _rightPatrolPoint = transform.position + Vector3.right * 2; // 5 units to the right
             _currentPatrolTarget = _rightPatrolPoint;
             _animator = GetComponent<BossAnimator>();
@@ -101,7 +106,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 float step = Time.deltaTime * _moveSpeed;
                 transform.position = Vector3.MoveTowards(transform.position, _currentPatrolTarget, step);
                 _animator.ChangeAnimationState("walk");
-                
+
                 if (Vector3.Distance(transform.position, _currentPatrolTarget) < 0.001f)
                 {
                     // BossAnimator.Instance.ChangeAnimationState("idle", false, false);
@@ -117,9 +122,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                         _currentPatrolTarget = _rightPatrolPoint;
                         transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
                             transform.localScale.z);
-                        
                     }
-
                 }
 
                 yield return null;

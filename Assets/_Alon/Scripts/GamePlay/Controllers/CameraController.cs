@@ -10,7 +10,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Serialized Fields
         /// </summary>
-
         [SerializeField] private Vector2 minBoundary;
 
         [SerializeField] private Vector2 maxBoundary;
@@ -51,7 +50,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
         }
 
-        
 
         private void ClampCameraPosition()
         {

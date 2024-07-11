@@ -9,13 +9,21 @@ namespace _Alon.Scripts.Core.Loaders
 {
     public class GameLoader : MonoBehaviour
     {
+        /// <summary>
+        /// Serialized Fields
+        /// </summary>
+        [SerializeField] private GameLoaderUI gameLoaderUI;
+
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private const int LoadMaxAmount = 100;
+
         private const float XMinPos = -10;
         private const float YMinPos = 5.5f;
         private const float XMaxPos = -4;
         private const float YMaxPos = 1.5f;
 
-        [SerializeField] private GameLoaderUI gameLoaderUI;
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
             { "LoadMainScene", 20 },
@@ -30,6 +38,8 @@ namespace _Alon.Scripts.Core.Loaders
         private GameObject _enemy2;
         private GameObject _enemy3;
         private GameObject _enemy4;
+
+        // End Of Local Variables
 
         void Start()
         {
@@ -136,10 +146,8 @@ namespace _Alon.Scripts.Core.Loaders
             {
                 Debug.LogError("Failed to set boss in GameManager.");
             }
-            
-            
         }
-        
+
         private void LoadEnemy()
         {
             GameObject enemyPrefab1 = Resources.Load<GameObject>("EnemyGroup1");
@@ -151,7 +159,7 @@ namespace _Alon.Scripts.Core.Loaders
                 Debug.LogError("Failed to load enemy prefab from Resources folder.");
                 return;
             }
-            
+
             _enemy1 = Instantiate(enemyPrefab1, new Vector3(11, 0, 0), Quaternion.identity);
             _enemy2 = Instantiate(enemyPrefab2, new Vector3(8, -9, 0), Quaternion.identity);
             _enemy3 = Instantiate(enemyPrefab3, new Vector3(-1, -8.5f, 0), Quaternion.identity);
@@ -161,20 +169,23 @@ namespace _Alon.Scripts.Core.Loaders
                 Debug.LogError("Enemy instantiation failed.");
                 return;
             }
-            
+
 
             foreach (Transform child in _enemy1.transform)
             {
                 GameManager.Instance.AddEnemy(child.gameObject);
             }
+
             foreach (Transform child in _enemy2.transform)
             {
                 GameManager.Instance.AddEnemy(child.gameObject);
             }
+
             foreach (Transform child in _enemy3.transform)
             {
                 GameManager.Instance.AddEnemy(child.gameObject);
             }
+
             foreach (Transform child in _enemy4.transform)
             {
                 GameManager.Instance.AddEnemy(child.gameObject);

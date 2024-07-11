@@ -9,12 +9,12 @@ public class Handler : MonoBehaviour
     {
         GameManager.Instance.SetPlayerToSpawn("RamSmasher");
     }
-    
+
     public void OnClickIronGuardian()
     {
         GameManager.Instance.SetPlayerToSpawn("IronGuardian");
     }
-    
+
     public void OnClickSwiftBlade()
     {
         GameManager.Instance.SetPlayerToSpawn("SwiftBlade");

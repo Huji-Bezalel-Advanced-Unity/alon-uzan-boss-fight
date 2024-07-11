@@ -8,24 +8,38 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class BasePlayerController : MonoBehaviour
     {
-        private const float MinDistanceToAttack = 1.5f;
+        /// <summary>
+        /// Serialized Fields
+        /// </summary>
         [SerializeField] private Image lifeBar;
+
         [SerializeField] private GameObject barHolder;
+        [SerializeField] protected float _playersLife = 100f;
+
+        /// <summary>
+        /// Private Fields
+        /// </summary>
+        private const float MinDistanceToAttack = 1.5f;
+
         private bool _isMoving;
         private bool _wasMoving;
         private bool _isAttacking;
         private GameObject _boss;
-        [SerializeField] protected float _playersLife = 100f;
         private float _TimeToTakeDamage = 2f;
         private float _TimeToGiveDamage = 2f;
         public bool _isDead = false;
         private NavMeshAgent _navMeshAgent;
         private float _maxLife = 100;
-
-        protected PlayerAnimator _playerAnimator;
         private Vector3 _target;
+
+        /// <summary>
+        /// Public Fields
+        /// </summary>
+        protected PlayerAnimator _playerAnimator;
+
         protected GameObject nearestEnemy;
-        
+
+        // End Of Local Variables
 
         protected void Start()
         {

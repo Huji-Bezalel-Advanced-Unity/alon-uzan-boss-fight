@@ -8,13 +8,26 @@ namespace _Alon.Scripts.Core.Managers
 {
     public class UIManager : MonoBehaviour
     {
-        public static UIManager Instance { get; private set; }
+        /// <summary>
+        /// Serialized Fields
+        /// </summary>
+        [SerializeField] private Image bossLifeBar;
 
+        [SerializeField] private TextMeshProUGUI mesosText;
+
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private const float BossMaxLife = 1000f;
+
         private float _mesos = 2500f;
 
-        [SerializeField] private Image bossLifeBar;
-        [SerializeField] private TextMeshProUGUI mesosText;
+        /// <summary>
+        /// Public Fields
+        /// </summary>
+        public static UIManager Instance { get; private set; }
+
+        // End Of Local Variables
 
         private void Awake()
         {
@@ -50,6 +63,7 @@ namespace _Alon.Scripts.Core.Managers
 
             bossLifeBar.fillAmount = targetPercentage;
         }
+
         public void SetMesos(float mesos)
         {
             _mesos -= mesos;

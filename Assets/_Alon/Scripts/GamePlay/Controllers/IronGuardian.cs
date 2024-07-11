@@ -5,9 +5,19 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class IronGuardian : BasePlayerController
     {
-        public float _BaseDamageToTake = 20f;
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private float _BaseDamageToGive = 30f;
+
+        private float _BaseDamageToTake = 20f;
+
+        /// <summary>
+        /// Public Fields
+        /// </summary>
         public float mesosCost = 100f;
+
+        // End Of Local Variables
 
         public override void TakeDamage(float damage)
         {
@@ -22,6 +32,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
+
             GameManager.Instance.DealEnemyDamage(_BaseDamageToGive, nearestEnemy);
         }
 

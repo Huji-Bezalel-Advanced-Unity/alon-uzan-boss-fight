@@ -6,9 +6,19 @@ namespace _Alon.Scripts.Gameplay.Controllers
 {
     public class SwiftBlade : BasePlayerController
     {
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private float _BaseDamageToTake = 20f;
+
         private float _BaseDamageToGive = 30f;
+
+        /// <summary>
+        /// Public Fields
+        /// </summary>
         public float mesosCost = 250f;
+
+        // End Of Local Variables
 
         public override void TakeDamage(float damage)
         {
@@ -23,13 +33,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
+
             GameManager.Instance.DealEnemyDamage(_BaseDamageToGive, nearestEnemy);
         }
-        
+
         public override float GetMesosCost()
         {
             return mesosCost;
         }
-        
     }
 }

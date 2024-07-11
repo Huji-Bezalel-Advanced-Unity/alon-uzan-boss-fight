@@ -12,15 +12,20 @@ namespace _Alon.Scripts.Core.Loaders
         /// Serialized Fields
         /// </summary>
         [SerializeField] private Image loaderFg;
+
         [SerializeField] private TextMeshProUGUI accumulatePercent;
 
         /// <summary>
         /// Private Fields
         /// </summary>
         private int _accumulate;
+
         private int _accumulateTarget;
         private Coroutine _currentCoroutine;
 
+        /// <summary>
+        /// Public Fields
+        /// </summary>
         public event Action OnUIFinished;
 
         // End Of Local Variables
@@ -56,6 +61,7 @@ namespace _Alon.Scripts.Core.Loaders
             {
                 StopCoroutine(_currentCoroutine);
             }
+
             _currentCoroutine = StartCoroutine(UpdateFillAmount(percentageClamp));
             accumulatePercent.text = Mathf.FloorToInt(percentageClamp * 100).ToString() + "%";
         }

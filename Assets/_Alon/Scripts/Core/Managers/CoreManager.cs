@@ -26,9 +26,8 @@ namespace _Alon.Scripts.Core.Managers
             }
 
             Instance = this;
-            
-            
-            
+
+
             this._onComplete = onComplete;
             OnLoadSuccess();
         }

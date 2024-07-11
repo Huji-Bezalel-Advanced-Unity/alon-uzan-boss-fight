@@ -7,16 +7,23 @@ namespace _Alon.Scripts.Core.Managers
 {
     public class GameManager
     {
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private readonly Action<bool> _onComplete;
+
         private HashSet<BasePlayerController> _players;
         private HashSet<BaseEnemyController> _enemies;
         private static float MinDistanceToAttack = 1.2f;
         private GameObject currentPlayerToSpawn;
+
+        // End Of Local Variables
+
         private Dictionary<string, GameObject> playersPrefabs = new Dictionary<string, GameObject>
         {
-            {"IronGuardian", Resources.Load<GameObject>("IronGuardian")},
-            {"RamSmasher", Resources.Load<GameObject>("RamSmasher")},
-            {"SwiftBlade", Resources.Load<GameObject>("SwiftBlade")}
+            { "IronGuardian", Resources.Load<GameObject>("IronGuardian") },
+            { "RamSmasher", Resources.Load<GameObject>("RamSmasher") },
+            { "SwiftBlade", Resources.Load<GameObject>("SwiftBlade") }
         };
 
         public static GameManager Instance { get; private set; }
@@ -44,9 +51,9 @@ namespace _Alon.Scripts.Core.Managers
             PlayerAnimator = new PlayerAnimator();
             damagesDict = new Dictionary<string, int>
             {
-                {"IronGuardian", 20},
-                {"RamSmasher", 30},
-                {"SwiftBlade", 40}
+                { "IronGuardian", 20 },
+                { "RamSmasher", 30 },
+                { "SwiftBlade", 40 }
             };
             OnLoadSuccess();
         }
@@ -87,9 +94,10 @@ namespace _Alon.Scripts.Core.Managers
                     return player;
                 }
             }
+
             return null;
         }
-        
+
         public GameObject GetNearestEnemy(GameObject basePlayer)
         {
             float currentDistance = 1000f;
@@ -103,6 +111,7 @@ namespace _Alon.Scripts.Core.Managers
                     nearestEnemy = enemy;
                 }
             }
+
             float distanceToBoss = Vector3.Distance(Boss.transform.position, basePlayer.transform.position);
             return distanceToBoss < currentDistance || nearestEnemy == null ? Boss : nearestEnemy.gameObject;
         }
@@ -126,11 +135,12 @@ namespace _Alon.Scripts.Core.Managers
                 Debug.LogError("BossController component not found on Boss.");
                 return;
             }
+
             Debug.Log("Dealing damage to enemy" + enemy.gameObject.name);
             bossController.TakeDamage(baseDamageToGive);
             Debug.Log("life: " + bossController.life);
         }
-        
+
         public void SetPlayerToSpawn(string player)
         {
             currentPlayerToSpawn = playersPrefabs[player];
@@ -160,6 +170,7 @@ namespace _Alon.Scripts.Core.Managers
                     nearestPlayer = player;
                 }
             }
+
             return nearestPlayer;
         }
 
