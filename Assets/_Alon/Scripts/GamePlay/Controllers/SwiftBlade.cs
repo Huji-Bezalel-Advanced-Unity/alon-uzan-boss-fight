@@ -8,6 +8,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
     {
         private float _BaseDamageToTake = 20f;
         private float _BaseDamageToGive = 30f;
+        public float mesosCost = 250f;
 
         public override void TakeDamage(float damage)
         {
@@ -23,6 +24,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 return;
             }
             GameManager.Instance.DealEnemyDamage(_BaseDamageToGive, nearestEnemy);
+        }
+        
+        public override float GetMesosCost()
+        {
+            return mesosCost;
         }
         
     }

@@ -55,6 +55,12 @@ namespace _Alon.Scripts.GamePlay.Spawners
         private void SpawnPlayer()
         {
             playerPrefab = GameManager.Instance.GetPlayerToSpawn();
+            var mesosToTake = playerPrefab.GetComponent<BasePlayerController>().GetMesosCost();
+            if (UIManager.Instance.GetMesos() - mesosToTake <= 0)
+            {
+                return;
+            }
+            UIManager.Instance.SetMesos(mesosToTake);
             if (playerPrefab == null)
             {
                 Debug.Log("Choose Player");

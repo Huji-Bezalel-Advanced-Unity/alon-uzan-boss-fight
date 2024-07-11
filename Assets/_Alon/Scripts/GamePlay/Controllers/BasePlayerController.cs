@@ -25,6 +25,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected PlayerAnimator _playerAnimator;
         private Vector3 _target;
         protected GameObject nearestEnemy;
+        
 
         protected void Start()
         {
@@ -202,6 +203,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             yield return new WaitForSeconds(0.7f);
             lifeBar.fillAmount = Mathf.Max(0, target / _maxLife);
+        }
+
+        public virtual float GetMesosCost()
+        {
+            return 0;
         }
     }
 }

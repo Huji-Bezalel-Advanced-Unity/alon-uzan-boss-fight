@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +11,10 @@ namespace _Alon.Scripts.Core.Managers
         public static UIManager Instance { get; private set; }
 
         private const float BossMaxLife = 1000f;
+        private float _mesos = 2500f;
 
         [SerializeField] private Image bossLifeBar;
+        [SerializeField] private TextMeshProUGUI mesosText;
 
         private void Awake()
         {
@@ -28,6 +31,7 @@ namespace _Alon.Scripts.Core.Managers
         private void Start()
         {
             bossLifeBar.fillAmount = 1;
+            mesosText.text = _mesos.ToString();
         }
 
         public IEnumerator UpdateBossLifeBar(float target)
@@ -46,6 +50,15 @@ namespace _Alon.Scripts.Core.Managers
 
             bossLifeBar.fillAmount = targetPercentage;
         }
+        public void SetMesos(float mesos)
+        {
+            _mesos -= mesos;
+            mesosText.text = _mesos.ToString();
+        }
 
+        public float GetMesos()
+        {
+            return _mesos;
+        }
     }
 }

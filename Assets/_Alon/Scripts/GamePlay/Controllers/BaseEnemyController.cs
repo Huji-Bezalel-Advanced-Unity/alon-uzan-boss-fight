@@ -82,6 +82,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (_playerToAttack == null)
             {
+                _animator.SetBool("isAttack", false);
+                _animator.SetBool("isWalk", false);
                 return;
             }
     
@@ -92,6 +94,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
             else
             {
+                _animator.SetBool("isAttack", false);
                 _isAttacking = false;
             }
         }
