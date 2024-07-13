@@ -29,10 +29,6 @@ namespace _Alon.Scripts.Core.Loaders
         };
 
         private GameObject _boss;
-        private GameObject _enemy1;
-        private GameObject _enemy2;
-        private GameObject _enemy3;
-        private GameObject _enemy4;
 
         // End Of Local Variables
 
@@ -144,46 +140,21 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void LoadEnemy()
         {
-            GameObject enemyPrefab1 = Resources.Load<GameObject>("EnemyGroup1");
-            GameObject enemyPrefab2 = Resources.Load<GameObject>("EnemyGroup2");
-            GameObject enemyPrefab3 = Resources.Load<GameObject>("EnemyGroup3");
-            GameObject enemyPrefab4 = Resources.Load<GameObject>("EnemyGroup4");
-            if (enemyPrefab1 == null || enemyPrefab2 == null || enemyPrefab3 == null || enemyPrefab4 == null)
+            GameObject enemyGroup1 = EnemyFactory.CreateEnemy("EnemyGroup1");
+            GameObject enemyGroup2 = EnemyFactory.CreateEnemy("EnemyGroup2");
+            GameObject enemyGroup3 = EnemyFactory.CreateEnemy("EnemyGroup3");
+            GameObject enemyGroup4 = EnemyFactory.CreateEnemy("EnemyGroup4");
+            if (enemyGroup1 == null || enemyGroup2 == null || enemyGroup3 == null || enemyGroup4 == null)
             {
                 Debug.LogError("Failed to load enemy prefab from Resources folder.");
                 return;
             }
+            
+            GameManager.Instance.AddEnemy(enemyGroup1);
+            GameManager.Instance.AddEnemy(enemyGroup2);
+            GameManager.Instance.AddEnemy(enemyGroup3);
+            GameManager.Instance.AddEnemy(enemyGroup4);
 
-            _enemy1 = Instantiate(enemyPrefab1, new Vector3(-22.15f, 18.34f, 0), Quaternion.identity);
-            _enemy2 = Instantiate(enemyPrefab2, new Vector3(40.13f, -5.6f, 0), Quaternion.identity);
-            _enemy3 = Instantiate(enemyPrefab3, new Vector3(21.8f, -38f, 0), Quaternion.identity);
-            _enemy4 = Instantiate(enemyPrefab4, new Vector3(-30.44f, -33.64f, 0), Quaternion.identity);
-            if (_enemy1 == null || _enemy2 == null || _enemy3 == null || _enemy4 == null)
-            {
-                Debug.LogError("Enemy instantiation failed.");
-                return;
-            }
-
-
-            foreach (Transform child in _enemy1.transform)
-            {
-                GameManager.Instance.AddEnemy(child.gameObject);
-            }
-
-            foreach (Transform child in _enemy2.transform)
-            {
-                GameManager.Instance.AddEnemy(child.gameObject);
-            }
-
-            foreach (Transform child in _enemy3.transform)
-            {
-                GameManager.Instance.AddEnemy(child.gameObject);
-            }
-
-            foreach (Transform child in _enemy4.transform)
-            {
-                GameManager.Instance.AddEnemy(child.gameObject);
-            }
         }
         
     }

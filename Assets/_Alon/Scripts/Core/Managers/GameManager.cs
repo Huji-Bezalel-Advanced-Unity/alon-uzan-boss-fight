@@ -19,11 +19,19 @@ namespace _Alon.Scripts.Core.Managers
 
         // End Of Local Variables
 
-        private Dictionary<string, GameObject> playersPrefabs = new Dictionary<string, GameObject>
+        public readonly Dictionary<string, GameObject> PlayersPrefabs = new Dictionary<string, GameObject>
         {
             { "IronGuardian", Resources.Load<GameObject>("IronGuardian") },
             { "RamSmasher", Resources.Load<GameObject>("RamSmasher") },
             { "SwiftBlade", Resources.Load<GameObject>("SwiftBlade") }
+        };
+        
+        public readonly Dictionary<string, GameObject> EnemiesPrefabs = new Dictionary<string, GameObject>
+        {
+            { "EnemyGroup1", Resources.Load<GameObject>("EnemyGroup1") },
+            { "EnemyGroup2", Resources.Load<GameObject>("EnemyGroup2") },
+            { "EnemyGroup3", Resources.Load<GameObject>("EnemyGroup3") },
+            { "EnemyGroup4", Resources.Load<GameObject>("EnemyGroup4") }
         };
 
         public static GameManager Instance { get; private set; }
@@ -32,6 +40,7 @@ namespace _Alon.Scripts.Core.Managers
 
         public bool IsBossAlive = true;
         private Dictionary<string, int> damagesDict;
+        
 
         public GameManager(Action<bool> onComplete)
         {
@@ -143,7 +152,7 @@ namespace _Alon.Scripts.Core.Managers
 
         public void SetPlayerToSpawn(string player)
         {
-            currentPlayerToSpawn = playersPrefabs[player];
+            currentPlayerToSpawn = PlayerFactory.CreatePlayer(player); // Updated to use PlayerFactory
         }
 
         public GameObject GetPlayerToSpawn()
@@ -152,9 +161,12 @@ namespace _Alon.Scripts.Core.Managers
         }
 
 
-        public void AddEnemy(GameObject enemyToAdd)
+        public void AddEnemy(GameObject enemyPrefab)
         {
-            _enemies.Add(enemyToAdd.GetComponent<BaseEnemyController>());
+            foreach (Transform child in enemyPrefab.transform)
+            {
+                _enemies.Add(child.gameObject.GetComponent<BaseEnemyController>());
+            }
         }
 
         public BasePlayerController GetNearestPlayerToEnemy(GameObject gameObject)

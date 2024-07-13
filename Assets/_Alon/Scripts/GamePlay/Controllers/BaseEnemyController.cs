@@ -82,6 +82,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected void Die()
         {
+            this.enabled = false;
             StopAllCoroutines();
             UIManager.Instance.SetExp(expToAdd);
             GameManager.Instance.RemoveEnemy(this);
@@ -92,7 +93,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private IEnumerator DieRoutine()
         {
             Debug.Log("start die routine");
-            this.enabled = false;
             yield return new WaitForSeconds(2);
             Destroy(this.gameObject);
         }
