@@ -28,6 +28,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// </summary>
         protected BasePlayerController _playerToAttack = null;
 
+        private float expToAdd = 100;
+
         // End Of Local Variables
 
         private void Start()
@@ -81,6 +83,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected void Die()
         {
             StopAllCoroutines();
+            UIManager.Instance.SetExp(expToAdd);
             GameManager.Instance.RemoveEnemy(this);
             _animator.Play("death");
             StartCoroutine(DieRoutine());

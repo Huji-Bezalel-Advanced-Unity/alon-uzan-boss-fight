@@ -14,6 +14,8 @@ namespace _Alon.Scripts.Core.Managers
         [SerializeField] private Image bossLifeBar;
 
         [SerializeField] private TextMeshProUGUI mesosText;
+        
+        [SerializeField] private TextMeshProUGUI expText;
 
         /// <summary>
         /// Private Fields
@@ -21,6 +23,8 @@ namespace _Alon.Scripts.Core.Managers
         private const float BossMaxLife = 1000f;
 
         private float _mesos = 2500f;
+        
+        private float _exp = 0f;
 
         /// <summary>
         /// Public Fields
@@ -45,6 +49,7 @@ namespace _Alon.Scripts.Core.Managers
         {
             bossLifeBar.fillAmount = 1;
             mesosText.text = _mesos.ToString();
+            expText.text = _exp.ToString();
         }
 
         public IEnumerator UpdateBossLifeBar(float target)
@@ -73,6 +78,17 @@ namespace _Alon.Scripts.Core.Managers
         public float GetMesos()
         {
             return _mesos;
+        }
+        
+        public void SetExp(float exp)
+        {
+            _exp += exp;
+            expText.text = _exp.ToString();
+        }
+        
+        public float GetExp()
+        {
+            return _exp;
         }
     }
 }

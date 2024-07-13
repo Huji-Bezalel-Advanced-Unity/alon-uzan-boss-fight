@@ -19,11 +19,6 @@ namespace _Alon.Scripts.Core.Loaders
         /// </summary>
         private const int LoadMaxAmount = 100;
 
-        private const float XMinPos = -10;
-        private const float YMinPos = 5.5f;
-        private const float XMaxPos = -4;
-        private const float YMaxPos = 1.5f;
-
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
             { "LoadMainScene", 20 },
@@ -131,8 +126,7 @@ namespace _Alon.Scripts.Core.Loaders
                 return;
             }
 
-            Vector3 spawnPosition = GeneratePosition();
-            _boss = Instantiate(bossPrefab, spawnPosition, Quaternion.identity);
+            _boss = Instantiate(bossPrefab, new Vector3(1.24f, 31.8f, 0), Quaternion.identity);
             if (_boss == null)
             {
                 Debug.LogError("Boss instantiation failed.");
@@ -160,10 +154,10 @@ namespace _Alon.Scripts.Core.Loaders
                 return;
             }
 
-            _enemy1 = Instantiate(enemyPrefab1, new Vector3(11, 0, 0), Quaternion.identity);
-            _enemy2 = Instantiate(enemyPrefab2, new Vector3(8, -9, 0), Quaternion.identity);
-            _enemy3 = Instantiate(enemyPrefab3, new Vector3(-1, -8.5f, 0), Quaternion.identity);
-            _enemy4 = Instantiate(enemyPrefab4, new Vector3(-14, -1.5f, 0), Quaternion.identity);
+            _enemy1 = Instantiate(enemyPrefab1, new Vector3(-22.15f, 18.34f, 0), Quaternion.identity);
+            _enemy2 = Instantiate(enemyPrefab2, new Vector3(40.13f, -5.6f, 0), Quaternion.identity);
+            _enemy3 = Instantiate(enemyPrefab3, new Vector3(21.8f, -38f, 0), Quaternion.identity);
+            _enemy4 = Instantiate(enemyPrefab4, new Vector3(-30.44f, -33.64f, 0), Quaternion.identity);
             if (_enemy1 == null || _enemy2 == null || _enemy3 == null || _enemy4 == null)
             {
                 Debug.LogError("Enemy instantiation failed.");
@@ -191,12 +185,6 @@ namespace _Alon.Scripts.Core.Loaders
                 GameManager.Instance.AddEnemy(child.gameObject);
             }
         }
-
-        private Vector3 GeneratePosition()
-        {
-            float x = UnityEngine.Random.Range(XMinPos, XMaxPos);
-            float y = UnityEngine.Random.Range(YMinPos, YMaxPos);
-            return new Vector3(x, y, 0);
-        }
+        
     }
 }
