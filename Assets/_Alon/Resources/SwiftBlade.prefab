@@ -406,7 +406,7 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: Idle
+  _animationName: 
   loop: 1
   timeScale: 1
 --- !u!114 &8778593453187732053
@@ -421,10 +421,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b8620ff59f4c5dbfb3b0d1f19f714b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
   lifeBar: {fileID: 2321036504079525592}
   barHolder: {fileID: 6915364035833887064}
   _playersLife: 100
+  _isDead: 0
+  mesosCost: 250
 --- !u!195 &5716600126901058125
 NavMeshAgent:
   m_ObjectHideFlags: 0

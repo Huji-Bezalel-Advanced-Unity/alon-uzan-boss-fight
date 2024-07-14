@@ -1,19 +1,28 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace _Alon.Scripts.Core.Managers
 {
     public class EnemyFactory
     {
-        public static GameObject CreateEnemy(string enemyType)
+        private readonly Dictionary<string, GameObject> EnemiesPrefabs = new Dictionary<string, GameObject>
+        {
+            { "EnemyGroup1", Resources.Load<GameObject>("EnemyGroup1") },
+            { "EnemyGroup2", Resources.Load<GameObject>("EnemyGroup2") },
+            { "EnemyGroup3", Resources.Load<GameObject>("EnemyGroup3") },
+            { "EnemyGroup4", Resources.Load<GameObject>("EnemyGroup4") }
+        };
+        
+        public GameObject CreateEnemy(string enemyType)
         {
             // Assuming a similar dictionary for enemies in GameManager
-            if (!GameManager.Instance.EnemiesPrefabs.ContainsKey(enemyType))
+            if (!EnemiesPrefabs.ContainsKey(enemyType))
             {
                 Debug.LogError($"Enemy type {enemyType} not found.");
                 return null;
             }
-            return Object.Instantiate(GameManager.Instance.EnemiesPrefabs[enemyType]);
+            return Object.Instantiate(EnemiesPrefabs[enemyType]);
         }
     }
 }

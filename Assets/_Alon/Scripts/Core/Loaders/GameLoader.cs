@@ -21,17 +21,26 @@ namespace _Alon.Scripts.Core.Loaders
 
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
-            { "LoadMainScene", 20 },
-            { "OnMainSceneLoaded", 20 },
-            { "OnLoadComplete", 10 },
-            { "OnCoreManagerLoaded", 30 },
-            { "OnGameManagersLoaded", 20 }
+            { "LoadMainScene", 30 },
+            { "OnMainSceneLoaded", 5 },
+            { "OnLoadComplete", 5 },
+            { "OnCoreManagerLoaded", 10 },
+            { "OnGameManagersLoaded", 5 },
+            { "LoadEnemies", 30 },
+            { "LoadBoss", 15 }
         };
 
         private GameObject _boss;
 
+        private EnemyFactory _enemyFactory;
+
         // End Of Local Variables
 
+        void Awake()
+        {
+            _enemyFactory = new EnemyFactory();
+        }
+        
         void Start()
         {
             gameLoaderUI.OnUIFinished += OnUIFinished;
@@ -85,7 +94,7 @@ namespace _Alon.Scripts.Core.Loaders
         {
             SceneManager.sceneLoaded -= OnMainSceneLoaded;
             LoadBoss();
-            LoadEnemy();
+            LoadEnemies();
             gameLoaderUI.AddAccumulate(_loadersProgress["OnMainSceneLoaded"]);
             OnLoadComplete();
         }
@@ -136,26 +145,29 @@ namespace _Alon.Scripts.Core.Loaders
             {
                 Debug.LogError("Failed to set boss in GameManager.");
             }
+
+            gameLoaderUI.AddAccumulate(_loadersProgress["LoadBoss"]);
         }
 
-        private void LoadEnemy()
+        private void LoadEnemies()
         {
-            GameObject enemyGroup1 = EnemyFactory.CreateEnemy("EnemyGroup1");
-            GameObject enemyGroup2 = EnemyFactory.CreateEnemy("EnemyGroup2");
-            GameObject enemyGroup3 = EnemyFactory.CreateEnemy("EnemyGroup3");
-            GameObject enemyGroup4 = EnemyFactory.CreateEnemy("EnemyGroup4");
+            GameObject enemyGroup1 = _enemyFactory.CreateEnemy("EnemyGroup1");
+            GameObject enemyGroup2 = _enemyFactory.CreateEnemy("EnemyGroup2");
+            GameObject enemyGroup3 = _enemyFactory.CreateEnemy("EnemyGroup3");
+            GameObject enemyGroup4 = _enemyFactory.CreateEnemy("EnemyGroup4");
+
             if (enemyGroup1 == null || enemyGroup2 == null || enemyGroup3 == null || enemyGroup4 == null)
             {
                 Debug.LogError("Failed to load enemy prefab from Resources folder.");
                 return;
             }
-            
+
             GameManager.Instance.AddEnemy(enemyGroup1);
             GameManager.Instance.AddEnemy(enemyGroup2);
             GameManager.Instance.AddEnemy(enemyGroup3);
             GameManager.Instance.AddEnemy(enemyGroup4);
 
+            gameLoaderUI.AddAccumulate(_loadersProgress["LoadEnemies"]);
         }
-        
     }
 }

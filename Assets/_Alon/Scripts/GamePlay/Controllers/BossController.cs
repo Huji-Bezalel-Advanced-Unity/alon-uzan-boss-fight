@@ -9,17 +9,16 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Private Fields
         /// </summary>
-        private BasePlayerController _playerToAttack = null;
+        private new BasePlayerController _playerToAttack = null;
 
         private bool _isAttacking = false;
-        private float _maxBossLife = 1000;
         private float _bossLife = 1000f;
         private Vector3 _leftPatrolPoint;
         private Vector3 _rightPatrolPoint;
         private bool _isPatrolling = false;
         private float _lastAttackTime = 0;
         private Vector3 _currentPatrolTarget;
-        private readonly float _moveSpeed = 0.6f;
+        private const float MoveSpeed = 0.6f;
         private BossAnimator _animator;
 
         // End Of Local Variables
@@ -62,7 +61,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private IEnumerator DieRoutine()
         {
             this.enabled = false;
-            GameManager.Instance.IsBossAlive = false;
             yield return new WaitForSeconds(4);
             Destroy(gameObject);
         }
@@ -88,7 +86,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _playerToAttack = GameManager.Instance.GetNearestPlayerToBoss();
         }
 
-        private void Attack()
+        protected override void Attack()
         {
             _isAttacking = true;
             _animator.ChangeAnimationState("attack");
@@ -103,7 +101,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isPatrolling = true;
             while (_isPatrolling && !_isAttacking)
             {
-                float step = Time.deltaTime * _moveSpeed;
+                float step = Time.deltaTime * MoveSpeed;
                 transform.position = Vector3.MoveTowards(transform.position, _currentPatrolTarget, step);
                 _animator.ChangeAnimationState("walk");
 

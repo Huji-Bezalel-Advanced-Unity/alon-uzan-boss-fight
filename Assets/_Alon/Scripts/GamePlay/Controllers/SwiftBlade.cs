@@ -9,9 +9,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Private Fields
         /// </summary>
-        private float _BaseDamageToTake = 20f;
-
-        private float _BaseDamageToGive = 30f;
 
         /// <summary>
         /// Public Fields
@@ -29,12 +26,12 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected override void GiveDamage()
         {
-            if (nearestEnemy == null)
+            if (nearestEnemy == null || Vector3.Distance(transform.position, nearestEnemy.transform.position) > MinDistanceToAttack)
             {
                 return;
             }
 
-            GameManager.Instance.DealEnemyDamage(_BaseDamageToGive, nearestEnemy);
+            GameManager.Instance.DealEnemyDamage(GameManager.Instance._damagesDict["SwiftBlade"], nearestEnemy);
         }
 
         public override float GetMesosCost()

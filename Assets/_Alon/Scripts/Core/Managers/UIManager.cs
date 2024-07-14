@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -89,6 +90,14 @@ namespace _Alon.Scripts.Core.Managers
         public float GetExp()
         {
             return _exp;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                SetMesos(-1000);
+            }
         }
     }
 }

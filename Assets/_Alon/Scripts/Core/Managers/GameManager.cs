@@ -12,35 +12,26 @@ namespace _Alon.Scripts.Core.Managers
         /// </summary>
         private readonly Action<bool> _onComplete;
 
-        private HashSet<BasePlayerController> _players;
-        private HashSet<BaseEnemyController> _enemies;
-        private static float MinDistanceToAttack = 1.2f;
-        private GameObject currentPlayerToSpawn;
+        private readonly HashSet<BasePlayerController> _players;
+        private readonly HashSet<BaseEnemyController> _enemies;
+        
+        private const float MinDistanceToAttack = 1.2f;
+        private GameObject _currentPlayerToSpawn;
+
+        private readonly PlayerFactory _playerFactory = new PlayerFactory();
+
+        /// <summary>
+        /// Public Fields
+        /// </summary>
+        public static GameManager Instance { get; private set; }
+
+        public Dictionary<string, int> _damagesDict;
+        public event Action OnAllEnemiesCleared;
+        public event Action OnEnemyDeath;
+        public GameObject Boss { get; private set; }
 
         // End Of Local Variables
 
-        public readonly Dictionary<string, GameObject> PlayersPrefabs = new Dictionary<string, GameObject>
-        {
-            { "IronGuardian", Resources.Load<GameObject>("IronGuardian") },
-            { "RamSmasher", Resources.Load<GameObject>("RamSmasher") },
-            { "SwiftBlade", Resources.Load<GameObject>("SwiftBlade") }
-        };
-        
-        public readonly Dictionary<string, GameObject> EnemiesPrefabs = new Dictionary<string, GameObject>
-        {
-            { "EnemyGroup1", Resources.Load<GameObject>("EnemyGroup1") },
-            { "EnemyGroup2", Resources.Load<GameObject>("EnemyGroup2") },
-            { "EnemyGroup3", Resources.Load<GameObject>("EnemyGroup3") },
-            { "EnemyGroup4", Resources.Load<GameObject>("EnemyGroup4") }
-        };
-
-        public static GameManager Instance { get; private set; }
-        public GameObject Boss { get; private set; }
-        public PlayerAnimator PlayerAnimator { get; private set; }
-
-        public bool IsBossAlive = true;
-        private Dictionary<string, int> damagesDict;
-        
 
         public GameManager(Action<bool> onComplete)
         {
@@ -57,8 +48,7 @@ namespace _Alon.Scripts.Core.Managers
             this._players = new HashSet<BasePlayerController>();
             this._enemies = new HashSet<BaseEnemyController>();
             _onComplete = onComplete;
-            PlayerAnimator = new PlayerAnimator();
-            damagesDict = new Dictionary<string, int>
+            _damagesDict = new Dictionary<string, int>
             {
                 { "IronGuardian", 20 },
                 { "RamSmasher", 30 },
@@ -121,13 +111,12 @@ namespace _Alon.Scripts.Core.Managers
                 }
             }
 
-            float distanceToBoss = Vector3.Distance(Boss.transform.position, basePlayer.transform.position);
-            return distanceToBoss < currentDistance || nearestEnemy == null ? Boss : nearestEnemy.gameObject;
+            return nearestEnemy ? nearestEnemy.gameObject : null;
         }
 
         public void DealDamage(BasePlayerController playerToAttack)
         {
-            playerToAttack.TakeDamage(damagesDict[playerToAttack.gameObject.name.Replace("(Clone)", "")]);
+            playerToAttack.TakeDamage(_damagesDict[playerToAttack.gameObject.name.Replace("(Clone)", "")]);
         }
 
         public void DealEnemyDamage(float baseDamageToGive, GameObject enemy)
@@ -145,19 +134,17 @@ namespace _Alon.Scripts.Core.Managers
                 return;
             }
 
-            Debug.Log("Dealing damage to enemy" + enemy.gameObject.name);
             bossController.TakeDamage(baseDamageToGive);
-            Debug.Log("life: " + bossController.life);
         }
 
         public void SetPlayerToSpawn(string player)
         {
-            currentPlayerToSpawn = PlayerFactory.CreatePlayer(player); // Updated to use PlayerFactory
+            _currentPlayerToSpawn = _playerFactory.CreatePlayer(player);
         }
 
         public GameObject GetPlayerToSpawn()
         {
-            return currentPlayerToSpawn;
+            return _currentPlayerToSpawn;
         }
 
 
@@ -189,6 +176,23 @@ namespace _Alon.Scripts.Core.Managers
         public void RemoveEnemy(BaseEnemyController baseEnemyController)
         {
             _enemies.Remove(baseEnemyController);
+            if (_enemies.Count == 0)
+            {
+                Debug.Log("All enemies cleared");
+                OnAllEnemiesCleared?.Invoke();
+            }
+            else
+            {
+                OnEnemyDeath?.Invoke();
+            }
+        }
+
+        public void KillAllEnemies()
+        {
+            foreach (var enemy in _enemies)
+            {
+                enemy.TakeDamage(1000);
+            }
         }
     }
 }

@@ -18,6 +18,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private float _minDistanceToAttack = 1.2f;
         private float _moveSpeed = 0.6f;
 
+        private bool _isDead = false;
+        
+        private Rigidbody2D _rigidbody2D;
+
         /// <summary>
         /// Public Fields
         /// </summary>
@@ -36,36 +40,32 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             Debug.Log("BaseEnemyController Start");
             _animator = GetComponentInChildren<Animator>();
+            _rigidbody2D = GetComponent<Rigidbody2D>();
         }
 
         private void Update()
         {
+            if (_isDead)
+            {
+                return;
+            }
+
             CheckForTarget();
             HandleDirections();
-            if (!_isAttacking)
-            {
-                TryAttack();
-            }
-
+    
             HandleApproachToPlayer();
-            if (_playerToAttack == null || (_playerToAttack != null && _playerToAttack._isDead))
-            {
-                _animator.SetBool("isAttack", false);
-            }
-
             CheckForDeath();
         }
 
         private void HandleApproachToPlayer()
         {
-            if (_playerToAttack == null)
+            if (_playerToAttack == null || _isDead)
             {
                 return;
             }
 
             if (!_isAttacking && Vector3.Distance(transform.position, _playerToAttack.transform.position) < _deadZone)
             {
-                Debug.Log("Approaching player");
                 MoveToPlayer();
             }
             else
@@ -80,9 +80,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _playerToAttack = player;
         }
 
-        protected void Die()
+        private void Die()
         {
-            this.enabled = false;
+            _isDead = true;
+            _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
             StopAllCoroutines();
             UIManager.Instance.SetExp(expToAdd);
             GameManager.Instance.RemoveEnemy(this);
@@ -92,30 +93,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private IEnumerator DieRoutine()
         {
-            Debug.Log("start die routine");
             yield return new WaitForSeconds(2);
             Destroy(this.gameObject);
-        }
-
-        private void TryAttack()
-        {
-            if (_playerToAttack == null)
-            {
-                _animator.SetBool("isAttack", false);
-                _animator.SetBool("isWalk", false);
-                return;
-            }
-
-            if (Vector3.Distance(transform.position, _playerToAttack.transform.position) < _minDistanceToAttack)
-            {
-                StartCoroutine(AttackCoolDown());
-                Attack();
-            }
-            else
-            {
-                _animator.SetBool("isAttack", false);
-                _isAttacking = false;
-            }
         }
 
         private IEnumerator AttackCoolDown()
@@ -128,6 +107,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             _isAttacking = true;
             _animator.SetBool("isAttack", true);
+            StartCoroutine(AttackCoolDown());
             StartCoroutine(DelayAttack());
         }
 
@@ -146,17 +126,17 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void MoveToPlayer()
         {
-            if (_playerToAttack == null)
+            
+            if (Vector3.Distance(transform.position, _playerToAttack.transform.position) > _minDistanceToAttack)
             {
-                Debug.Log("No player to attack");
-                return;
+                _animator.SetBool("isWalk", true);
+                transform.Translate((_playerToAttack.transform.position - transform.position).normalized * (_moveSpeed * Time.deltaTime));
             }
-
-            Debug.Log("Moving to player");
-            // move to the player in _moveSpeed
-            _animator.SetBool("isWalk", true);
-            transform.position = Vector3.MoveTowards(transform.position, _playerToAttack.transform.position,
-                _moveSpeed * Time.deltaTime);
+            else if (!_isAttacking)
+            {
+                Attack();
+            }
+            
         }
 
         private IEnumerator DelayAttack()
@@ -167,7 +147,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleDirections()
         {
-            if (_playerToAttack == null)
+            if (!_playerToAttack)
             {
                 return;
             }

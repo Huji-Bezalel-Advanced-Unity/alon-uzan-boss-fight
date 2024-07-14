@@ -319,10 +319,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f55ee34920e4dfab8c902398b250f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
   lifeBar: {fileID: 3674004370172556172}
   barHolder: {fileID: 5991048060287763803}
   _playersLife: 100
+  _isDead: 0
+  mesosCost: 100
 --- !u!195 &6772842409085980059
 NavMeshAgent:
   m_ObjectHideFlags: 0

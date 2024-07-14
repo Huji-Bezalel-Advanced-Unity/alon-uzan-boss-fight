@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using _Alon.Scripts.Core.Managers;
+using Spine.Unity;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
@@ -19,9 +20,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Private Fields
         /// </summary>
-        private const float MinDistanceToAttack = 1.5f;
-
         private bool _isMoving;
+
         private bool _wasMoving;
         private bool _isAttacking;
         private GameObject _boss;
@@ -32,30 +32,41 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private float _maxLife = 100;
         private Vector3 _target;
 
+        private SkeletonAnimation _skeletonAnimation;
+
         /// <summary>
         /// Public Fields
         /// </summary>
-        protected PlayerAnimator _playerAnimator;
+        protected BaseAnimator _playerAnimator;
 
         protected GameObject nearestEnemy;
+
+        protected const float MinDistanceToAttack = 1.5f;
 
         // End Of Local Variables
 
         protected void Start()
         {
             _boss = GameManager.Instance.Boss;
+            GameManager.Instance.OnAllEnemiesCleared += HandleAllEnemiesCleared;
+            GameManager.Instance.OnEnemyDeath += HandleSetTarget;
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _navMeshAgent.updateRotation = false;
             _navMeshAgent.updateUpAxis = false;
             lifeBar.fillAmount = 1;
             HandleSetTarget();
-            _playerAnimator = GameManager.Instance.PlayerAnimator; // inject Player Animator
+            _skeletonAnimation = gameObject.GetComponent<SkeletonAnimation>(); // inject Player Animator
+        }
+
+        private void HandleAllEnemiesCleared()
+        {
+            nearestEnemy = _boss;
+            HandleSetTarget();
         }
 
         private void Update()
         {
             if (_isDead) return;
-            HandleSetTarget();
             HandleAnimation();
             HandleMovement();
             HandleAttack();
@@ -64,7 +75,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleSetTarget()
         {
-            nearestEnemy = GameManager.Instance.GetNearestEnemy(this.gameObject);
+            if (nearestEnemy != _boss)
+                nearestEnemy = GameManager.Instance.GetNearestEnemy(this.gameObject);
             if (nearestEnemy)
             {
                 Vector3 destination = nearestEnemy.transform.position + _target;
@@ -83,7 +95,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleAttack()
         {
-            if (!GameManager.Instance.IsBossAlive) return;
+            if (!nearestEnemy) return;
             if (Vector3.Distance(transform.position, nearestEnemy.transform.position) > MinDistanceToAttack)
             {
                 return;
@@ -99,7 +111,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             int randomAttack = Random.Range(1, 3);
             string attackAnimation = randomAttack == 1 ? "Stab" : "Slash";
-            _playerAnimator.SetAnimation(gameObject, attackAnimation, false);
+            BaseAnimator.SetAnimation(_skeletonAnimation, attackAnimation, false);
             _isAttacking = false;
         }
 
@@ -119,7 +131,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
-                barHolder.transform.Rotate(0, 180, 0);
+                barHolder.transform.Rotate(0, -180, 0);
                 _target = Vector3.right;
             }
         }
@@ -128,12 +140,12 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             if (_isMoving && !_wasMoving)
             {
-                _playerAnimator.SetAnimation(gameObject, "Run", true);
+                BaseAnimator.SetAnimation(_skeletonAnimation, "Run", true);
                 _wasMoving = true;
             }
             else if (nearestEnemy == null || (!_isDead && !_isMoving && _wasMoving))
             {
-                _playerAnimator.SetAnimation(gameObject, "Idle", true);
+                BaseAnimator.SetAnimation(_skeletonAnimation, "Idle", true);
                 _wasMoving = false;
             }
         }
@@ -148,7 +160,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
             if (Vector2.Distance(transform.position, nearestEnemy.transform.position) >= MinDistanceToAttack)
             {
-                HandleSetTarget();
                 _isMoving = true;
             }
             else if (_isMoving)
@@ -184,34 +195,37 @@ namespace _Alon.Scripts.Gameplay.Controllers
             yield return new WaitForSeconds(1f);
             if (!_isDead)
             {
-                _playerAnimator.SetAnimation(gameObject, "Hurt", false);
+                BaseAnimator.SetAnimation(_skeletonAnimation, "Hurt", false);
             }
         }
 
         private void Die()
         {
+            this.enabled = false;
+            UnSubscribeFromAllEvents();
             _isDead = true;
             StopAllCoroutines();
-            _playerAnimator.SetAnimation(gameObject, "Death", false);
+            BaseAnimator.SetAnimation(_skeletonAnimation, "Death", false);
             GameManager.Instance.RemovePlayer(this);
             StartCoroutine(DelayDeathForAnimation());
         }
 
+        private void UnSubscribeFromAllEvents()
+        {
+            GameManager.Instance.OnAllEnemiesCleared -= HandleAllEnemiesCleared;
+            GameManager.Instance.OnEnemyDeath -= HandleSetTarget;
+        }
+
         private IEnumerator DelayDeathForAnimation()
         {
-            this.enabled = false;
             yield return new WaitForSeconds(0.5f);
-            _playerAnimator.SetAnimation(gameObject, "Death", false);
+            BaseAnimator.SetAnimation(_skeletonAnimation, "Death", false);
             yield return new WaitForSeconds(0.7f);
             barHolder.SetActive(false);
             yield return new WaitForSeconds(4f);
             Destroy(gameObject);
         }
 
-        private void OnCollisionEnter2D(Collision2D other)
-        {
-            Debug.Log("Collided with " + other.gameObject.name);
-        }
 
         protected IEnumerator UpdateLifeBar(float target)
         {
