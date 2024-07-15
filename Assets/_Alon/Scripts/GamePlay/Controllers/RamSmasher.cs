@@ -25,17 +25,12 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected override void GiveDamage()
         {
-            if (nearestEnemy == null || Vector3.Distance(transform.position, nearestEnemy.transform.position) > MinDistanceToAttack)
-            {
-                return;
-            }
-
-            GameManager.Instance.DealEnemyDamage(GameManager.Instance._damagesDict["RamSmasher"], nearestEnemy);
+            nearestEnemy.GetComponent<BaseEnemyController>().TakeDamage(GameManager.Instance._damagesDict["IronGuardian"]);
         }
 
         public override float GetMesosCost()
         {
-            return mesosCost;
+            return -mesosCost;
         }
     }
 }

@@ -25,8 +25,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private bool _isMoving;
 
         private GameObject _boss;
-        private float _TimeToTakeDamage = 2f;
-        private float _TimeToGiveDamage = 2f;
         public bool _isDead = false;
         private NavMeshAgent _navMeshAgent;
         private float _maxLife = 100;
@@ -47,7 +45,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected GameObject nearestEnemy;
         private float _timeToAttack = 0;
 
-        protected const float MinDistanceToAttack = 1;
+        private const float MinDistanceToAttack = 1.2f;
         
         public static event Action OnPlayerDeath;
 
@@ -219,7 +217,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             StopAllCoroutines();
             BaseAnimator.SetAnimation(_skeletonAnimation, "Death", false);
             GameManager.Instance.RemovePlayer(this);
-            StartCoroutine(DelayAnimationForDeath());
+            StartCoroutine(DelayForDeathAnimation());
         }
 
         private void UnSubscribeFromAllEvents()
@@ -229,7 +227,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _boss.GetComponent<BossController>().OnBossDeath -= HandleBossDie;
         }
 
-        private IEnumerator DelayAnimationForDeath()
+        private IEnumerator DelayForDeathAnimation()
         {
             barHolder.SetActive(false);
             yield return new WaitForSeconds(4f);

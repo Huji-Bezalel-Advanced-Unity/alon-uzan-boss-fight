@@ -13,7 +13,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private new BasePlayerController _playerToAttack = null;
 
         private bool _isAttacking = false;
-        private float _bossLife = 1000f;
+        private float maxBossLife = 1000f;
         private Vector3 _leftPatrolPoint;
         private Vector3 _rightPatrolPoint;
         private bool _isPatrolling = false;
@@ -31,6 +31,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _leftPatrolPoint = transform.position + Vector3.left * 2; // 5 units to the left
             _rightPatrolPoint = transform.position + Vector3.right * 2; // 5 units to the right
             _currentPatrolTarget = _rightPatrolPoint;
+            life = maxBossLife;
             _animator = GetComponent<BossAnimator>();
         }
 
@@ -49,7 +50,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 StartCoroutine(Patrol());
             }
 
-            if (_bossLife <= 0)
+            if (life <= 0)
             {
                 Die();
             }
@@ -133,9 +134,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         public override void TakeDamage(float damage)
         {
-            _bossLife = Mathf.Max(0, _bossLife - damage);
-            StartCoroutine(UIManager.Instance.UpdateBossLifeBar(_bossLife));
-            print(_bossLife);
+            base.TakeDamage(damage);
+            life = Mathf.Max(0, life - damage);
+            StartCoroutine(UIManager.Instance.UpdateBossLifeBar(life));
         }
     }
 }

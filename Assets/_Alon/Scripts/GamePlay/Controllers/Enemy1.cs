@@ -12,9 +12,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         // End Of Local Variables
 
-        protected override void Attack()
+        
+        protected override void GiveDamage()
         {
-            base.Attack();
             _playerToAttack.TakeDamage(baseDamageToGive);
         }
     }
