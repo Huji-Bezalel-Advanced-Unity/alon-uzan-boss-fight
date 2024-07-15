@@ -74,25 +74,12 @@ namespace _Alon.Scripts.Core.Managers
 
         public void SetMesos(float mesos)
         {
-            if (mesos > 0)
-            {
-                AddMesos(mesos);
-            }
-            else if (mesos < 0)
-            {
-                SubtractMesos(mesos);
-            }
+            AddMesos(mesos);
         }
         
         private void AddMesos(float mesos)
         {
             _mesos += mesos;
-            mesosText.text = _mesos.ToString();
-        }
-        
-        private void SubtractMesos(float mesos)
-        {
-            _mesos -= mesos;
             mesosText.text = _mesos.ToString();
         }
 

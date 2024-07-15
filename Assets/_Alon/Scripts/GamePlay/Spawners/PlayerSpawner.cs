@@ -59,7 +59,7 @@ namespace _Alon.Scripts.GamePlay.Spawners
                 return;
             }
             var mesosToTake = playerPrefab.GetComponent<BasePlayerController>().GetMesosCost();
-            if (UIManager.Instance.GetMesos() - mesosToTake <= 0)
+            if (UIManager.Instance.GetMesos() - mesosToTake < 0)
             {
                 return;
             }
