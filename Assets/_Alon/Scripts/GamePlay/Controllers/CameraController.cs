@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Alon.Scripts.Core.Managers;
 using UnityEngine;
 
 namespace _Alon.Scripts.Gameplay.Controllers
@@ -31,6 +32,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         void Update()
         {
+            if (GameManager.Instance.CameraIsLocked)
+            {
+                return;
+            }
             HandlePanning();
         }
 

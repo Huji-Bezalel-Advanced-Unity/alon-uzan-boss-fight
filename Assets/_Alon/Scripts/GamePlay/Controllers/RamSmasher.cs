@@ -12,7 +12,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Public Fields
         /// </summary>
-        public float mesosCost = 150f;
+        public float mesosCost = 250f;
 
         // End Of Local Variables
 

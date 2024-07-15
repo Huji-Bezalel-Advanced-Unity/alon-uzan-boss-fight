@@ -350,7 +350,7 @@ MonoBehaviour:
   barHolder: {fileID: 212479705000941732}
   _playersLife: 100
   _isDead: 0
-  mesosCost: 150
+  mesosCost: 250
 --- !u!195 &9049363651678700227
 NavMeshAgent:
   m_ObjectHideFlags: 0

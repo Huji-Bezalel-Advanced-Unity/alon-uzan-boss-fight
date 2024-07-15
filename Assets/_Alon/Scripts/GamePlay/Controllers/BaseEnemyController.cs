@@ -113,7 +113,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
             UnSubscribeFromAllEvents();
             StopAllCoroutines();
             _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-            UIManager.Instance.SetExp(expToAdd);
             GameManager.Instance.RemoveEnemy(this);
             _animator.Play("death");
             DropItem();

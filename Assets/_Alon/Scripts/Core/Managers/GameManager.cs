@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using _Alon.Scripts.Gameplay.Controllers;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace _Alon.Scripts.Core.Managers
         public static GameManager Instance { get; private set; }
 
         public Dictionary<string, int> _damagesDict;
+        public bool CameraIsLocked = false;
         public event Action OnAllEnemiesCleared;
         public event Action OnEnemyPosChanged;
         public GameObject Boss { get; private set; }
@@ -198,6 +200,18 @@ namespace _Alon.Scripts.Core.Managers
         public void InvokeOnEnemyPosChanged()
         {
             OnEnemyPosChanged?.Invoke();
+        }
+        
+        public IEnumerator LockCamera()
+        {
+            CameraIsLocked = true;
+            yield return new WaitForSeconds(1.5f);
+            CameraIsLocked = false;
+        }
+
+        public void UpgradePlayer(String playerName)
+        {
+            _damagesDict[playerName] += 50;
         }
     }
 }

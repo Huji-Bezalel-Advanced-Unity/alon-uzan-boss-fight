@@ -44,6 +44,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected GameObject nearestEnemy;
         private float _timeToAttack = 0;
+        private bool _isSetEnemyOnes = false;
 
         private const float MinDistanceToAttack = 1.2f;
         
@@ -110,6 +111,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleSetTarget()
         {
+            if (!nearestEnemy && _isSetEnemyOnes) // if the enemy is null, ignore the case of starting the game
+            {
+                return;
+            }
             Vector3 destination;
             if (nearestEnemy != _boss)
             {
@@ -120,8 +125,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 destination = _boss.transform.position;
             }
-
-            if (!nearestEnemy) return;
+            _isSetEnemyOnes = true;
+            
             _navMeshAgent.SetDestination(destination);
             HandleDirections();
         }

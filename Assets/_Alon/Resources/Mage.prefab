@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.20000002, y: 0.20000002, z: 0.40000004}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 0.9}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 252323745006873678}
@@ -60,20 +60,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8e49a7e547bc814497235fd4a0b28e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 1
-  runSpeed: 2
   animator: {fileID: 252323745006873676}
   isFlying: 0
-  walk: 0
-  run: 0
-  smoothTime: 0.3
-  PLAYER_IDLE: idle
-  PLAYER_ATTACK: attack
-  PLAYER_WALK: walk
-  PLAYER_RUN: run
-  PLAYER_DEATH: death
-  PLAYER_FLY: 
-  PLAYER_FLY_ATTACK: 
 --- !u!50 &252323743365998869
 Rigidbody2D:
   serializedVersion: 4
