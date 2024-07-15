@@ -21,6 +21,8 @@ namespace _Alon.Scripts.Core.Managers
         [SerializeField] private GameObject barHolder; 
         
         [SerializeField] private GameObject dangerImage;
+        
+        [SerializeField] private Notification notification;
 
         /// <summary>
         /// Private Fields
@@ -130,6 +132,11 @@ namespace _Alon.Scripts.Core.Managers
             dangerImage.SetActive(false);
             barHolder.SetActive(true);
             OnBossPhaseStart?.Invoke();
+        }
+        
+        public void Notify(string message)
+        {
+            notification.ShowNotification(message);
         }
     }
 }

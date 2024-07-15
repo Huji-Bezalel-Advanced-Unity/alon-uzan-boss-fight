@@ -26,6 +26,7 @@ public class Handler : MonoBehaviour
         if (UIManager.Instance.GetExp() < 2500)
         {
             // TODO: Show message
+            UIManager.Instance.Notify("Not enough exp");
             Debug.Log("Not enough exp");
             return;
         }
@@ -33,6 +34,9 @@ public class Handler : MonoBehaviour
         GameManager.Instance.UpgradePlayer("RamSmasher");
         var block = button.colors;
         block.normalColor = Color.yellow;
+        block.highlightedColor = Color.yellow;
+        block.pressedColor = Color.yellow;
+        block.selectedColor = Color.yellow;
         button.colors = block;
     }
     
@@ -41,6 +45,7 @@ public class Handler : MonoBehaviour
         if (UIManager.Instance.GetExp() < 1000)
         {
             // TODO: Show message
+            UIManager.Instance.Notify("Not enough exp");
             Debug.Log("Not enough exp");
             return;
         }
@@ -48,6 +53,9 @@ public class Handler : MonoBehaviour
         GameManager.Instance.UpgradePlayer("IronGuardian");
         var block = button.colors;
         block.normalColor = Color.yellow;
+        block.highlightedColor = Color.yellow;
+        block.pressedColor = Color.yellow;
+        block.selectedColor = Color.yellow;
         button.colors = block;
     }
     
@@ -56,6 +64,7 @@ public class Handler : MonoBehaviour
         if (UIManager.Instance.GetExp() < 1500)
         {
             // TODO: Show message
+            UIManager.Instance.Notify("Not enough exp");
             Debug.Log("Not enough exp");
             return;
         }
@@ -63,6 +72,9 @@ public class Handler : MonoBehaviour
         GameManager.Instance.UpgradePlayer("SwiftBlade");
         var block = button.colors;
         block.normalColor = Color.yellow;
+        block.highlightedColor = Color.yellow;
+        block.pressedColor = Color.yellow;
+        block.selectedColor = Color.yellow;
         button.colors = block;
     }
 }
