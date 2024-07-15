@@ -17,11 +17,15 @@ namespace _Alon.Scripts.Core.Managers
         [SerializeField] private TextMeshProUGUI mesosText;
         
         [SerializeField] private TextMeshProUGUI expText;
+        
+        [SerializeField] private GameObject barHolder; 
+        
+        [SerializeField] private GameObject dangerImage;
 
         /// <summary>
         /// Private Fields
         /// </summary>
-        private const float BossMaxLife = 1000f;
+        private const float BossMaxLife = 10000f;
 
         private float _mesos = 2500f;
         
@@ -33,6 +37,8 @@ namespace _Alon.Scripts.Core.Managers
         /// Public Fields
         /// </summary>
         public static UIManager Instance { get; private set; }
+        
+        public event Action OnBossPhaseStart;
 
         // End Of Local Variables
 
@@ -104,12 +110,26 @@ namespace _Alon.Scripts.Core.Managers
             return _exp;
         }
 
-        private void Update()
+        public void StartBossPhase()
         {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                SetMesos(-1000);
-            }
+            StartCoroutine(DangerAnimation());
+        }
+
+        private IEnumerator DangerAnimation()
+        {
+            dangerImage.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            dangerImage.SetActive(false);
+            yield return new WaitForSeconds(1f);
+            dangerImage.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            dangerImage.SetActive(false);
+            yield return new WaitForSeconds(1f);
+            dangerImage.SetActive(true);
+            yield return new WaitForSeconds(3f);
+            dangerImage.SetActive(false);
+            barHolder.SetActive(true);
+            OnBossPhaseStart?.Invoke();
         }
     }
 }

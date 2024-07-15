@@ -178,6 +178,7 @@ namespace _Alon.Scripts.Core.Managers
             if (_enemies.Count == 0)
             {
                 Debug.Log("All enemies cleared");
+                UIManager.Instance.StartBossPhase();
                 OnAllEnemiesCleared?.Invoke();
             }
             else

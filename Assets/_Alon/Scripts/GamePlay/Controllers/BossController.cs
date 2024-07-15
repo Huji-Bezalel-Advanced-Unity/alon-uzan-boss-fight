@@ -13,7 +13,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private new BasePlayerController _playerToAttack = null;
 
         private bool _isAttacking = false;
-        private float maxBossLife = 1000f;
+        private float maxBossLife = 10000f;
         private Vector3 _leftPatrolPoint;
         private Vector3 _rightPatrolPoint;
         private bool _isPatrolling = false;

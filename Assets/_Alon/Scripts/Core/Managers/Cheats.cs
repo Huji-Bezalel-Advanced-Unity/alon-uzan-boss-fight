@@ -28,7 +28,7 @@ namespace _Alon.Scripts.Core.Managers
 
         private void AddMesos()
         {
-            UIManager.Instance.SetMesos(-1000);
+            UIManager.Instance.SetMesos(1000);
         }
         
         private void AddExp()

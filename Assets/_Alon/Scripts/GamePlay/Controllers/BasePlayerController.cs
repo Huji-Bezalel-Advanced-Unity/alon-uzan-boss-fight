@@ -73,6 +73,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _boss.GetComponent<BossController>().OnBossDeath += HandleBossDie;
             GameManager.Instance.OnAllEnemiesCleared += HandleAllEnemiesCleared;
             GameManager.Instance.OnEnemyPosChanged += HandleSetTarget;
+            UIManager.Instance.OnBossPhaseStart += HandleBossPhase;
         }
 
         private void HandleBossDie()
@@ -90,7 +91,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Update()
         {
             if (_isDead) return;
-            HandleBossPhase();
+            HandleSetTarget();
             HandleMovement();
             HandleIncreaseTimers();
         }
@@ -103,11 +104,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleBossPhase()
         {
-            if (nearestEnemy == _boss && _timerForBossPhase >= timeLapsToSetBossTarget)
-            {
-                HandleSetTarget();
-                _timerForBossPhase = 0;
-            }
+            nearestEnemy = _boss;
         }
 
 
@@ -225,6 +222,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             GameManager.Instance.OnAllEnemiesCleared -= HandleAllEnemiesCleared;
             GameManager.Instance.OnEnemyPosChanged -= HandleSetTarget;
             _boss.GetComponent<BossController>().OnBossDeath -= HandleBossDie;
+            UIManager.Instance.OnBossPhaseStart -= HandleBossPhase;
         }
 
         private IEnumerator DelayForDeathAnimation()
