@@ -4013,6 +4013,8 @@ MonoBehaviour:
   bossLifeBar: {fileID: 2013667693}
   mesosText: {fileID: 31277078}
   expText: {fileID: 429022790}
+  MoneyImage: {fileID: 1764613274}
+  ExpImage: {fileID: 1575644307}
 --- !u!1 &222121906
 GameObject:
   m_ObjectHideFlags: 0
@@ -26663,6 +26665,50 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!1 &1504325635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1504325637}
+  - component: {fileID: 1504325636}
+  m_Layer: 0
+  m_Name: ItemHoverMamager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1504325636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504325635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70293cee969e4bf3b35b19b0c3ce186f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1504325637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504325635}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.589263, y: 1.8403422, z: 1.556542}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1532883958
 GameObject:
   m_ObjectHideFlags: 0
@@ -26719,7 +26765,7 @@ GameObject:
   - component: {fileID: 1575644309}
   - component: {fileID: 1575644308}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ImageExp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28122,7 +28168,7 @@ GameObject:
   - component: {fileID: 1764613276}
   - component: {fileID: 1764613275}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ImageMoney
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30656,3 +30702,4 @@ SceneRoots:
   - {fileID: 1685830571}
   - {fileID: 101509148}
   - {fileID: 1532883960}
+  - {fileID: 1504325637}

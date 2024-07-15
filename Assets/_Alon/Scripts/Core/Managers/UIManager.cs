@@ -26,6 +26,8 @@ namespace _Alon.Scripts.Core.Managers
         private float _mesos = 2500f;
         
         private float _exp = 0f;
+        [SerializeField] public Transform MoneyImage;
+        [SerializeField] public Transform ExpImage;
 
         /// <summary>
         /// Public Fields

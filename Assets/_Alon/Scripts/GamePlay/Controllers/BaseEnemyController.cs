@@ -13,14 +13,15 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// </summary>
 
         private Animator _animator;
+
         private float _deadZone = 3f;
         private float _minDistanceToAttack = 1.2f;
         private float _moveSpeed = 0.6f;
 
         private bool _isDead = false;
-        
+
         private Rigidbody2D _rigidbody2D;
-        
+
         private const float AttackCoolDownTime = 2.5f;
         private float _timeToAttack = 0;
 
@@ -35,6 +36,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected BasePlayerController _playerToAttack = null;
 
         private float expToAdd = 100;
+        private GameObject[] itemPrefabs;
 
         // End Of Local Variables
 
@@ -54,6 +56,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             _animator = GetComponentInChildren<Animator>();
             _rigidbody2D = GetComponent<Rigidbody2D>();
+            itemPrefabs = new GameObject[2];
+            itemPrefabs[0] = Resources.Load<GameObject>("Coins");
+            itemPrefabs[1] = Resources.Load<GameObject>("Exps");
         }
 
         private void Update()
@@ -62,10 +67,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
+
             HandleApproachToPlayer();
             HandleIncreaseTimers();
         }
-        
+
         private void HandleIncreaseTimers()
         {
             _timeToAttack += Time.deltaTime;
@@ -97,6 +103,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
+
             HandleDirections();
         }
 
@@ -109,6 +116,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             UIManager.Instance.SetExp(expToAdd);
             GameManager.Instance.RemoveEnemy(this);
             _animator.Play("death");
+            DropItem();
             StartCoroutine(DelayForDeathAnimation());
         }
 
@@ -122,14 +130,14 @@ namespace _Alon.Scripts.Gameplay.Controllers
             yield return new WaitForSeconds(2);
             Destroy(this.gameObject);
         }
-        
+
 
         protected virtual void Attack()
         {
             _animator.SetBool("isAttack", true);
             GiveDamage();
         }
-        
+
         protected virtual void GiveDamage()
         {
         }
@@ -148,7 +156,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
             if (Vector3.Distance(transform.position, _playerToAttack.transform.position) > _minDistanceToAttack)
             {
                 _animator.SetBool("isWalk", true);
-                transform.Translate((_playerToAttack.transform.position - transform.position).normalized * (_moveSpeed * Time.deltaTime));
+                transform.Translate((_playerToAttack.transform.position - transform.position).normalized *
+                                    (_moveSpeed * Time.deltaTime));
             }
             else
             {
@@ -156,19 +165,20 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 _animator.SetBool("isWalk", false);
                 TryAttack();
             }
-            
+
         }
-        
+
         private void TryAttack()
         {
             if (_timeToAttack < AttackCoolDownTime)
             {
                 return;
             }
+
             _timeToAttack = 0;
             Attack();
         }
-        
+
 
         private void HandleDirections()
         {
@@ -181,6 +191,25 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
+            }
+        }
+
+        void DropItem()
+        {
+            // drop itemPrefab[0] with 10% chance and itemPrefab[1] with 90% chance
+            GameObject itemPrefab;
+            if (Random.Range(0, 10) == 0)
+            {
+                itemPrefab = itemPrefabs[0];
+            }
+            else
+            {
+                itemPrefab = itemPrefabs[1];
+            }
+            if (itemPrefab != null)
+            {
+                Vector3 position = new Vector3(transform.position.x, transform.position.y, 0);
+                Instantiate(itemPrefab, position, Quaternion.identity);
             }
         }
     }

@@ -53,6 +53,11 @@ namespace _Alon.Scripts.GamePlay.Spawners
         private void SpawnPlayer()
         {
             playerPrefab = GameManager.Instance.GetPlayerToSpawn();
+            if (playerPrefab == null)
+            {
+                Debug.Log("Choose Player");
+                return;
+            }
             var mesosToTake = playerPrefab.GetComponent<BasePlayerController>().GetMesosCost();
             if (UIManager.Instance.GetMesos() - mesosToTake <= 0)
             {
@@ -60,12 +65,6 @@ namespace _Alon.Scripts.GamePlay.Spawners
             }
 
             UIManager.Instance.SetMesos(mesosToTake);
-            if (playerPrefab == null)
-            {
-                Debug.Log("Choose Player");
-                return;
-            }
-
             GameObject newPlayer = Instantiate(playerPrefab, _spawnPosition, Quaternion.identity);
             print(newPlayer);
             GameManager.Instance.AddPlayer(newPlayer.GetComponent<BasePlayerController>());

@@ -179,8 +179,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97fde77edf664dfc874380057f7f69a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 100
-  deadZone: 3
-  minDistanceToAttack: 1.2
-  moveSpeed: 0.6
-  expToAdd: 100
+  itemPrefab: {fileID: 8250981605202854531, guid: 9955ffdbff706d9488423ee4e2fbe0a0, type: 3}
