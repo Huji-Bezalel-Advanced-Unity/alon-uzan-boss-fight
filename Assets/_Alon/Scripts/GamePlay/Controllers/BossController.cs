@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using _Alon.Scripts.Core.Managers;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private Vector3 _currentPatrolTarget;
         private const float MoveSpeed = 0.6f;
         private BossAnimator _animator;
+        
+        public event Action OnBossDeath;
 
         // End Of Local Variables
 
@@ -54,6 +57,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Die()
         {
+            OnBossDeath?.Invoke();
             _animator.ChangeAnimationState("death");
             StartCoroutine(DieRoutine());
         }

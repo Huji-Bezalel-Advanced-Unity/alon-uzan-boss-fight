@@ -38,9 +38,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Start()
         {
-            Debug.Log("BaseEnemyController Start");
             _animator = GetComponentInChildren<Animator>();
             _rigidbody2D = GetComponent<Rigidbody2D>();
+            BasePlayerController.OnPlayerDeath += CheckForTarget;
+            CheckForTarget();
         }
 
         private void Update()
@@ -49,10 +50,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
-
-            CheckForTarget();
-            HandleDirections();
-    
+            
+            
             HandleApproachToPlayer();
             CheckForDeath();
         }
@@ -78,11 +77,17 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             var player = GameManager.Instance.GetNearestPlayerToEnemy(this.gameObject);
             _playerToAttack = player;
+            if (!_playerToAttack)
+            {
+                return;
+            }
+            HandleDirections();
         }
 
         private void Die()
         {
             _isDead = true;
+            BasePlayerController.OnPlayerDeath -= CheckForTarget;
             _rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
             StopAllCoroutines();
             UIManager.Instance.SetExp(expToAdd);
@@ -126,7 +131,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void MoveToPlayer()
         {
-            
             if (Vector3.Distance(transform.position, _playerToAttack.transform.position) > _minDistanceToAttack)
             {
                 _animator.SetBool("isWalk", true);
@@ -134,6 +138,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
             else if (!_isAttacking)
             {
+                GameManager.Instance.InvokeOnEnemyPosChanged();
                 Attack();
             }
             
@@ -147,11 +152,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleDirections()
         {
-            if (!_playerToAttack)
-            {
-                return;
-            }
-
             if (_playerToAttack.transform.position.x > transform.position.x)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,

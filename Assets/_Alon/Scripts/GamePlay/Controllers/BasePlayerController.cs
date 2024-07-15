@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
+using Random = UnityEngine.Random;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
@@ -22,8 +24,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// </summary>
         private bool _isMoving;
 
-        private bool _wasMoving;
-        private bool _isAttacking;
         private GameObject _boss;
         private float _TimeToTakeDamage = 2f;
         private float _TimeToGiveDamage = 2f;
@@ -33,6 +33,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private Vector3 _target;
 
         private SkeletonAnimation _skeletonAnimation;
+        
+        private const float timeLapsToSetBossTarget = 0.5f;
+        private float _timerForBossPhase;
+
+        private const float AttackCoolDownTime = 2.5f;
 
         /// <summary>
         /// Public Fields
@@ -40,22 +45,42 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected BaseAnimator _playerAnimator;
 
         protected GameObject nearestEnemy;
+        private float _timeToAttack = 0;
 
-        protected const float MinDistanceToAttack = 1.5f;
+        protected const float MinDistanceToAttack = 1;
+        
+        public static event Action OnPlayerDeath;
 
         // End Of Local Variables
 
         protected void Start()
         {
             _boss = GameManager.Instance.Boss;
-            GameManager.Instance.OnAllEnemiesCleared += HandleAllEnemiesCleared;
-            GameManager.Instance.OnEnemyDeath += HandleSetTarget;
+            SubscribeToAllEvents();
+            InitialNavMash();
+            OnPlayerDeath?.Invoke();
+            _skeletonAnimation = gameObject.GetComponent<SkeletonAnimation>(); // inject Player Animator
+        }
+
+        private void InitialNavMash()
+        {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _navMeshAgent.updateRotation = false;
             _navMeshAgent.updateUpAxis = false;
-            lifeBar.fillAmount = 1;
             HandleSetTarget();
-            _skeletonAnimation = gameObject.GetComponent<SkeletonAnimation>(); // inject Player Animator
+        }
+
+        private void SubscribeToAllEvents()
+        {
+            _boss.GetComponent<BossController>().OnBossDeath += HandleBossDie;
+            GameManager.Instance.OnAllEnemiesCleared += HandleAllEnemiesCleared;
+            GameManager.Instance.OnEnemyPosChanged += HandleSetTarget;
+        }
+
+        private void HandleBossDie()
+        {
+            nearestEnemy = null;
+            BaseAnimator.SetAnimation(_skeletonAnimation, "Idle", true);
         }
 
         private void HandleAllEnemiesCleared()
@@ -67,44 +92,43 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Update()
         {
             if (_isDead) return;
-            HandleAnimation();
+            HandleBossPhase();
             HandleMovement();
-            HandleAttack();
-            GiveDamageRoutine();
+            HandleIncreaseTimers();
         }
+
+        private void HandleIncreaseTimers()
+        {
+            _timeToAttack += Time.deltaTime;
+            _timerForBossPhase += Time.deltaTime;
+        }
+
+        private void HandleBossPhase()
+        {
+            if (nearestEnemy == _boss && _timerForBossPhase >= timeLapsToSetBossTarget)
+            {
+                HandleSetTarget();
+                _timerForBossPhase = 0;
+            }
+        }
+
 
         private void HandleSetTarget()
         {
+            Vector3 destination;
             if (nearestEnemy != _boss)
+            {
                 nearestEnemy = GameManager.Instance.GetNearestEnemy(this.gameObject);
-            if (nearestEnemy)
-            {
-                Vector3 destination = nearestEnemy.transform.position + _target;
-                _navMeshAgent.SetDestination(destination);
-                HandleDirections();
+                destination = nearestEnemy.transform.position + _target;
             }
-        }
+            else
+            {
+                destination = _boss.transform.position;
+            }
 
-        private void GiveDamageRoutine()
-        {
-            _TimeToGiveDamage -= Time.deltaTime;
-            if (!(Vector3.Distance(transform.position, nearestEnemy.transform.position) <= MinDistanceToAttack) ||
-                !(_TimeToGiveDamage <= 0)) return;
-            _TimeToGiveDamage = 2f;
-        }
-
-        private void HandleAttack()
-        {
             if (!nearestEnemy) return;
-            if (Vector3.Distance(transform.position, nearestEnemy.transform.position) > MinDistanceToAttack)
-            {
-                return;
-            }
-
-            if (_isAttacking && !_isDead)
-            {
-                StartCoroutine(AttackCooldown());
-            }
+            _navMeshAgent.SetDestination(destination);
+            HandleDirections();
         }
 
         private void Attack()
@@ -112,7 +136,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             int randomAttack = Random.Range(1, 3);
             string attackAnimation = randomAttack == 1 ? "Stab" : "Slash";
             BaseAnimator.SetAnimation(_skeletonAnimation, attackAnimation, false);
-            _isAttacking = false;
+            GiveDamage();
         }
 
         protected virtual void GiveDamage()
@@ -135,48 +159,45 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 _target = Vector3.right;
             }
         }
-
-        private void HandleAnimation()
-        {
-            if (_isMoving && !_wasMoving)
-            {
-                BaseAnimator.SetAnimation(_skeletonAnimation, "Run", true);
-                _wasMoving = true;
-            }
-            else if (nearestEnemy == null || (!_isDead && !_isMoving && _wasMoving))
-            {
-                BaseAnimator.SetAnimation(_skeletonAnimation, "Idle", true);
-                _wasMoving = false;
-            }
-        }
+        
 
         private void HandleMovement()
         {
             if (nearestEnemy == null)
             {
-                _isMoving = false;
+                BaseAnimator.SetAnimation(_skeletonAnimation, "Idle", false);
                 return;
             }
 
-            if (Vector2.Distance(transform.position, nearestEnemy.transform.position) >= MinDistanceToAttack)
+            if (Vector2.Distance(transform.position, nearestEnemy.transform.position) <= MinDistanceToAttack)
             {
-                _isMoving = true;
+                TryAttack();
             }
-            else if (_isMoving)
+            else if (!_isMoving)
             {
-                _isMoving = false;
-                _isAttacking = true;
+                StartCoroutine(SetRunAnimation());
             }
+            
         }
 
-        private IEnumerator AttackCooldown()
+        private IEnumerator SetRunAnimation()
         {
-            Attack();
-            yield return new WaitForSeconds(2.5f);
-            if (!_isDead)
-                GiveDamage();
-            _isAttacking = true;
+            _isMoving = true;
+            BaseAnimator.SetAnimation(_skeletonAnimation, "Run", true);
+            yield return new WaitForSeconds(1f);
+            _isMoving = false;
         }
+
+        private void TryAttack()
+        {
+            if (_timeToAttack < AttackCoolDownTime)
+            {
+                return;
+            }
+            _timeToAttack = 0;
+            Attack();
+        }
+
 
         public virtual void TakeDamage(float damage)
         {
@@ -186,47 +207,35 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
             else
             {
-                StartCoroutine(DelayHurtAnimation());
-            }
-        }
-
-        private IEnumerator DelayHurtAnimation()
-        {
-            yield return new WaitForSeconds(1f);
-            if (!_isDead)
-            {
-                BaseAnimator.SetAnimation(_skeletonAnimation, "Hurt", false);
+                BaseAnimator.AddAnimation(_skeletonAnimation, "Hurt", false);
             }
         }
 
         private void Die()
         {
-            this.enabled = false;
-            UnSubscribeFromAllEvents();
             _isDead = true;
+            OnPlayerDeath?.Invoke();
+            UnSubscribeFromAllEvents();
             StopAllCoroutines();
             BaseAnimator.SetAnimation(_skeletonAnimation, "Death", false);
             GameManager.Instance.RemovePlayer(this);
-            StartCoroutine(DelayDeathForAnimation());
+            StartCoroutine(DelayAnimationForDeath());
         }
 
         private void UnSubscribeFromAllEvents()
         {
             GameManager.Instance.OnAllEnemiesCleared -= HandleAllEnemiesCleared;
-            GameManager.Instance.OnEnemyDeath -= HandleSetTarget;
+            GameManager.Instance.OnEnemyPosChanged -= HandleSetTarget;
+            _boss.GetComponent<BossController>().OnBossDeath -= HandleBossDie;
         }
 
-        private IEnumerator DelayDeathForAnimation()
+        private IEnumerator DelayAnimationForDeath()
         {
-            yield return new WaitForSeconds(0.5f);
-            BaseAnimator.SetAnimation(_skeletonAnimation, "Death", false);
-            yield return new WaitForSeconds(0.7f);
             barHolder.SetActive(false);
             yield return new WaitForSeconds(4f);
             Destroy(gameObject);
         }
-
-
+        
         protected IEnumerator UpdateLifeBar(float target)
         {
             yield return new WaitForSeconds(0.7f);

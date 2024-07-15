@@ -27,7 +27,7 @@ namespace _Alon.Scripts.Core.Managers
 
         public Dictionary<string, int> _damagesDict;
         public event Action OnAllEnemiesCleared;
-        public event Action OnEnemyDeath;
+        public event Action OnEnemyPosChanged;
         public GameObject Boss { get; private set; }
 
         // End Of Local Variables
@@ -74,7 +74,6 @@ namespace _Alon.Scripts.Core.Managers
 
         public void AddPlayer(BasePlayerController player)
         {
-            Debug.Log("new player added");
             _players.Add(player);
         }
 
@@ -183,7 +182,7 @@ namespace _Alon.Scripts.Core.Managers
             }
             else
             {
-                OnEnemyDeath?.Invoke();
+                OnEnemyPosChanged?.Invoke();
             }
         }
 
@@ -193,6 +192,11 @@ namespace _Alon.Scripts.Core.Managers
             {
                 enemy.TakeDamage(1000);
             }
+        }
+
+        public void InvokeOnEnemyPosChanged()
+        {
+            OnEnemyPosChanged?.Invoke();
         }
     }
 }
