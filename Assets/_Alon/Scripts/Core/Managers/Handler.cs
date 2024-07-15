@@ -38,6 +38,7 @@ public class Handler : MonoBehaviour
         block.pressedColor = Color.yellow;
         block.selectedColor = Color.yellow;
         button.colors = block;
+        AudioManager.Instance.PlayAudioClip(3);
     }
     
     public void OnUpgradeIronGuardian(Button button)
@@ -57,6 +58,8 @@ public class Handler : MonoBehaviour
         block.pressedColor = Color.yellow;
         block.selectedColor = Color.yellow;
         button.colors = block;
+        AudioManager.Instance.PlayAudioClip(3);
+
     }
     
     public void OnUpgradeSwiftBlade(Button button)
@@ -76,5 +79,6 @@ public class Handler : MonoBehaviour
         block.pressedColor = Color.yellow;
         block.selectedColor = Color.yellow;
         button.colors = block;
+        AudioManager.Instance.PlayAudioClip(3);
     }
 }

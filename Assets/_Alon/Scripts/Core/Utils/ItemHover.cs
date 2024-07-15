@@ -74,6 +74,7 @@ namespace _Alon.Scripts.Core.Utils
                 }
                 UIManager.Instance.SetExp(250);
             }
+            AudioManager.Instance.PlayAudioClip(2);
         }
     }
 

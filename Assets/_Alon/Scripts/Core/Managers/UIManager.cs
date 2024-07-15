@@ -131,6 +131,7 @@ namespace _Alon.Scripts.Core.Managers
             yield return new WaitForSeconds(3f);
             dangerImage.SetActive(false);
             barHolder.SetActive(true);
+            AudioManager.Instance.PlayAudioClip(1);
             OnBossPhaseStart?.Invoke();
         }
         
