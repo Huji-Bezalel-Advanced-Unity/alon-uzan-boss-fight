@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using _Alon.Scripts.Core.Managers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
@@ -68,6 +69,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             this.enabled = false;
             yield return new WaitForSeconds(4);
             Destroy(gameObject);
+            SceneManager.LoadScene("Winning");
         }
 
         private IEnumerator DelayAttack()

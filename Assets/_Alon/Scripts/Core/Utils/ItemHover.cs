@@ -72,7 +72,7 @@ namespace _Alon.Scripts.Core.Utils
                         .SetEase(Ease.InOutElastic);
                     yield return new WaitForSeconds(0.1f);
                 }
-                UIManager.Instance.SetExp(250);
+                UIManager.Instance.SetExp(50);
             }
             AudioManager.Instance.PlayAudioClip(2);
         }

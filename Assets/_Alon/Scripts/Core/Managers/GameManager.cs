@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _Alon.Scripts.Gameplay.Controllers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _Alon.Scripts.Core.Managers
 {
@@ -52,9 +53,9 @@ namespace _Alon.Scripts.Core.Managers
             _onComplete = onComplete;
             _damagesDict = new Dictionary<string, int>
             {
-                { "IronGuardian", 20 },
-                { "RamSmasher", 30 },
-                { "SwiftBlade", 40 }
+                { "IronGuardian", 10 },
+                { "RamSmasher", 15 },
+                { "SwiftBlade", 20 }
             };
             OnLoadSuccess();
         }
@@ -82,6 +83,10 @@ namespace _Alon.Scripts.Core.Managers
         public void RemovePlayer(BasePlayerController player)
         {
             _players.Remove(player);
+            if (_players.Count == 0)
+            {
+                SceneManager.LoadScene("Deafet");
+            }
         }
 
         public BasePlayerController GetNearestPlayerToBoss()
@@ -211,7 +216,7 @@ namespace _Alon.Scripts.Core.Managers
 
         public void UpgradePlayer(String playerName)
         {
-            _damagesDict[playerName] += 50;
+            _damagesDict[playerName] *= 5;
         }
     }
 }

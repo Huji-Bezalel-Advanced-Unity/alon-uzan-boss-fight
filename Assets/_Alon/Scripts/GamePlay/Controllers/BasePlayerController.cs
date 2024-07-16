@@ -48,7 +48,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private const float MinDistanceToAttack = 1.2f;
         
-        public static event Action OnPlayerDeath;
+        public static event Action OnPlayerDieOrSpawn;
 
         // End Of Local Variables
 
@@ -57,7 +57,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _boss = GameManager.Instance.Boss;
             SubscribeToAllEvents();
             InitialNavMash();
-            OnPlayerDeath?.Invoke();
+            OnPlayerDieOrSpawn?.Invoke();
             _skeletonAnimation = gameObject.GetComponent<SkeletonAnimation>(); // inject Player Animator
         }
 
@@ -81,6 +81,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             nearestEnemy = null;
             BaseAnimator.SetAnimation(_skeletonAnimation, "Idle", true);
+            this.enabled = false;
         }
 
         private void HandleAllEnemiesCleared()
@@ -214,7 +215,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Die()
         {
             _isDead = true;
-            OnPlayerDeath?.Invoke();
+            OnPlayerDieOrSpawn?.Invoke();
             UnSubscribeFromAllEvents();
             StopAllCoroutines();
             BaseAnimator.SetAnimation(_skeletonAnimation, "Death", false);

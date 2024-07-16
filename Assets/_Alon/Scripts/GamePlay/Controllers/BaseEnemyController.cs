@@ -49,7 +49,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void SubscribeForAllEvents()
         {
-            BasePlayerController.OnPlayerDeath += CheckForTarget;
+            BasePlayerController.OnPlayerDieOrSpawn += CheckForTarget;
         }
 
         private void InitFields()
@@ -121,7 +121,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void UnSubscribeFromAllEvents()
         {
-            BasePlayerController.OnPlayerDeath -= CheckForTarget;
+            BasePlayerController.OnPlayerDieOrSpawn -= CheckForTarget;
         }
 
         private IEnumerator DelayForDeathAnimation()
