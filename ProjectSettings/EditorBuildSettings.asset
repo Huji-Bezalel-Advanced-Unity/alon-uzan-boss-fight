@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Alon/Scenes/BossMain.unity
     guid: 8e03dd369e41b4a00adaa7aa401a96d9
+  - enabled: 1
+    path: Assets/_Alon/Scenes/Winning.unity
+    guid: 0dcd96e7dd93aea4096a27982f5d1861
+  - enabled: 1
+    path: Assets/_Alon/Scenes/Deafet.unity
+    guid: ad6725e23a85a40418f4851ccd460d9a
   m_configObjects: {}
