@@ -57,6 +57,7 @@ namespace _Alon.Scripts.Core.Managers
                 { "RamSmasher", 15 },
                 { "SwiftBlade", 20 }
             };
+            AudioManager.Instance.PlayAudioClip(2);
             OnLoadSuccess();
         }
 
@@ -85,6 +86,7 @@ namespace _Alon.Scripts.Core.Managers
             _players.Remove(player);
             if (_players.Count == 0)
             {
+                AudioManager.Instance.PlayAudioClip(5);
                 SceneManager.LoadScene("Deafet");
             }
         }

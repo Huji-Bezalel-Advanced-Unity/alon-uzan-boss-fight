@@ -69,6 +69,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             this.enabled = false;
             yield return new WaitForSeconds(4);
             Destroy(gameObject);
+            AudioManager.Instance.PlayAudioClip(4);
             SceneManager.LoadScene("Winning");
         }
 
