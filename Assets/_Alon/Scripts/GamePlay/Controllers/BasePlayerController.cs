@@ -31,23 +31,21 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private Vector3 _target;
 
         private SkeletonAnimation _skeletonAnimation;
-        
-        private const float timeLapsToSetBossTarget = 0.5f;
-        private float _timerForBossPhase;
 
         private const float AttackCoolDownTime = 2.5f;
 
         /// <summary>
         /// Public Fields
         /// </summary>
-        protected BaseAnimator _playerAnimator;
-
         protected GameObject nearestEnemy;
+
         private float _timeToAttack = 0;
         private bool _isSetEnemyOnes = false;
+        
+        private bool _allEnemiesDead = false;
 
         private const float MinDistanceToAttack = 1.2f;
-        
+
         public static event Action OnPlayerDieOrSpawn;
 
         // End Of Local Variables
@@ -87,6 +85,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void HandleAllEnemiesCleared()
         {
             nearestEnemy = _boss;
+            _allEnemiesDead = true;
             HandleSetTarget();
         }
 
@@ -101,7 +100,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void HandleIncreaseTimers()
         {
             _timeToAttack += Time.deltaTime;
-            _timerForBossPhase += Time.deltaTime;
         }
 
         private void HandleBossPhase()
@@ -112,22 +110,24 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleSetTarget()
         {
-            if (!nearestEnemy && _isSetEnemyOnes) // if the enemy is null, ignore the case of starting the game
+            if (!nearestEnemy && (_isSetEnemyOnes || _allEnemiesDead)) // if the enemy is null, ignore the case of starting the game
             {
                 return;
             }
             Vector3 destination;
-            if (nearestEnemy != _boss)
+            var tryToGetEnemy = GameManager.Instance.GetNearestEnemy(this.gameObject);
+            if (nearestEnemy != _boss && tryToGetEnemy)
             {
-                nearestEnemy = GameManager.Instance.GetNearestEnemy(this.gameObject);
+                nearestEnemy = tryToGetEnemy;
                 destination = nearestEnemy.transform.position + _target;
             }
             else
             {
                 destination = _boss.transform.position;
             }
+
             _isSetEnemyOnes = true;
-            
+
             _navMeshAgent.SetDestination(destination);
             HandleDirections();
         }
@@ -160,7 +160,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 _target = Vector3.right;
             }
         }
-        
+
 
         private void HandleMovement()
         {
@@ -178,7 +178,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 StartCoroutine(SetRunAnimation());
             }
-            
         }
 
         private IEnumerator SetRunAnimation()
@@ -195,6 +194,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
+
             _timeToAttack = 0;
             Attack();
         }
@@ -237,7 +237,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             yield return new WaitForSeconds(4f);
             Destroy(gameObject);
         }
-        
+
         protected IEnumerator UpdateLifeBar(float target)
         {
             yield return new WaitForSeconds(0.7f);

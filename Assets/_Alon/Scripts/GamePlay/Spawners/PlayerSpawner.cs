@@ -47,10 +47,6 @@ namespace _Alon.Scripts.GamePlay.Spawners
 
         private void SpawnPlayer()
         {
-            if (UIManager.Instance.GetMesos() <= 0)
-            {
-                return;
-            }
             playerPrefab = GameManager.Instance.GetPlayerToSpawn();
             if (playerPrefab == null)
             {
@@ -59,8 +55,7 @@ namespace _Alon.Scripts.GamePlay.Spawners
             }
 
             var mesosToTake = playerPrefab.GetComponent<BasePlayerController>().GetMesosCost();
-            Debug.Log(mesosToTake);
-            if (UIManager.Instance.GetMesos() < -mesosToTake)
+            if (UIManager.Instance.GetMesos() + mesosToTake < 0)
             {
                 UIManager.Instance.Notify("Not Enough Mesos");
                 return;
