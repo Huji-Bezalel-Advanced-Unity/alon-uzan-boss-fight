@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Alon.Scripts.Core.Managers
 {
@@ -9,14 +10,13 @@ namespace _Alon.Scripts.Core.Managers
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private Animator _animator;
+        [SerializeField]
+        private Animator animator;
 
         /// <summary>
         /// Public Fields
         /// </summary>
-        public static BossAnimator Instance { get; private set; }
-
-        public bool IsFlying { get; set; }
+        private static BossAnimator Instance { get; set; }
 
         // End Of Local Variables
 
@@ -36,20 +36,14 @@ namespace _Alon.Scripts.Core.Managers
 
         public void ChangeAnimationState(string newAnimation)
         {
-            if (_animator)
+            if (animator)
             {
-                _animator.Play(newAnimation);
+                animator.Play(newAnimation);
             }
             else
             {
                 Debug.LogError("Animator component is not assigned or found.");
             }
-        }
-
-        public Animator Animator
-        {
-            get => _animator;
-            set => _animator = value;
         }
     }
 }

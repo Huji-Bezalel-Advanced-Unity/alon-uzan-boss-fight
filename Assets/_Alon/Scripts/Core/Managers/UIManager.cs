@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using _Alon.Scripts.Core.Utils;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Alon.Scripts.Core.Managers
@@ -12,39 +14,44 @@ namespace _Alon.Scripts.Core.Managers
         /// <summary>
         /// Private Serialized Fields
         /// </summary>
-        [SerializeField] private Image bossLifeBar;
+        [SerializeField]
+        private Image bossLifeBar;
 
-        [SerializeField] private TextMeshProUGUI mesosText;
+        [SerializeField]
+        private TextMeshProUGUI mesosText;
 
-        [SerializeField] private TextMeshProUGUI expText;
+        [SerializeField]
+        private TextMeshProUGUI expText;
 
-        [SerializeField] private GameObject barHolder;
+        [SerializeField]
+        private GameObject barHolder;
 
-        [SerializeField] private GameObject dangerImage;
+        [SerializeField]
+        private GameObject dangerImage;
 
-        [SerializeField] private Notification notification;
+        [SerializeField]
+        private Notification notification;
 
         /// <summary>
         /// Public Serialized Fields
         /// </summary>
-        [SerializeField] public Transform MoneyImage;
+        [SerializeField]
+        public Transform moneyImage;
 
-        [SerializeField] public Transform ExpImage;
+        [SerializeField]
+        public Transform expImage;
 
         /// <summary>
         /// Private Fields
         /// </summary>
         private const float BossMaxLife = 10000f;
-
         private float _mesos = 2500f;
-
         private float _exp = 0f;
 
         /// <summary>
         /// Public Fields
         /// </summary>
         public static UIManager Instance { get; private set; }
-
         public event Action OnBossPhaseStart;
 
         // End Of Local Variables
@@ -70,10 +77,10 @@ namespace _Alon.Scripts.Core.Managers
 
         public IEnumerator UpdateBossLifeBar(float target)
         {
-            float startPercentage = bossLifeBar.fillAmount;
-            float targetPercentage = target / BossMaxLife; // make constant
-            float elapsedTime = 0f;
-            float duration = 1f; // Duration in seconds for the fill amount animation
+            var startPercentage = bossLifeBar.fillAmount;
+            var targetPercentage = target / BossMaxLife;
+            var elapsedTime = 0f;
+            var duration = 1f;
 
             while (elapsedTime < duration)
             {

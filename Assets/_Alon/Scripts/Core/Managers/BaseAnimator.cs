@@ -6,7 +6,7 @@ namespace _Alon.Scripts.Core.Managers
 {
     public class BaseAnimator
     {
-        public static void SetAnimation(SkeletonAnimation skeletonAnimation, string animationName, bool loop)
+        public void SetAnimation(SkeletonAnimation skeletonAnimation, string animationName, bool loop)
         {
             if (!skeletonAnimation)
                 return;
@@ -14,7 +14,7 @@ namespace _Alon.Scripts.Core.Managers
             skeletonAnimation.AnimationState.SetAnimation(0, animationName, loop);
         }
         
-        public static void AddAnimation(SkeletonAnimation skeletonAnimation, string animationName, bool loop)
+        public void AddAnimation(SkeletonAnimation skeletonAnimation, string animationName, bool loop)
         {
             if (!skeletonAnimation)
                 return;

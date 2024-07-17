@@ -11,15 +11,16 @@ namespace _Alon.Scripts.Core.Loaders
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private Image loaderFg;
-
-        [SerializeField] private TextMeshProUGUI accumulatePercent;
+        [SerializeField]
+        private Image loaderFg;
+        
+        [SerializeField]
+        private TextMeshProUGUI accumulatePercent;
 
         /// <summary>
         /// Private Fields
         /// </summary>
         private int _accumulate;
-
         private int _accumulateTarget;
         private Coroutine _currentCoroutine;
 
@@ -55,8 +56,8 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void UpdateUI()
         {
-            float percentage = (float)_accumulate / _accumulateTarget;
-            float percentageClamp = Mathf.Clamp01(percentage);
+            var percentage = (float)_accumulate / _accumulateTarget;
+            var percentageClamp = Mathf.Clamp01(percentage);
             if (_currentCoroutine != null)
             {
                 StopCoroutine(_currentCoroutine);
@@ -68,9 +69,9 @@ namespace _Alon.Scripts.Core.Loaders
 
         private IEnumerator UpdateFillAmount(float targetPercentage)
         {
-            float startPercentage = loaderFg.fillAmount;
-            float elapsedTime = 0f;
-            float duration = 1f;
+            var startPercentage = loaderFg.fillAmount;
+            var elapsedTime = 0f;
+            const float duration = 1f;
 
             while (elapsedTime < duration)
             {
@@ -81,11 +82,9 @@ namespace _Alon.Scripts.Core.Loaders
 
             loaderFg.fillAmount = targetPercentage;
 
-            if (Mathf.Approximately(targetPercentage, 1f))
-            {
-                yield return new WaitForSeconds(0.5f);
-                OnUIFinished?.Invoke();
-            }
+            if (!Mathf.Approximately(targetPercentage, 1f)) yield break;
+            yield return new WaitForSeconds(0.5f);
+            OnUIFinished?.Invoke();
         }
     }
 }

@@ -9,20 +9,23 @@ namespace _Alon.Scripts.Gameplay.Controllers
     public class BossController : BaseEnemyController
     {
         /// <summary>
+        /// Constants
+        /// </summary>
+        private const float MaxBossLife = 10000f;
+        private const float MoveSpeed = 0.6f;
+
+        /// <summary>
         /// Private Fields
         /// </summary>
-        private new BasePlayerController _playerToAttack = null;
-
+        private BasePlayerController _playerToAttack = null;
         private bool _isAttacking = false;
-        private float maxBossLife = 10000f;
         private Vector3 _leftPatrolPoint;
         private Vector3 _rightPatrolPoint;
         private bool _isPatrolling = false;
         private float _lastAttackTime = 0;
         private Vector3 _currentPatrolTarget;
-        private const float MoveSpeed = 0.6f;
         private BossAnimator _animator;
-        
+
         /// <summary>
         /// Events
         /// </summary>
@@ -32,10 +35,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Start()
         {
-            _leftPatrolPoint = transform.position + Vector3.left * 2; // 5 units to the left
-            _rightPatrolPoint = transform.position + Vector3.right * 2; // 5 units to the right
+            _leftPatrolPoint = transform.position + Vector3.left * 2;
+            _rightPatrolPoint = transform.position + Vector3.right * 2;
             _currentPatrolTarget = _rightPatrolPoint;
-            life = maxBossLife;
+            Life = MaxBossLife;
             _animator = GetComponent<BossAnimator>();
         }
 
@@ -54,7 +57,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 StartCoroutine(Patrol());
             }
 
-            if (life <= 0)
+            if (Life <= 0)
             {
                 Die();
             }
@@ -102,7 +105,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isAttacking = true;
             _animator.ChangeAnimationState("attack");
             GameManager.Instance.DealDamage(_playerToAttack);
-            _isPatrolling = false; // Stop patrolling when attacking
+            _isPatrolling = false;
             StartCoroutine(DelayAttack());
         }
 
@@ -112,14 +115,12 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _isPatrolling = true;
             while (_isPatrolling && !_isAttacking)
             {
-                float step = Time.deltaTime * MoveSpeed;
+                var step = Time.deltaTime * MoveSpeed;
                 transform.position = Vector3.MoveTowards(transform.position, _currentPatrolTarget, step);
                 _animator.ChangeAnimationState("walk");
 
                 if (Vector3.Distance(transform.position, _currentPatrolTarget) < 0.001f)
                 {
-                    // BossAnimator.Instance.ChangeAnimationState("idle", false, false);
-                    // yield return new WaitForSeconds(1);
                     if (_currentPatrolTarget == _rightPatrolPoint)
                     {
                         _currentPatrolTarget = _leftPatrolPoint;
@@ -141,8 +142,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
         public override void TakeDamage(float damage)
         {
             base.TakeDamage(damage);
-            life = Mathf.Max(0, life - damage);
-            StartCoroutine(UIManager.Instance.UpdateBossLifeBar(life));
+            Life = Mathf.Max(0, Life - damage);
+            StartCoroutine(UIManager.Instance.UpdateBossLifeBar(Life));
         }
     }
 }

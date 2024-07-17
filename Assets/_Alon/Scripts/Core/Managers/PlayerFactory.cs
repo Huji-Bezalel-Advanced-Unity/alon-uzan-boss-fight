@@ -8,7 +8,7 @@ namespace _Alon.Scripts.Core.Managers
         /// <summary>
         /// private Fields
         /// </summary>
-        private readonly Dictionary<string, GameObject> PlayersPrefabs = new Dictionary<string, GameObject>
+        private readonly Dictionary<string, GameObject> _playersPrefabs = new Dictionary<string, GameObject>
         {
             { "IronGuardian", Resources.Load<GameObject>("IronGuardian") },
             { "RamSmasher", Resources.Load<GameObject>("RamSmasher") },
@@ -19,13 +19,10 @@ namespace _Alon.Scripts.Core.Managers
 
         public GameObject CreatePlayer(string playerType)
         {
-            if (!PlayersPrefabs.TryGetValue(playerType, out var prefab))
-            {
-                Debug.LogError($"Player type {playerType} not found.");
-                return null;
-            }
+            if (_playersPrefabs.TryGetValue(playerType, out var prefab)) return prefab;
+            Debug.LogError($"Player type {playerType} not found.");
+            return null;
 
-            return prefab;
         }
     }
 }

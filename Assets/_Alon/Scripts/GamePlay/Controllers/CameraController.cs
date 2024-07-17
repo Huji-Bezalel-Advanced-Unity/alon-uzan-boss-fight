@@ -11,15 +11,16 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private Vector2 minBoundary;
+        [SerializeField]
+        private Vector2 minBoundary;
 
-        [SerializeField] private Vector2 maxBoundary;
+        [SerializeField]
+        private Vector2 maxBoundary;
 
         /// <summary>
         /// Private Fields
         /// </summary>
         private Vector3 _dragOrigin;
-
         private Camera _mainCamera;
 
         // End Of Local Variables
@@ -31,11 +32,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         void Update()
         {
-            if (GameManager.Instance.CameraIsLocked)
-            {
-                return;
-            }
-
             HandlePanning();
         }
 
@@ -54,8 +50,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
                 ClampCameraPosition();
             }
         }
-
-
+        
         private void ClampCameraPosition()
         {
             Vector3 pos = _mainCamera.transform.position;

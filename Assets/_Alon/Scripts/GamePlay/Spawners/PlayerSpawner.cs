@@ -13,48 +13,42 @@ namespace _Alon.Scripts.GamePlay.Spawners
         /// Private Fields
         /// </summary>
         private Vector3 _spawnPosition;
-
         private GameObject _bossPosition;
-        private GameObject playerPrefab;
+        private GameObject _playerPrefab;
 
         // End Of Local Variables
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (!EventSystem.current.IsPointerOverGameObject())
-                {
-                    Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
-                        Input.mousePosition.y, Camera.main.nearClipPlane));
-                    mouseWorldPosition.z = 0;
+            if (!Input.GetMouseButtonDown(0)) return;
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+            if (Camera.main == null) return;
+            var mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+                Input.mousePosition.y, Camera.main.nearClipPlane));
+            mouseWorldPosition.z = 0;
 
-                    if (NavMesh.SamplePosition(mouseWorldPosition, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
-                    {
-                        if (hit.hit)
-                        {
-                            _spawnPosition = hit.position;
-                            SpawnPlayer();
-                        }
-                        else
-                        {
-                            UIManager.Instance.Notify("Cannot Spawn Player Here");
-                        }
-                    }
-                }
+            if (!NavMesh.SamplePosition(mouseWorldPosition, out var hit, 1.0f, NavMesh.AllAreas)) return;
+            if (hit.hit)
+            {
+                _spawnPosition = hit.position;
+                SpawnPlayer();
+            }
+            else
+            {
+                UIManager.Instance.Notify("Cannot Spawn Player Here");
             }
         }
 
         private void SpawnPlayer()
         {
-            playerPrefab = GameManager.Instance.GetPlayerToSpawn();
-            if (playerPrefab == null)
+            _playerPrefab = GameManager.Instance.GetPlayerToSpawn();
+            if (_playerPrefab == null)
             {
                 UIManager.Instance.Notify("Choose Your Player");
                 return;
             }
 
-            var mesosToTake = playerPrefab.GetComponent<BasePlayerController>().GetMesosCost();
+            var mesosToTake = _playerPrefab.GetComponent<BasePlayerController>().GetMesosCost();
             if (UIManager.Instance.GetMesos() + mesosToTake < 0)
             {
                 UIManager.Instance.Notify("Not Enough Mesos");
@@ -62,7 +56,7 @@ namespace _Alon.Scripts.GamePlay.Spawners
             }
 
             UIManager.Instance.SetMesos(mesosToTake);
-            GameObject newPlayer = Instantiate(playerPrefab, _spawnPosition, Quaternion.identity);
+            var newPlayer = Instantiate(_playerPrefab, _spawnPosition, Quaternion.identity);
             print(newPlayer);
             GameManager.Instance.AddPlayer(newPlayer.GetComponent<BasePlayerController>());
         }

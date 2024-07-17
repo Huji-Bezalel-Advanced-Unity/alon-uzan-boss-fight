@@ -10,10 +10,14 @@ namespace _Alon.Scripts.Core.Managers
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private AudioSource backgroundSource; // For background music
-
-        [SerializeField] private AudioSource itemSource; // For itemized sounds
-        [SerializeField] private AudioClip[] audioClips; // Collection of audio clips
+        [SerializeField]
+        private AudioSource backgroundSource; // For background music
+        
+        [SerializeField]
+        private AudioSource itemSource; // For itemized sounds
+        
+        [SerializeField]
+        private AudioClip[] audioClips; // Collection of audio clips
 
         /// <summary>
         /// Singleton instance of AudioManager.

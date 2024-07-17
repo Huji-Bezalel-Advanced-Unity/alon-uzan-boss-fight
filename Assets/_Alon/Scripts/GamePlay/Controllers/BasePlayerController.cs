@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 using _Alon.Scripts.Core.Managers;
 using Spine.Unity;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace _Alon.Scripts.Gameplay.Controllers
@@ -12,38 +13,42 @@ namespace _Alon.Scripts.Gameplay.Controllers
     public class BasePlayerController : MonoBehaviour
     {
         /// <summary>
+        /// Constants
+        /// </summary>
+        private const float AttackCoolDownTime = 2.5f;
+        private const float MinDistanceToAttack = 1.2f;
+        private const float MaxLife = 100;
+
+        /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private Image lifeBar;
+        [SerializeField]
+        private Image lifeBar;
 
-        [SerializeField] private GameObject barHolder;
-        [SerializeField] protected float _playersLife = 100f;
+        [SerializeField]
+        private GameObject barHolder;
+        
+        [SerializeField]
+        protected float playersLife = 100f;
 
         /// <summary>
         /// Private Fields
         /// </summary>
         private bool _isMoving;
-
         private GameObject _boss;
         private NavMeshAgent _navMeshAgent;
-        private float _maxLife = 100;
         private Vector3 _target;
-
         private SkeletonAnimation _skeletonAnimation;
-
-        private const float AttackCoolDownTime = 2.5f;
         private float _timeToAttack = 0;
         private bool _isSetEnemyOnes = false;
-        
         private bool _allEnemiesDead = false;
-
-        private const float MinDistanceToAttack = 1.2f;
-
+        private readonly BaseAnimator _baseAnimator = new BaseAnimator();
+        
         /// <summary>
         /// Public Fields
         /// </summary>
-        public bool _isDead = false;
-        
+        public bool isDead = false;
+
         /// <summary>
         /// Events
         /// </summary>
@@ -52,17 +57,17 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Protected Fields
         /// </summary>
-        protected GameObject nearestEnemy;
-        
+        protected GameObject NearestEnemy;
+
         // End Of Local Variables
 
-        protected void Start()
+        private void Start()
         {
             _boss = GameManager.Instance.Boss;
             SubscribeToAllEvents();
             InitialNavMash();
             OnPlayerDieOrSpawn?.Invoke();
-            _skeletonAnimation = gameObject.GetComponent<SkeletonAnimation>(); // inject Player Animator
+            _skeletonAnimation = gameObject.GetComponent<SkeletonAnimation>();
         }
 
         private void InitialNavMash()
@@ -83,21 +88,21 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleBossDie()
         {
-            nearestEnemy = null;
-            BaseAnimator.SetAnimation(_skeletonAnimation, "Idle", true);
+            NearestEnemy = null;
+            _baseAnimator.SetAnimation(_skeletonAnimation, "Idle", true);
             this.enabled = false;
         }
 
         private void HandleAllEnemiesCleared()
         {
-            nearestEnemy = _boss;
+            NearestEnemy = _boss;
             _allEnemiesDead = true;
             HandleSetTarget();
         }
 
         private void Update()
         {
-            if (_isDead) return;
+            if (isDead) return;
             // HandleSetTarget();
             HandleMovement();
             HandleIncreaseTimers();
@@ -110,14 +115,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleBossPhase()
         {
-            nearestEnemy = _boss;
+            NearestEnemy = _boss;
             StartCoroutine(UpdateBossPosition());
         }
 
         private IEnumerator UpdateBossPosition()
         {
-            // every 0.5 seconds update call the HandleSetTarget method
-            while (nearestEnemy == _boss)
+            while (NearestEnemy == _boss)
             {
                 HandleSetTarget();
                 yield return new WaitForSeconds(0.5f);
@@ -127,17 +131,19 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleSetTarget()
         {
-            if (!nearestEnemy && (_isSetEnemyOnes || _allEnemiesDead)) // if the enemy is null, ignore the case of starting the game
+            if (!NearestEnemy &&
+                (_isSetEnemyOnes || _allEnemiesDead))
             {
                 return;
             }
+
             Vector3 destination;
             var tryToGetEnemy = GameManager.Instance.GetNearestEnemy(this.gameObject);
-            if (nearestEnemy != _boss && tryToGetEnemy)
+            if (NearestEnemy != _boss && tryToGetEnemy)
             {
-                nearestEnemy = tryToGetEnemy;
+                NearestEnemy = tryToGetEnemy;
                 OnPlayerDieOrSpawn?.Invoke();
-                destination = nearestEnemy.transform.position + _target;
+                destination = NearestEnemy.transform.position + _target;
             }
             else
             {
@@ -152,9 +158,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void Attack()
         {
-            int randomAttack = Random.Range(1, 3);
-            string attackAnimation = randomAttack == 1 ? "Stab" : "Slash";
-            BaseAnimator.SetAnimation(_skeletonAnimation, attackAnimation, false);
+            var randomAttack = Random.Range(1, 3);
+            var attackAnimation = randomAttack == 1 ? "Stab" : "Slash";
+            _baseAnimator.SetAnimation(_skeletonAnimation, attackAnimation, false);
             GiveDamage();
         }
 
@@ -164,11 +170,12 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleDirections()
         {
-            if (!nearestEnemy)
+            if (!NearestEnemy)
             {
                 return;
             }
-            if (nearestEnemy.transform.position.x > transform.position.x)
+
+            if (NearestEnemy.transform.position.x > transform.position.x)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
@@ -186,13 +193,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleMovement()
         {
-            if (nearestEnemy == null)
+            if (NearestEnemy == null)
             {
-                BaseAnimator.SetAnimation(_skeletonAnimation, "Idle", false);
+                _baseAnimator.SetAnimation(_skeletonAnimation, "Idle", false);
                 return;
             }
 
-            if (Vector2.Distance(transform.position, nearestEnemy.transform.position) <= MinDistanceToAttack)
+            if (Vector2.Distance(transform.position, NearestEnemy.transform.position) <= MinDistanceToAttack)
             {
                 TryAttack();
             }
@@ -205,7 +212,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private IEnumerator SetRunAnimation()
         {
             _isMoving = true;
-            BaseAnimator.SetAnimation(_skeletonAnimation, "Run", true);
+            _baseAnimator.SetAnimation(_skeletonAnimation, "Run", true);
             yield return new WaitForSeconds(1f);
             _isMoving = false;
         }
@@ -224,23 +231,23 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         public virtual void TakeDamage(float damage)
         {
-            if (_playersLife <= 0)
+            if (playersLife <= 0)
             {
                 Die();
             }
             else
             {
-                BaseAnimator.AddAnimation(_skeletonAnimation, "Hurt", false);
+                _baseAnimator.AddAnimation(_skeletonAnimation, "Hurt", false);
             }
         }
 
         private void Die()
         {
-            _isDead = true;
+            isDead = true;
             OnPlayerDieOrSpawn?.Invoke();
             UnSubscribeFromAllEvents();
             StopAllCoroutines();
-            BaseAnimator.SetAnimation(_skeletonAnimation, "Death", false);
+            _baseAnimator.SetAnimation(_skeletonAnimation, "Death", false);
             GameManager.Instance.RemovePlayer(this);
             StartCoroutine(DelayForDeathAnimation());
         }
@@ -263,7 +270,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         protected IEnumerator UpdateLifeBar(float target)
         {
             yield return new WaitForSeconds(0.7f);
-            lifeBar.fillAmount = Mathf.Max(0, target / _maxLife);
+            lifeBar.fillAmount = Mathf.Max(0, target / MaxLife);
         }
 
         public virtual float GetMesosCost()

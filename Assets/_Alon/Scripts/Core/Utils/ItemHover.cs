@@ -16,13 +16,13 @@ namespace _Alon.Scripts.Core.Utils
         /// Private Fields
         /// </summary>
         private const float TargetScale = 1.18f;
-
         private bool _isHovered = false;
 
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private ParticleSystem particleSystem;
+        [SerializeField]
+        private new ParticleSystem particleSystem;
 
         // End Of Local Variables
 
@@ -33,16 +33,15 @@ namespace _Alon.Scripts.Core.Utils
                 return;
             }
 
-            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
+            if (Camera.main == null) return;
+            var mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,
                 Input.mousePosition.y, Camera.main.nearClipPlane));
             mouseWorldPosition.z =
                 0;
 
-            if (Vector3.Distance(mouseWorldPosition, gameObject.transform.position) < 0.2f)
-            {
-                _isHovered = true;
-                StartCoroutine(MoveItemToUI());
-            }
+            if (!(Vector3.Distance(mouseWorldPosition, gameObject.transform.position) < 0.2f)) return;
+            _isHovered = true;
+            StartCoroutine(MoveItemToUI());
         }
 
         private IEnumerator MoveItemToUI()
@@ -52,7 +51,7 @@ namespace _Alon.Scripts.Core.Utils
             {
                 foreach (Transform coin in transform)
                 {
-                    coin.DOMove(UIManager.Instance.MoneyImage.position, 0.5f)
+                    coin.DOMove(UIManager.Instance.moneyImage.position, 0.5f)
                         .SetEase(Ease.InQuint).OnComplete(() => Destroy(coin.gameObject));
                     coin.DOScale(Vector3.one * TargetScale, 0.5f)
                         .SetEase(Ease.Linear);
@@ -65,7 +64,7 @@ namespace _Alon.Scripts.Core.Utils
             {
                 foreach (Transform exp in transform)
                 {
-                    exp.DOMove(UIManager.Instance.ExpImage.position, 0.5f)
+                    exp.DOMove(UIManager.Instance.expImage.position, 0.5f)
                         .SetEase(Ease.InQuint).OnComplete(() => Destroy(exp.gameObject));
                     exp.DOScale(Vector3.one * TargetScale, 0.5f)
                         .SetEase(Ease.Linear);

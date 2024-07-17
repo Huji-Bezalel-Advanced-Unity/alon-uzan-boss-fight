@@ -12,7 +12,8 @@ namespace _Alon.Scripts.Core.Loaders
         /// <summary>
         /// Serialized Fields
         /// </summary>
-        [SerializeField] private GameLoaderUI gameLoaderUI;
+        [SerializeField]
+        private GameLoaderUI gameLoaderUI;
 
         /// <summary>
         /// Private Constants
@@ -32,7 +33,6 @@ namespace _Alon.Scripts.Core.Loaders
             { "LoadEnemies", 30 },
             { "LoadBoss", 15 }
         };
-
         private GameObject _boss;
         private EnemyFactory _enemyFactory;
 
@@ -60,7 +60,7 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void LoadGameManagers()
         {
-            new GameManager(OnGameManagersLoaded);
+            var gameManager = new GameManager(OnGameManagersLoaded);
         }
 
         private void OnGameManagersLoaded(bool isSuccess)
@@ -142,10 +142,10 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void LoadEnemies()
         {
-            GameObject enemyGroup1 = _enemyFactory.CreateEnemy("EnemyGroup1");
-            GameObject enemyGroup2 = _enemyFactory.CreateEnemy("EnemyGroup2");
-            GameObject enemyGroup3 = _enemyFactory.CreateEnemy("EnemyGroup3");
-            GameObject enemyGroup4 = _enemyFactory.CreateEnemy("EnemyGroup4");
+            var enemyGroup1 = _enemyFactory.CreateEnemy("EnemyGroup1");
+            var enemyGroup2 = _enemyFactory.CreateEnemy("EnemyGroup2");
+            var enemyGroup3 = _enemyFactory.CreateEnemy("EnemyGroup3");
+            var enemyGroup4 = _enemyFactory.CreateEnemy("EnemyGroup4");
 
             if (enemyGroup1 == null || enemyGroup2 == null || enemyGroup3 == null || enemyGroup4 == null)
             {

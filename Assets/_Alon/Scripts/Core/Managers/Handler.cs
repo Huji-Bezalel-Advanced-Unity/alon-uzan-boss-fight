@@ -12,15 +12,20 @@ namespace _Alon.Scripts.Core.Managers
         /// Private fields
         /// </summary>
         private readonly Color _goldColor = new Color(1f, 0.84f, 0f);
-
-        [Tooltip("first is RamSmasher, second is IronGuardian, third is SwiftBlade")] [SerializeField]
+        
+        /// <summary>
+        /// Serialized Fields
+        /// </summary>
+        [Tooltip("first is RamSmasher, second is IronGuardian, third is SwiftBlade")]
+        [SerializeField]
         private Button[] spawnersButtons;
 
-        [Tooltip("first is RamSmasher, second is IronGuardian, third is SwiftBlade")] [SerializeField]
+        [Tooltip("first is RamSmasher, second is IronGuardian, third is SwiftBlade")]
+        [SerializeField]
         private Button[] upgradesButtons;
 
         // End Of Local Variables
-        
+
         public void OnClickRamSmasher()
         {
             GameManager.Instance.SetPlayerToSpawn("RamSmasher");
@@ -42,19 +47,15 @@ namespace _Alon.Scripts.Core.Managers
             UIManager.Instance.SetExp(-2500);
             GameManager.Instance.UpgradePlayer("RamSmasher");
             SetButtonColor(spawnersButtons[0], _goldColor);
-            upgradesButtons[0].interactable = false; // Disable the upgrade button
+            upgradesButtons[0].interactable = false;
             AudioManager.Instance.PlayAudioClip(1);
         }
 
         private bool CheckForEnoughExp(float expNeeded)
         {
-            if (UIManager.Instance.GetExp() < expNeeded)
-            {
-                UIManager.Instance.Notify("You Need " + expNeeded + " Exp For Upgrade");
-                return true;
-            }
-
-            return false;
+            if (!(UIManager.Instance.GetExp() < expNeeded)) return false;
+            UIManager.Instance.Notify("You Need " + expNeeded + " Exp For Upgrade");
+            return true;
         }
 
         public void OnUpgradeIronGuardian()
@@ -63,7 +64,7 @@ namespace _Alon.Scripts.Core.Managers
             UIManager.Instance.SetExp(-1000);
             GameManager.Instance.UpgradePlayer("IronGuardian");
             SetButtonColor(spawnersButtons[1], _goldColor);
-            upgradesButtons[1].interactable = false; // Disable the upgrade button
+            upgradesButtons[1].interactable = false;
             AudioManager.Instance.PlayAudioClip(1);
         }
 
@@ -73,7 +74,7 @@ namespace _Alon.Scripts.Core.Managers
             UIManager.Instance.SetExp(-1500);
             GameManager.Instance.UpgradePlayer("SwiftBlade");
             SetButtonColor(spawnersButtons[2], _goldColor);
-            upgradesButtons[2].interactable = false; // Disable the upgrade button
+            upgradesButtons[2].interactable = false;
             AudioManager.Instance.PlayAudioClip(1);
         }
 
@@ -87,5 +88,4 @@ namespace _Alon.Scripts.Core.Managers
             button.colors = colorBlock;
         }
     }
-
 }

@@ -9,26 +9,27 @@ namespace _Alon.Scripts.Gameplay.Controllers
     public class BaseEnemyController : MonoBehaviour
     {
         /// <summary>
+        /// Constants
+        /// </summary>
+        private const float DeadZone = 3f;
+        private const float MinDistanceToAttack = 1.2f;
+        private const float MoveSpeed = 0.6f;
+        private const float AttackCoolDownTime = 2.5f;
+
+        /// <summary>
         /// Private Fields
         /// </summary>
         private Animator _animator;
-
-        private float _deadZone = 3f;
-        private float _minDistanceToAttack = 1.2f;
-        private float _moveSpeed = 0.6f;
         private bool _isDead = false;
         private Rigidbody2D _rigidbody2D;
-        private const float AttackCoolDownTime = 2.5f;
         private float _timeToAttack = 0;
-        private float expToAdd = 100;
-        private GameObject[] itemPrefabs;
+        private GameObject[] _itemPrefabs;
 
         /// <summary>
         /// Protected Fields
         /// </summary>
-        protected BasePlayerController _playerToAttack = null;
-
-        protected float life = 100;
+        protected BasePlayerController PlayerToAttack = null;
+        protected float Life = 100;
 
 
         // End Of Local Variables
@@ -49,9 +50,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
         {
             _animator = GetComponentInChildren<Animator>();
             _rigidbody2D = GetComponent<Rigidbody2D>();
-            itemPrefabs = new GameObject[2];
-            itemPrefabs[0] = Resources.Load<GameObject>("Coins");
-            itemPrefabs[1] = Resources.Load<GameObject>("Exps");
+            _itemPrefabs = new GameObject[2];
+            _itemPrefabs[0] = Resources.Load<GameObject>("Coins");
+            _itemPrefabs[1] = Resources.Load<GameObject>("Exps");
         }
 
         private void Update()
@@ -72,13 +73,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleApproachToPlayer()
         {
-            if (_playerToAttack == null)
+            if (PlayerToAttack == null)
             {
                 _animator.SetBool("isAttack", false);
                 return;
             }
 
-            if (Vector3.Distance(transform.position, _playerToAttack.transform.position) < _deadZone)
+            if (Vector3.Distance(transform.position, PlayerToAttack.transform.position) < DeadZone)
             {
                 MoveToPlayer();
             }
@@ -91,8 +92,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void CheckForTarget()
         {
             var player = GameManager.Instance.GetNearestPlayerToEnemy(this.gameObject);
-            _playerToAttack = player;
-            if (!_playerToAttack)
+            PlayerToAttack = player;
+            if (!PlayerToAttack)
             {
                 _animator.SetBool("isAttack", false);
                 return;
@@ -137,8 +138,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         public virtual void TakeDamage(float damage)
         {
-            life -= damage;
-            if (life <= 0)
+            Life -= damage;
+            if (Life <= 0)
             {
                 Die();
             }
@@ -146,11 +147,11 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void MoveToPlayer()
         {
-            if (Vector3.Distance(transform.position, _playerToAttack.transform.position) > _minDistanceToAttack)
+            if (Vector3.Distance(transform.position, PlayerToAttack.transform.position) > MinDistanceToAttack)
             {
                 _animator.SetBool("isWalk", true);
-                transform.Translate((_playerToAttack.transform.position - transform.position).normalized *
-                                    (_moveSpeed * Time.deltaTime));
+                transform.Translate((PlayerToAttack.transform.position - transform.position).normalized *
+                                    (MoveSpeed * Time.deltaTime));
             }
             else
             {
@@ -174,7 +175,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleDirections()
         {
-            if (_playerToAttack.transform.position.x > transform.position.x)
+            if (PlayerToAttack.transform.position.x > transform.position.x)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,
                     transform.localScale.z);
@@ -188,7 +189,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void DropItem()
         {
-            var itemPrefab = Random.Range(0, 10) == 0 ? itemPrefabs[0] : itemPrefabs[1];
+            var itemPrefab = Random.Range(0, 10) == 0 ? _itemPrefabs[0] : _itemPrefabs[1];
 
             if (itemPrefab == null) return;
             var position = new Vector3(transform.position.x, transform.position.y, 0);

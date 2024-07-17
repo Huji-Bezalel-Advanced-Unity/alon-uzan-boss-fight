@@ -6,15 +6,15 @@ namespace _Alon.Scripts.Gameplay.Controllers
     public class LittleEnemy : BaseEnemyController
     {
         /// <summary>
-        /// Private Fields
+        /// Constants
         /// </summary>
-        private float baseDamageToGive = 5f;
+        private const float BaseDamageToGive = 5f;
 
         // End Of Local Variables
 
         protected override void GiveDamage()
         {
-            _playerToAttack.TakeDamage(baseDamageToGive);
+            PlayerToAttack.TakeDamage(BaseDamageToGive);
         }
     }
 }
