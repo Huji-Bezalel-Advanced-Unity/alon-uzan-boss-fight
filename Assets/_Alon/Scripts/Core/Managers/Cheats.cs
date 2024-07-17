@@ -27,11 +27,6 @@ namespace _Alon.Scripts.Core.Managers
             {
                 KillAllEnemies();
             }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                ReloadScene();
-            }
         }
 
         private void AddMesos()
@@ -47,11 +42,6 @@ namespace _Alon.Scripts.Core.Managers
         private void KillAllEnemies()
         {
             GameManager.Instance.KillAllEnemies();
-        }
-
-        private void ReloadScene()
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

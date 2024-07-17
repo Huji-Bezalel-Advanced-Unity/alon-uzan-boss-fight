@@ -26,9 +26,8 @@ namespace _Alon.Scripts.Core.Loaders
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
             { "LoadMainScene", 30 },
-            { "OnMainSceneLoaded", 5 },
-            { "OnLoadComplete", 5 },
-            { "OnCoreManagerLoaded", 10 },
+            { "OnMainSceneLoaded", 10 },
+            { "OnLoadComplete", 10 },
             { "OnGameManagersLoaded", 5 },
             { "LoadEnemies", 30 },
             { "LoadBoss", 15 }
@@ -101,18 +100,6 @@ namespace _Alon.Scripts.Core.Loaders
         private void OnLoadComplete()
         {
             gameLoaderUI.AddAccumulate(_loadersProgress["OnLoadComplete"]);
-        }
-
-        private void OnCoreManagerLoaded(bool isSuccess)
-        {
-            if (isSuccess)
-            {
-                gameLoaderUI.AddAccumulate(_loadersProgress["OnCoreManagerLoaded"]);
-            }
-            else
-            {
-                Debug.LogException(new Exception("Core Managers Loading Failed."));
-            }
         }
 
         private void LoadBoss()

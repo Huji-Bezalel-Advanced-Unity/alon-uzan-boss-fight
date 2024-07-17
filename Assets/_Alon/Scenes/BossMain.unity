@@ -4900,8 +4900,8 @@ MonoBehaviour:
   barHolder: {fileID: 1929535590}
   dangerImage: {fileID: 1164580387}
   notification: {fileID: 1767897966}
-  MoneyImage: {fileID: 1764613274}
-  ExpImage: {fileID: 1575644307}
+  moneyImage: {fileID: 1764613274}
+  expImage: {fileID: 1575644307}
 --- !u!1 &219769044
 GameObject:
   m_ObjectHideFlags: 0
