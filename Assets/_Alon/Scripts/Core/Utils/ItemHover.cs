@@ -51,6 +51,10 @@ namespace _Alon.Scripts.Core.Utils
             {
                 foreach (Transform coin in transform)
                 {
+                    if (coin.gameObject.name.Contains("Coin"))
+                    {
+                        coin.GetComponent<SpriteRenderer>().sortingLayerID = 25;
+                    }
                     coin.DOMove(UIManager.Instance.moneyImage.position, 0.5f)
                         .SetEase(Ease.InQuint).OnComplete(() => Destroy(coin.gameObject));
                     coin.DOScale(Vector3.one * TargetScale, 0.5f)
@@ -64,6 +68,10 @@ namespace _Alon.Scripts.Core.Utils
             {
                 foreach (Transform exp in transform)
                 {
+                    if (exp.gameObject.name.Contains("Exp"))
+                    {
+                        // set exp order in 
+                    }
                     exp.DOMove(UIManager.Instance.expImage.position, 0.5f)
                         .SetEase(Ease.InQuint).OnComplete(() => Destroy(exp.gameObject));
                     exp.DOScale(Vector3.one * TargetScale, 0.5f)

@@ -321,8 +321,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeBar: {fileID: 3674004370172556172}
   barHolder: {fileID: 5991048060287763803}
-  _playersLife: 100
-  _isDead: 0
+  playersLife: 100
+  isDead: 0
   mesosCost: 100
 --- !u!195 &6772842409085980059
 NavMeshAgent:
@@ -334,7 +334,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.27
-  m_Speed: 0.7
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
