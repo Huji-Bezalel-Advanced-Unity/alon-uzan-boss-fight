@@ -2,8 +2,8 @@
 using _Alon.Scripts.Core.Managers;
 using _Alon.Scripts.Gameplay.Controllers;
 using UnityEngine;
-using UnityEngine.EventSystems; // Import the EventSystems namespace
-using UnityEngine.AI; // Import the AI namespace
+using UnityEngine.EventSystems;
+using UnityEngine.AI;
 
 namespace _Alon.Scripts.GamePlay.Spawners
 {

@@ -7,10 +7,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
     public class SwiftBlade : BasePlayerController
     {
         /// <summary>
-        /// Private Fields
-        /// </summary>
-
-        /// <summary>
         /// Public Fields
         /// </summary>
         public float mesosCost = 150f;
@@ -26,7 +22,8 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         protected override void GiveDamage()
         {
-            nearestEnemy.GetComponent<BaseEnemyController>().TakeDamage(GameManager.Instance._damagesDict["IronGuardian"]);
+            nearestEnemy.GetComponent<BaseEnemyController>()
+                .TakeDamage(GameManager.Instance._damagesDict["IronGuardian"]);
         }
 
         public override float GetMesosCost()

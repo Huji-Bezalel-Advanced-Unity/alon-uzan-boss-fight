@@ -25,7 +25,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private bool _isMoving;
 
         private GameObject _boss;
-        public bool _isDead = false;
         private NavMeshAgent _navMeshAgent;
         private float _maxLife = 100;
         private Vector3 _target;
@@ -33,12 +32,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private SkeletonAnimation _skeletonAnimation;
 
         private const float AttackCoolDownTime = 2.5f;
-
-        /// <summary>
-        /// Public Fields
-        /// </summary>
-        protected GameObject nearestEnemy;
-
         private float _timeToAttack = 0;
         private bool _isSetEnemyOnes = false;
         
@@ -46,8 +39,21 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private const float MinDistanceToAttack = 1.2f;
 
+        /// <summary>
+        /// Public Fields
+        /// </summary>
+        public bool _isDead = false;
+        
+        /// <summary>
+        /// Events
+        /// </summary>
         public static event Action OnPlayerDieOrSpawn;
 
+        /// <summary>
+        /// Protected Fields
+        /// </summary>
+        protected GameObject nearestEnemy;
+        
         // End Of Local Variables
 
         protected void Start()
@@ -92,7 +98,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void Update()
         {
             if (_isDead) return;
-            HandleSetTarget();
+            // HandleSetTarget();
             HandleMovement();
             HandleIncreaseTimers();
         }
@@ -105,6 +111,17 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private void HandleBossPhase()
         {
             nearestEnemy = _boss;
+            StartCoroutine(UpdateBossPosition());
+        }
+
+        private IEnumerator UpdateBossPosition()
+        {
+            // every 0.5 seconds update call the HandleSetTarget method
+            while (nearestEnemy == _boss)
+            {
+                HandleSetTarget();
+                yield return new WaitForSeconds(0.5f);
+            }
         }
 
 
@@ -119,6 +136,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             if (nearestEnemy != _boss && tryToGetEnemy)
             {
                 nearestEnemy = tryToGetEnemy;
+                OnPlayerDieOrSpawn?.Invoke();
                 destination = nearestEnemy.transform.position + _target;
             }
             else
@@ -146,6 +164,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private void HandleDirections()
         {
+            if (!nearestEnemy)
+            {
+                return;
+            }
             if (nearestEnemy.transform.position.x > transform.position.x)
             {
                 transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y,

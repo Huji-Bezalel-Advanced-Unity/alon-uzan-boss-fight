@@ -10,19 +10,26 @@ namespace _Alon.Scripts.Core.Managers
     public class UIManager : MonoBehaviour
     {
         /// <summary>
-        /// Serialized Fields
+        /// Private Serialized Fields
         /// </summary>
         [SerializeField] private Image bossLifeBar;
 
         [SerializeField] private TextMeshProUGUI mesosText;
-        
+
         [SerializeField] private TextMeshProUGUI expText;
-        
-        [SerializeField] private GameObject barHolder; 
-        
+
+        [SerializeField] private GameObject barHolder;
+
         [SerializeField] private GameObject dangerImage;
-        
+
         [SerializeField] private Notification notification;
+
+        /// <summary>
+        /// Public Serialized Fields
+        /// </summary>
+        [SerializeField] public Transform MoneyImage;
+
+        [SerializeField] public Transform ExpImage;
 
         /// <summary>
         /// Private Fields
@@ -30,16 +37,14 @@ namespace _Alon.Scripts.Core.Managers
         private const float BossMaxLife = 10000f;
 
         private float _mesos = 2500f;
-        
+
         private float _exp = 0f;
-        [SerializeField] public Transform MoneyImage;
-        [SerializeField] public Transform ExpImage;
 
         /// <summary>
         /// Public Fields
         /// </summary>
         public static UIManager Instance { get; private set; }
-        
+
         public event Action OnBossPhaseStart;
 
         // End Of Local Variables
@@ -84,7 +89,7 @@ namespace _Alon.Scripts.Core.Managers
         {
             AddMesos(mesos);
         }
-        
+
         private void AddMesos(float mesos)
         {
             _mesos += mesos;
@@ -95,18 +100,18 @@ namespace _Alon.Scripts.Core.Managers
         {
             return _mesos;
         }
-        
+
         public void SetExp(float exp)
         {
             AddExp(exp);
         }
-        
+
         private void AddExp(float exp)
         {
             _exp += exp;
             expText.text = _exp.ToString();
         }
-        
+
         public float GetExp()
         {
             return _exp;
@@ -134,7 +139,7 @@ namespace _Alon.Scripts.Core.Managers
             AudioManager.Instance.PlayAudioClip(3);
             OnBossPhaseStart?.Invoke();
         }
-        
+
         public void Notify(string message)
         {
             notification.ShowNotification(message);

@@ -2,13 +2,25 @@ using UnityEngine;
 
 namespace _Alon.Scripts.Core.Managers
 {
+    /// <summary>
+    /// Manages and controls all audio playback in the game.
+    /// </summary>
     public class AudioManager : MonoBehaviour
     {
+        /// <summary>
+        /// Serialized Fields
+        /// </summary>
         [SerializeField] private AudioSource backgroundSource; // For background music
-        [SerializeField] private AudioSource itemSource; // For itemized sounds
-        [SerializeField] private AudioClip[] audioClips;
 
+        [SerializeField] private AudioSource itemSource; // For itemized sounds
+        [SerializeField] private AudioClip[] audioClips; // Collection of audio clips
+
+        /// <summary>
+        /// Singleton instance of AudioManager.
+        /// </summary>
         public static AudioManager Instance { get; private set; }
+
+        // End Of Local Variables
 
         private void Awake()
         {
@@ -20,7 +32,7 @@ namespace _Alon.Scripts.Core.Managers
             else
             {
                 Debug.LogError("AudioManager already exists");
-                Destroy(gameObject); // Ensure only one instance exists
+                Destroy(gameObject);
             }
         }
 
@@ -28,16 +40,13 @@ namespace _Alon.Scripts.Core.Managers
         {
             if (index >= 2)
             {
-                // Handles background audio (0 and 1 are for background)
                 backgroundSource.clip = audioClips[index];
                 backgroundSource.Play();
             }
             else
             {
-                // Handles itemized sounds (2 and 3 are itemized sounds)
                 itemSource.PlayOneShot(audioClips[index]);
             }
         }
-        
     }
 }

@@ -12,11 +12,10 @@ namespace _Alon.Scripts.Core.Managers
         /// <summary>
         /// Private Fields
         /// </summary>
-        private readonly Action<bool> _onComplete;
-
         private readonly HashSet<BasePlayerController> _players;
+
         private readonly HashSet<BaseEnemyController> _enemies;
-        
+
         private const float MinDistanceToAttack = 1.2f;
         private GameObject _currentPlayerToSpawn;
 
@@ -29,12 +28,18 @@ namespace _Alon.Scripts.Core.Managers
 
         public Dictionary<string, int> _damagesDict;
         public bool CameraIsLocked = false;
-        public event Action OnAllEnemiesCleared;
-        public event Action OnEnemyPosChanged;
         public GameObject Boss { get; private set; }
 
-        // End Of Local Variables
+        /// <summary>
+        /// Events
+        /// </summary>
+        private readonly Action<bool> _onComplete;
 
+        public event Action OnAllEnemiesCleared;
+
+        public event Action OnEnemyPosChanged;
+
+        // End Of Local Variables
 
         public GameManager(Action<bool> onComplete)
         {
@@ -208,7 +213,7 @@ namespace _Alon.Scripts.Core.Managers
         {
             OnEnemyPosChanged?.Invoke();
         }
-        
+
         public IEnumerator LockCamera()
         {
             CameraIsLocked = true;

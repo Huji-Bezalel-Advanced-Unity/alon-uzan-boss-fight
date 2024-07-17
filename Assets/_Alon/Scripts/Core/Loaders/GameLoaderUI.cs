@@ -24,7 +24,7 @@ namespace _Alon.Scripts.Core.Loaders
         private Coroutine _currentCoroutine;
 
         /// <summary>
-        /// Public Fields
+        /// Event that is triggered when the UI loading is completed.
         /// </summary>
         public event Action OnUIFinished;
 
@@ -55,8 +55,8 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void UpdateUI()
         {
-            var percentage = (float)_accumulate / _accumulateTarget;
-            var percentageClamp = Mathf.Clamp01(percentage);
+            float percentage = (float)_accumulate / _accumulateTarget;
+            float percentageClamp = Mathf.Clamp01(percentage);
             if (_currentCoroutine != null)
             {
                 StopCoroutine(_currentCoroutine);
@@ -70,7 +70,7 @@ namespace _Alon.Scripts.Core.Loaders
         {
             float startPercentage = loaderFg.fillAmount;
             float elapsedTime = 0f;
-            float duration = 1f; // Duration in seconds for the fill amount animation
+            float duration = 1f;
 
             while (elapsedTime < duration)
             {
@@ -83,7 +83,7 @@ namespace _Alon.Scripts.Core.Loaders
 
             if (Mathf.Approximately(targetPercentage, 1f))
             {
-                yield return new WaitForSeconds(1f); // Add delay when reaching 100%
+                yield return new WaitForSeconds(0.5f);
                 OnUIFinished?.Invoke();
             }
         }

@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using _Alon.Scripts.Core.Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using _Alon.Scripts.Core.Managers;
 
 namespace _Alon.Scripts.Core.Loaders
 {
@@ -15,10 +15,13 @@ namespace _Alon.Scripts.Core.Loaders
         [SerializeField] private GameLoaderUI gameLoaderUI;
 
         /// <summary>
-        /// Private Fields
+        /// Private Constants
         /// </summary>
         private const int LoadMaxAmount = 100;
 
+        /// <summary>
+        /// Private Fields
+        /// </summary>
         private readonly Dictionary<string, int> _loadersProgress = new Dictionary<string, int>
         {
             { "LoadMainScene", 30 },
@@ -31,17 +34,16 @@ namespace _Alon.Scripts.Core.Loaders
         };
 
         private GameObject _boss;
-
         private EnemyFactory _enemyFactory;
 
         // End Of Local Variables
 
-        void Awake()
+        private void Awake()
         {
             _enemyFactory = new EnemyFactory();
         }
-        
-        void Start()
+
+        private void Start()
         {
             gameLoaderUI.OnUIFinished += OnUIFinished;
             StartCoroutine(StartLoadingAsync());
@@ -50,24 +52,15 @@ namespace _Alon.Scripts.Core.Loaders
         private IEnumerator StartLoadingAsync()
         {
             yield return new WaitForSeconds(0.1f);
-
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(gameLoaderUI.transform.root.gameObject);
-
             gameLoaderUI.Init(LoadMaxAmount);
-
-            LoadCoreManagers();
             LoadGameManagers();
-        }
-
-        private void LoadCoreManagers()
-        {
-            var coreManager = new CoreManager(OnCoreManagerLoaded);
         }
 
         private void LoadGameManagers()
         {
-            var gameManager = new GameManager(OnGameManagersLoaded);
+            new GameManager(OnGameManagersLoaded);
         }
 
         private void OnGameManagersLoaded(bool isSuccess)
@@ -101,7 +94,7 @@ namespace _Alon.Scripts.Core.Loaders
 
         private void OnUIFinished()
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             Destroy(gameLoaderUI.transform.root.gameObject);
         }
 
@@ -138,9 +131,7 @@ namespace _Alon.Scripts.Core.Loaders
                 return;
             }
 
-
-            GameManager.Instance.SetBoss(_boss); // Set the boss in the GameManager
-
+            GameManager.Instance.SetBoss(_boss);
             if (GameManager.Instance.Boss == null)
             {
                 Debug.LogError("Failed to set boss in GameManager.");

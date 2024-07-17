@@ -8,6 +8,9 @@ namespace _Alon.Scripts.Core.Managers
 {
     public class Handler : MonoBehaviour
     {
+        /// <summary>
+        /// Private fields
+        /// </summary>
         private readonly Color _goldColor = new Color(1f, 0.84f, 0f);
 
         [Tooltip("first is RamSmasher, second is IronGuardian, third is SwiftBlade")] [SerializeField]
@@ -16,6 +19,8 @@ namespace _Alon.Scripts.Core.Managers
         [Tooltip("first is RamSmasher, second is IronGuardian, third is SwiftBlade")] [SerializeField]
         private Button[] upgradesButtons;
 
+        // End Of Local Variables
+        
         public void OnClickRamSmasher()
         {
             GameManager.Instance.SetPlayerToSpawn("RamSmasher");

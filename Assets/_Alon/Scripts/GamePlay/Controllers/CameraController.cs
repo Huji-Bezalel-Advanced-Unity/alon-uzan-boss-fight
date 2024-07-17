@@ -22,7 +22,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         private Camera _mainCamera;
 
-
         // End Of Local Variables
 
         private void Start()
@@ -36,6 +35,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             {
                 return;
             }
+
             HandlePanning();
         }
 

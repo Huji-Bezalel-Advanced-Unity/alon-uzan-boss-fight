@@ -11,32 +11,25 @@ namespace _Alon.Scripts.Gameplay.Controllers
         /// <summary>
         /// Private Fields
         /// </summary>
-
         private Animator _animator;
 
         private float _deadZone = 3f;
         private float _minDistanceToAttack = 1.2f;
         private float _moveSpeed = 0.6f;
-
         private bool _isDead = false;
-
         private Rigidbody2D _rigidbody2D;
-
         private const float AttackCoolDownTime = 2.5f;
         private float _timeToAttack = 0;
-
-        /// <summary>
-        /// Public Fields
-        /// </summary>
-        protected float life = 100;
+        private float expToAdd = 100;
+        private GameObject[] itemPrefabs;
 
         /// <summary>
         /// Protected Fields
         /// </summary>
         protected BasePlayerController _playerToAttack = null;
 
-        private float expToAdd = 100;
-        private GameObject[] itemPrefabs;
+        protected float life = 100;
+
 
         // End Of Local Variables
 
@@ -101,6 +94,7 @@ namespace _Alon.Scripts.Gameplay.Controllers
             _playerToAttack = player;
             if (!_playerToAttack)
             {
+                _animator.SetBool("isAttack", false);
                 return;
             }
 
@@ -160,11 +154,10 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
             else
             {
-                GameManager.Instance.InvokeOnEnemyPosChanged(); // for player to update enemy target after approaching
+                GameManager.Instance.InvokeOnEnemyPosChanged();
                 _animator.SetBool("isWalk", false);
                 TryAttack();
             }
-
         }
 
         private void TryAttack()
@@ -193,23 +186,13 @@ namespace _Alon.Scripts.Gameplay.Controllers
             }
         }
 
-        void DropItem()
+        private void DropItem()
         {
-            // drop itemPrefab[0] with 10% chance and itemPrefab[1] with 90% chance
-            GameObject itemPrefab;
-            if (Random.Range(0, 10) == 0)
-            {
-                itemPrefab = itemPrefabs[0];
-            }
-            else
-            {
-                itemPrefab = itemPrefabs[1];
-            }
-            if (itemPrefab != null)
-            {
-                Vector3 position = new Vector3(transform.position.x, transform.position.y, 0);
-                Instantiate(itemPrefab, position, Quaternion.identity);
-            }
+            var itemPrefab = Random.Range(0, 10) == 0 ? itemPrefabs[0] : itemPrefabs[1];
+
+            if (itemPrefab == null) return;
+            var position = new Vector3(transform.position.x, transform.position.y, 0);
+            Instantiate(itemPrefab, position, Quaternion.identity);
         }
     }
 }

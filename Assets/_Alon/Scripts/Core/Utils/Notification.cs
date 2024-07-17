@@ -1,15 +1,24 @@
 using UnityEngine;
-using DG.Tweening;  // Import DOTween
-using TMPro;  // Import TextMeshPro
+using DG.Tweening; // Import DOTween
+using TMPro; // Import TextMeshPro
 
 public class Notification : MonoBehaviour
 {
-    [SerializeField]private RectTransform notificationPanel;
-    [SerializeField]private float moveDistance = 100f;
-    [SerializeField]private float duration = 2.0f;
+    /// <summary>
+    /// Serialized Fields
+    /// </summary>
+    [SerializeField] private RectTransform notificationPanel;
+
+    [SerializeField] private float moveDistance = 100f;
+    [SerializeField] private float duration = 2.0f;
+    [SerializeField] private TextMeshProUGUI notificationText;
+
+    /// <summary>
+    /// Private Fields
+    /// </summary>
     private Vector3 _initPos;
 
-    [SerializeField] private TextMeshProUGUI notificationText;
+    // End Of Local Variables
 
     private void Awake()
     {
@@ -22,15 +31,18 @@ public class Notification : MonoBehaviour
         notificationText.text = message;
         notificationPanel.gameObject.SetActive(true);
 
-        notificationPanel.localPosition = new Vector3(notificationPanel.localPosition.x, notificationPanel.localPosition.y - moveDistance, notificationPanel.localPosition.z);
-        
+        notificationPanel.localPosition = new Vector3(notificationPanel.localPosition.x,
+            notificationPanel.localPosition.y - moveDistance, notificationPanel.localPosition.z);
+
 
         Sequence notificationSequence = DOTween.Sequence();
 
-        notificationSequence.Append(notificationPanel.DOLocalMoveY(notificationPanel.localPosition.y + moveDistance, duration).SetEase(Ease.OutQuad));
+        notificationSequence.Append(notificationPanel
+            .DOLocalMoveY(notificationPanel.localPosition.y + moveDistance, duration).SetEase(Ease.OutQuad));
         notificationSequence.Join(notificationText.DOFade(0, duration).From(1));
 
-        notificationSequence.OnComplete(() => {
+        notificationSequence.OnComplete(() =>
+        {
             notificationPanel.gameObject.SetActive(false);
             notificationPanel.localPosition = _initPos;
             notificationText.alpha = 1;

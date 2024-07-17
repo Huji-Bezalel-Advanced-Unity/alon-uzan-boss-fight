@@ -23,6 +23,9 @@ namespace _Alon.Scripts.Gameplay.Controllers
         private const float MoveSpeed = 0.6f;
         private BossAnimator _animator;
         
+        /// <summary>
+        /// Events
+        /// </summary>
         public event Action OnBossDeath;
 
         // End Of Local Variables

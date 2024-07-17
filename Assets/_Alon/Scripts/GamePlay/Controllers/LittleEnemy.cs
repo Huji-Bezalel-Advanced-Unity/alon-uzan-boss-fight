@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _Alon.Scripts.Gameplay.Controllers
 {
-    public class Enemy1 : BaseEnemyController
+    public class LittleEnemy : BaseEnemyController
     {
         /// <summary>
         /// Private Fields
@@ -12,7 +12,6 @@ namespace _Alon.Scripts.Gameplay.Controllers
 
         // End Of Local Variables
 
-        
         protected override void GiveDamage()
         {
             _playerToAttack.TakeDamage(baseDamageToGive);
