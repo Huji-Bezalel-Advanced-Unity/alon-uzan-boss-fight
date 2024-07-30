@@ -7,9 +7,9 @@
 **Submission  Content**
 
 ---
-- Game Play Video <strong><em>[This Page](https://youtu.be/x_h7B4d9Dw4)</em></strong><br>
-- Itch.io Game <strong><em>[This Page](https://uzano101.itch.io/clash-of-monsters)</em></strong><br>
-- CodeReview Video <strong><em>[This Page](https://youtu.be/MqtiuijOg1U)</em></strong><br>
+-  <strong><em>[Game Play Video](https://youtu.be/x_h7B4d9Dw4)</em></strong><br>
+-  <strong><em>[Itch.io Game](https://uzano101.itch.io/clash-of-monsters)</em></strong><br>
+-  <strong><em>[CodeReview Video](https://youtu.be/MqtiuijOg1U)</em></strong><br>
 
 **Game Mechanics**
 
