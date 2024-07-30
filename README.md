@@ -4,15 +4,10 @@
 
 >### Clash Of Monsters is a 2D strategy game in which each player choose his troops wiselly in order to defeat Warrok
 
-**Story**
-
----
-In Eldoria, a pretty town in Arinthia, something bad happened. Prince Aric got turned into Warrok, a big, scary monster, by a mean witch named Morana. Warrok started wrecking everything, scaring everyone. Now, Eldoria needs heroes to fix things. Brave folks from far away are coming to fight Warrok and save the prince. Only if they beat Warrok can the curse go away and Eldoria be happy again.
-
 **Game Mechanics**
 
 ---
-Each player is granted by certain amount of money. In order to defeat Warrok the player must destroy the fence around him and then kill him. <br><br>
+Each player is granted by certain amount of money. In order to defeat Warrok the player must kill all the monsters on the map and then kill him. <br><br>
 **How To Do It?**
 1. Choosing a troop from the troops panel, each with his own advantages and disadvantages.
 2. Left click (mouse) in the desirable place on the screen to spawn the troop.<br>
@@ -24,14 +19,13 @@ Each player is granted by certain amount of money. In order to defeat Warrok the
 ---
 <br><br>
 <img src="Assets/_Alon/Art/BossSprite.png" width="300" height="300"/><br><br>
-The Warrok is a monster that can punch troops and chase them if needed. There are some troops that can be killed by him easily and some that he is more struggle to kill. As well as there is some troops that is takes more damage to warrok then the others.
+The Boss is patrolling left ans right untill someone attacks him, and then he enters attack mode. if no one attacks the boss for 5 seconds, he return to patrol.
 
 **Boss Phases**
 
 ---
-- Protecting Phase - in this phase Warrok is trying to defend its fortress by throwing rocks on the closest troop, he throws one rock every 5 seconds.
-- Attacking Phase - when the fences is britches he starts to attack the closest troop by punching him. the strategy is to punch the closest troop with the least amount of life remains.
-- Falling Back Phase - when Warrok has less or equal then 10% life amount, he is starts to run away from the troops while every 5 seconds he attacks a troop nearby him.
+- patrolling Phase - in this phase the boss waits for the troops to kill all the enemies in the map and menwile patrols right and left.
+- Attacking Phase - when a troop comes nearby the boss and attacks him, he attacks him back.
 
 **Player Mechanics**
 
@@ -40,11 +34,11 @@ in order to attack Warrok, one must choose the troop he wants to spawn and then 
 
 <img src="Assets/_Alon/Art/warriors2.png" width="150" height="150"/>
 
-- **Ram Smashers**: These troops are great at breaking fences and barriers quickly, but they're slow and can get hit a lot while they move.
+- **Ram Smashers**: These troops has good attack damage, but they're slow and can get hit a lot while they move.
 
 <img src="Assets/_Alon/Art/warriors4.png" width="180" height="150"/>
 
-- **Iron Guardians**: These warriors hit hard and can take a lot of hits themselves, but they're slow and can be outmaneuvered by fast enemies.
+- **Iron Guardians**: These warriors hit hard and can take a lot of hits themselves, but they're very slow and can be outmaneuvered by fast enemies.
 
 <img src="Assets/_Alon/Art/warriors3.png" width="200" height="150"/>
 
