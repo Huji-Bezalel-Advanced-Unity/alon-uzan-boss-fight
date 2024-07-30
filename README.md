@@ -4,6 +4,13 @@
 
 >### Clash Of Monsters is a 2D strategy game in which each player choose his troops wiselly in order to defeat Warrok
 
+**Submission  Content**
+
+---
+- Game Play Video
+- Itch.io Game
+- CodeReview Video
+
 **Game Mechanics**
 
 ---
@@ -18,7 +25,7 @@ Each player is granted by certain amount of money. In order to defeat Warrok the
 
 ---
 <br><br>
-<img src="Assets/_Alon/Art/BossSprite.png" width="300" height="300"/><br><br>
+<img src="Assets/Forest Enemies/Sprites/Animation Sprites/Medium/Mage_1/Armature_mage_attack_00.png" width="300" height="300"/><br><br>
 The Boss is patrolling left ans right untill someone attacks him, and then he enters attack mode. if no one attacks the boss for 5 seconds, he return to patrol.
 
 **Boss Phases**
@@ -26,6 +33,11 @@ The Boss is patrolling left ans right untill someone attacks him, and then he en
 ---
 - patrolling Phase - in this phase the boss waits for the troops to kill all the enemies in the map and menwile patrols right and left.
 - Attacking Phase - when a troop comes nearby the boss and attacks him, he attacks him back.
+
+**Enemies Mechanics**
+
+---
+in order to attack Warrok, kill all the enemies in the map. the enemies are wait until a troop enters to the attack range and then run after him and attack him. they attack the closest one to them.
 
 **Player Mechanics**
 
@@ -50,11 +62,6 @@ in order to attack Warrok, one must choose the troop he wants to spawn and then 
 Unity Assets Store.<br>
 - Players at <strong><em>[This Page](https://assetstore.unity.com/packages/2d/characters/warriors-animated-2d-characters-178121)</em></strong><br>
 - Terrain at <strong><em>[This Page](https://assetstore.unity.com/packages/2d/environments/hex-medieval-fantasy-locations-59271)</em></strong><br>
-
-**The Map**
-
----
-<img src="Assets/_Alon/Art/Desktop Screenshot 2024.05.28 - 00.43.08.74.png" width="600" height="350"/>
 
 **AI**
 
